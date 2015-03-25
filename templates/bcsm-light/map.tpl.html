@@ -1,0 +1,95 @@
+{{set $_pagetitle="BuxomCurves Map"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="225"}}
+{{set $barcolor="961512"}}
+{{include _header}}
+
+<!-- model-map -->
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript"><!--
+function initialize() {
+	var myLatlng = new google.maps.LatLng(40.313043,-25.726562);
+	var myOptions = {
+		zoom: 2,
+		center: myLatlng,
+		disableDefaultUI: true,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+	{{foreach $models as $m}}
+		{{if $m['Lat'] != null && $m['Lng'] != null}}
+		var loc_{{@m.id}} = new google.maps.LatLng({{@m.Lat}},{{@m.Lng}});
+		var m_{{@m.id}} = new google.maps.Marker({
+			position: loc_{{@m.id}},
+			map: map,
+			title: "{{@m.modelname}}"
+		});
+		{{/if}}
+	{{/foreach}}
+
+	var infowindow = new google.maps.InfoWindow({
+	    content: "sasdsddsds"
+	});
+
+	google.maps.event.addListener(m_{{@m.id}}, 'click', function() {
+		infowindow.open(map, m_{{@m.id}});
+	});
+}
+
+//init map
+function addLoadEvent(func){var oldonload = window.onload;if(typeof window.onload!='function'){window.onload=func;}else{window.onload=function(){if(oldonload) oldonload();func();}}}
+addLoadEvent(initialize);
+//-->
+</script>
+<!-- model-map -->
+
+
+	<div id="headerimg">
+		<div id="map_canvas"></div>
+	</div><!-- /headerimg-->
+
+
+	<div class="pagecontent">
+
+			<a name="models"></a>
+			<div id="modelcontent">
+
+				{{foreach $models as $model}}
+					{{*marker for map*}}
+					<div id="pointer{{@model.id}}" style="display:none">{{@model.modelname}}</div>
+
+					<div class="thumbnail" style="padding:7px;border:1px dotted #AAAAAA;width:{{$model['width'] + 25}}px; height:{{$model['height'] + 40}}px">
+						<div>
+							<a href="{{$__siteurl}}/model/{{@model.slug}}" title="{{@model.modelname}}">
+								<div class="g-title"><span class="bold">{{@model.modelname}}</span></div>
+								<img src="{{@model.path}}" width="{{@model.width}}" height="{{@model.height}}" alt="{{@model.modelname}}" border="1">
+							</a>
+						</div>
+						<div class="f10">{{@model.location}}, {{@model.country}}</div>
+					</div>
+				{{/foreach}}
+
+				<div class="c"></div>
+
+				{{if $pagination}}
+				<div class="pagination">
+					{{@pagination.links}}
+				</div>
+				{{/if}}
+
+			</div> <!--modelcontent-->
+
+			<div id="bottom">
+				<div align="center">
+					<a href="{{$__siteurl}}/join">Join now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

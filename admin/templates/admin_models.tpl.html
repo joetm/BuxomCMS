@@ -1,0 +1,196 @@
+{{include _adminheader}}
+
+<script src="{{$__adminurl}}/js/jquery.jeditable.min.js" type="text/javascript"></script>
+<script src="{{$__adminurl}}/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript"><!--
+var oTable;
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	$("#checkboxall").click(function(){
+		var checked_status = this.checked;
+			$("input[@name=checkbox\\[\\]]").each(function()
+			{
+				this.checked = checked_status;
+			});
+	});
+
+	/* Init DataTables */
+	oTable = $('#table').dataTable( {
+				{{include includes/datatable_setup}}
+				"aaSorting": [[0,'desc']],
+				"bStateSave": false,
+				{{include includes/datatable_language}}
+				"sDom": '<"top"<"right"f>><"bottom"rt<"dt_buttons">lpi><"clear">',
+				"aoColumnDefs": [
+					//column 0: icon
+					{
+						"aTargets": [0],
+						"fnRender": function ( oObj ) {
+							if(oObj.aData[0] === 0)
+								return '<img src="{{$__adminurl}}/img/icons/warning.png" alt="" width="16" height="16" border="0">';
+							else
+								return '<img src="{{$__adminurl}}/img/icons/model.png" alt="" width="16" height="16" border="0">';
+						},
+						"bSearchable": false,
+						"bSortable": false,
+						"sClass": "center"
+					},
+					//column 1: id
+					{
+						"aTargets": [1],
+						"bSearchable": false,
+						"bSortable": false,
+						"bVisible": false
+					},
+					//column 2: modelname
+					{
+						"aTargets": [2],
+						"sClass": "editable_row"
+					},
+					//column 3: slug
+					{
+						"aTargets": [3],
+						"sClass": "editable_row"
+					},
+					//column 4: rating
+					{
+						"aTargets": [4],
+						"bSearchable": false
+					},
+					//column 5: comments
+					{
+						"aTargets": [5],
+						"bSearchable": false
+					},
+
+					//column 6: link
+					{
+						"aTargets": [6],
+						"fnRender": function ( oObj ) {
+								return '<a href="{{$__siteurl}}/model/'+oObj.aData[3]+'"><img src="{{$__adminurl}}/img/icons/link_go.png" alt="" border="0" width="16" height="16"></a>';
+						},
+						"bSearchable": false,
+						"bSortable": false,
+						"sClass": "center"
+					},
+					//column 7: edit
+					{
+						"aTargets": [7],
+						"fnRender": function ( oObj ) {
+								return '<a href="{{$__adminurl}}/model?edit='+oObj.aData[1]+'"><img src="{{$__adminurl}}/img/icons/pencil.png" alt="" width="16" height="16" border="0"></a>';
+						},
+						"bSearchable": false,
+						"bSortable": false,
+						"sClass": "center"
+					},
+					//column 8: preview
+					{
+						"aTargets": [8],
+						"fnRender": function ( oObj ) {
+								if(oObj.aData[8] != 0)
+								{
+									return '<span class="thumbnail"><img src="{{$__adminurl}}/img/icons/picture.png" alt="" width="16" height="16" border="0"><span><img src="'+oObj.aData[8]+'?{{#time()}}"></span></span>';
+								}
+								else
+								{
+									return '<img src="{{$__adminurl}}/img/icons/picture_error.png" alt="" title="Preview image not found" width="16" height="16" border="0">';;
+								}
+						},
+						"bSearchable": false,
+						"bSortable": false,
+						"sClass": "center"
+					},
+					//column 9: checkbox
+					{
+						"aTargets": [9],
+						"fnRender": function ( oObj ) {
+								return '<input type="checkbox" name="checkbox[]" id="checkbox'+oObj.aData[1]+'" value="'+oObj.aData[1]+'">';
+						},
+						"bSearchable": false,
+						"bSortable": false,
+						"sClass": "center"
+					}
+				],
+
+				{{include includes/datatable_request}}
+				{{!fnServerData table='model' securitytoken=$securitytoken}}
+
+				"fnDrawCallback": function () {
+					//edit in place
+					$('#table tbody td:nth-child(2),#table tbody td:nth-child(3)').editable('{{$__adminurl}}/lib/editable_ajax.php', {
+						"callback": function( sValue, y ) {
+							var aPos = oTable.fnGetPosition( this ) + 1; {{*hidden column is skewing position*}}
+							oTable.fnUpdate( aPos[1], aPos[0], aPos[1], false );
+						},
+						"submitdata": function ( value, settings ) {
+							var aPos = oTable.fnGetPosition( this );
+							var aData = oTable.fnGetData( aPos[0] );
+							return	{
+									"column": aPos[1],
+									"id": aData[1], 	//hidden id column
+									"type": "model",
+									"securitytoken": "{{$securitytoken}}"
+									};
+						},
+						"height": "14px",
+						indicator: '<img src="{{$__adminurl}}/img/loader.gif">'
+					});
+				}//fnDrawCallback
+	});
+
+	$("div.dt_buttons").html('<div class="right dt_butt"><input type="submit" id="delete" name="delete" value="{{@_t.delete}}" class="adm_button"></div>');
+
+});
+//-->
+</script>
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		<div class="left mright5">
+			<a href="{{$__adminurl}}/model" id="addnew"><img id="addicon" src="{{$__adminurl}}/img/icons/details_open.png" width="20" height="20" hspace="5" alt="" title="{{@_t.addnewmodel}}" border="0"></a>
+		</div>
+
+		{{include includes/error_success_msg}}
+
+		<div>
+			{{$updatelink}}
+		</div>
+
+		<div id="modelslist">
+
+			<form action="{{$__adminurl}}/models" method="post" name="updform">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" id="table">
+				<thead>
+				<tr>
+					<th class="col_icon">&nbsp;</th>
+					<th class="col_id">{{@_t.ID}}</th>
+					<th width="30%">{{@_t.modelname}}</th>
+					<th width="20%">{{@_t.slug}}</th>
+					<th class="col_rating">{{@_t.rating}}</th>
+					<th class="col_rating">{{@_t.comments}}</th>
+
+					<th class="col_link">{{@_t.link}}</th>
+					<th class="col_edit">{{@_t.edit}}</th>
+					<th class="col_preview">{{@_t.preview}}</th>
+					<th class="col_checkbox"><input type="checkbox" name="checkboxall" id="checkboxall"></th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr><td colspan="9">Querying data...</td></tr>
+				</tbody>
+				</table>
+
+			</form>
+
+			<div class="c"></div>
+
+		</div><!-- /modelslist-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

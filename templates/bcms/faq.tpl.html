@@ -1,0 +1,134 @@
+{{include _header}}
+
+<script type="text/javascript"><!--
+function ClearInput(value, id){
+	var input = document.getElementById(id);
+	if(value == input.value){
+		input.value = '';
+	}else{
+		input.value = input.value;
+	}
+}
+function FillInput(value, fill, id){
+	var input = document.getElementById(id);
+	if(value == ''){
+		input.value = fill;
+	}else{
+		input.value = input.value;
+	}
+}
+$(document).ready(function(){
+	$("#add_new_item").click(function(){
+		$("#new_question").show();
+		$("#add_new_item").hide();
+	});
+});
+//-->
+</script>
+
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<div class="headline_bar" align="left">
+		<div class="bold">{{@_t.frequentlyaskedquestions}}</div>
+	</div>
+
+	<div class="pagecontent">
+
+			<div id="faqcontainer">
+
+				<div id="faqitems" align="left">
+					<h3>Category X</h3>
+					<hr />
+					<ol>
+					{{foreach $faqitems as $fi}}
+						<li><strong>Q: {{$fi[question]}}</strong>
+						<span class="right f10">(by {{$fi[name]}})</span>
+						<br />
+						A: {{$fi[answer]}}
+						</li>
+					{{/foreach}}
+					</ol>
+				</div>
+
+				<div class="c"></div>
+
+				{{if $pagination}}
+				<div class="pagination">
+					{{@pagination.links}}
+				</div>
+				{{/if}}
+
+				<a name="new"></a>
+				<div style="margin-top:15px">
+					{{if $successmessage}}
+						<div align="center" class="successmessage">{{$successmessage}}</div>
+					{{elseif $errormessage}}
+						<div align="center" class="errormesssage">{{$errormessage}}</div>
+					{{else}}
+						<a id="add_new_item" class="login-button pointer" name="asknew">Ask a new question</a>
+					{{/if}}
+				</div>
+
+				<div id="new_question"{{if !$errormessage}} style="display:none"{{/if}}>
+				<form name="faqform" id="faqform" action="faq.php#new" method="post">
+					<fieldset style="width:550px;background-color:#F0F0F0;">
+
+						<div style="margin-left:20px;margin-bottom:5px;text-align:left">
+							<div>
+								<label for="name">{{@_t.nickname}}</label>
+								<input type="text" class="faqinput" id="name" name="name" value="{{if $var[name]}}{{$var[name]}}{{/if}}" /> <span class="f10">({{@_t.willbepublished}})</span>
+							</div>
+							<div>
+								<label for="email">{{@_t.email}}</label>
+								<input type="text" class="faqinput" id="email" name="email" value="{{if $var[email]}}{{$var[email]}}{{/if}}" /> <span class="f10">({{@_t.willnotbepublished}})</span>
+							</div>
+							<div>
+								<label for="categories">{{@_t.selectcategory}}</label>
+								<select name="category">
+									{{foreach $categories as $c}}
+										<option value="{{@c.id}}">{{@c.name}}</option>
+									{{/foreach}}
+								</select>
+							</div>
+						</div>
+
+						<textarea name="comment" class="faqtextarea">{{if $var[question]}}{{$var[question]}}{{/if}}</textarea>
+
+						<div style="margin:5px 0px 5px 0px">
+							{{$captcha[img]}}
+						</div>
+						<div>{{@_t.enter_verification_code}}:</div>
+						<div>
+							<input type="text" class="faqinput" name="captcha[input]" size="6" />
+						</div>
+						<div>
+							<input type="hidden" name="captcha[id]" value="{{$captcha[id]}}" />
+						</div>
+
+					</fieldset>
+
+					<div style="margin-top:10px">
+						<input type="submit" class="login-button" value="{{@_t.submitquestion}}" />
+					</div>
+
+				</form>
+				</div>
+
+				<div class="c"></div>
+
+			</div> <!-- /faqcontainer-->
+
+			<div id="bottom">
+				<div class="bottom-a">
+					<a href="{{$__siteurl}}/#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

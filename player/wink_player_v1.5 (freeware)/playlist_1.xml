@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<streams buffer="4" buffer_factor="6" volume="85" debug="false">
+  <skin fullscreen="false" playbutton="center" autoplay="false" hidecontrols="true" stretch_vid="true" trackinfo="false" />
+  <playlist server="www.example.com" proto="http" path="path/to/some/folder" port="">
+    <item title="My File 1" file="myfile.mp3" pmode="" thumbnail="/_images/thumb.jpg" />
+    <item title="My File 2" file="somegreatflick.mp4" pmode="" thumbnail="/_images/thumb.jpg" />
+  </playlist>
+</streams>

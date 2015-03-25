@@ -1,0 +1,40 @@
+{{set $_pagetitle="Join BuxomCurves!"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="240"}}
+{{set $barcolor="961512"}}
+
+{{include _header}}
+
+
+	<!-- <div id="headerimg">
+		<div id="goodies-header-inner" align="left">
+			<div class="f32">Join now!</div>
+			<div class="f12">xxxxxxxxxxxxxxx!
+			</div>
+			</span>
+		</div>
+	</div> -->
+
+	<a name="video"></a>
+	<div class="headline_bar" align="left">
+		{{$_pagetitle}}
+	</div>
+
+	<div class="pagecontent">
+
+		{{if $_page[errormessage]}}
+		<!-- error -->
+		<div id="errors">
+			<img src="{{$__siteurl}}/img/icons/warning.png" width="16" height="16" hspace="5" alt="" border="0" />
+			<strong>{{$_page[errormessage]}}</strong><br />
+		</div>
+		{{/if}}
+
+		<div id="join_page">
+			{{include $join_page_path}}
+		</div>
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

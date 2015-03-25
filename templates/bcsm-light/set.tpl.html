@@ -1,0 +1,169 @@
+{{set $_pagetitle="Set"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight = "214"}}
+{{set $barcolor = "967572"}}
+{{include _header}}
+
+{{*
+    <script type="text/javascript">
+    $(function() {
+        $('#t a').lightBox();
+    });
+    </script>
+*}}
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<a name="gallery"></a>
+
+			<div id="content-right">
+
+				<div class="headline_bar" align="left">
+					{{@update.title}}
+					{{if $update['totalpics']}}
+						<div class="right">{{@update.totalpics}} {{@_t.photos}}</div>
+					{{/if}}
+				</div>
+
+				<div id="thumbs">
+
+					<div id="t">
+					{{foreach $update['pictures'] as $pic}}
+						<div class="thumbnail">
+							{{if $pic['link']}}
+								<a href="{{@pic.link}}"><img src="{{@pic.thumb.src}}" class="{{@pic.thumb.class}}" alt="" width="{{@pic.thumb.width}}" height="{{@pic.thumb.height}}"></a>
+							{{else}}
+								<img src="{{@pic.thumb.src}}" class="{{@pic.thumb.class}}" alt="" width="{{@thumbsizes.width}}" height="{{@thumbsizes.height}}">
+							{{/if}}
+						</div>
+					{{else}}
+						{{@_t.no_pictures_found}}
+					{{/foreach}}
+					</div>
+
+					<div class="c"></div>
+
+					{{if $pagination}}
+					<div class="pagination">
+						{{@pagination.links}}
+					</div>
+					{{/if}}
+
+				</div><!-- /thumbs-->
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.statistics}}
+					</div>
+					<div class="subbox">
+					{{@_t.addedon}}: {{@update.date}}<br>
+					{{if $update['totalpics']}}
+						{{@_t.photocount}}: {{@update.totalpics}} {{@_t.photos|strtolower}}<br>
+					{{/if}}
+					{{if $update['picsize']}}Size: {{@update.picsize}}<br>{{/if}}
+					{{if $update['rating']}}{{@_t.currentrating}}: {{@update.rating}}<br>{{/if}}
+					{{if $update['tags']}}{{@_t.tags}}: {{@update.tags}}{{/if}}
+					</div><!-- /subbox-->
+				</div>
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.aboutthisscene}}
+					</div>
+					<div class="subbox">
+						{{@update.description}}
+					</div><!-- /subbox-->
+				</div>
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.model}}: {{@update.modelnames}}
+					</div>
+					<div class="subbox">
+						{{foreach $update['models'] as $m}}
+							<a href="{{$__siteurl}}/profile/{{@m.slug}}">
+								<img src="{{$__siteurl}}{{@m.path}}" alt="" border="2" width="100%">
+							</a>
+						{{/foreach}}
+					</div><!-- /subbox-->
+				</div>
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.rating}}
+					</div>
+					<div class="subbox">
+
+						<div id="ratescene" class="rating">rate this!</div>
+
+					</div><!-- /subbox-->
+				</div>
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.downloadoptions}}
+					</div>
+					<div class="subbox">
+						<img src="{{$__siteurl}}/img/icons/compress.png" width="16" height="16" alt="" border="0" align="absmiddle">
+						<a href="{{$__siteurl}}/members/zips/{{$slug|strtolower}}.zip">Download Zip File</a> ({{$zipsize}})
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.recentcomments}}
+					</div>
+					<div class="subbox">
+
+						<div id="comments">
+
+						{{if $update['comments']}}
+							{{foreach $update['comments'] as $comment}}
+							<div class="comment">
+								<span class="right"><a href="./report.php?id={{@comment.id}}" class="report"><img src="img/warning.png" title="Report this comment" width="12" height="12" border="0"></a></span>
+								<span class="cdate">On {{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> {{@_t.said}}:
+								<div class="c"></div>
+								{{@comment.content}}
+								<hr>
+								<div class="c">&nbsp;</div>
+							</div>
+							{{/foreach}}
+
+						{{else}}
+							<div class="smallfont">No comments for this video, yet.</div>
+						{{/if}}
+						<hr>
+
+						<img src="{{$__siteurl}}/img/icons/comment_add.png" width="12" height="12" alt="" border="0">
+						Post a new comment!
+						<br>Comment form here!
+
+					</div><!-- /subbox-->
+				</div>
+			</div><!-- /sidebar-->
+
+</div>
+
+			<div class="c"></div>
+
+			<div id="bottom">
+					<div>
+						<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+					</div>
+					<div class="bottom-text">
+						Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+					</div>
+					<div class="c"></div>
+			</div><!-- /bottom-->
+
+
+	<div class="c"></div>
+
+{{include _footer}}
+

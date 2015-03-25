@@ -1,0 +1,116 @@
+{{set $_pagetitle=""}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $barcolor="961512"}}
+
+{{translations averagescenerating="Average Scene Rating" country="Country" location="Location" model="Model" modelrating="Model Rating" pictureupdates="Picture Updates" rating="Rating" recentcomments="Recent Comments" reportcomment="Report comment" statistics="Statistics" updates="Updates" videos="Videos"}}
+
+{{include _header}}
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<a name="model"></a>
+
+	<div class="pagecontent">
+
+			<div id="content-right">
+
+				<div class="headline_bar" align="left">
+					{{$model[modelname]}}
+				</div>
+
+				{{if $description}}
+				<div class="thumbs">
+					<!-- model picture -->
+					<div id="profilemodelthumbnail">
+						<img src="{{$model[thumb0]}}" width="{{$modelthumbsizes[0][0]-100}}" height="{{$modelthumbsizes[0][1]-100}}" border="2" alt="{{$model[modelname]}}" />
+					</div>
+					{{$model[description]}}
+				</div><!-- /thumbs-->
+				{{/if}}
+
+				{{if $model[updates]}}
+				<div class="headline_bar" align="left">
+					{{$updates}}
+				</div>
+				<div class="thumbs">
+					{{foreach $model[updates] as $update}}
+		 			<div class="thumbnail">
+		 				<a href="./{{if $update[type] == 'videoset'}}video{{else}}set{{/if}}.php?id={{@update.id}}">
+		 					<img src="{{@update.thumb1}}" width="{{$_config[updatethumbsizes][1][0]}}" height="{{$_config[updatethumbsizes][1][1]}}" alt="" border="1" />
+		 					<div class="g-title">{{@update.title}}</div>
+		 				</a>
+		 			</div>
+					{{/foreach}}
+
+				</div><!-- /thumbs-->
+				{{/if}}
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{$statistics}}
+					</div>
+					<div class="subbox">
+					{{if $model[location]}}{{$location}}: {{$model[location]}}<br />{{/if}}
+					{{if $model[country]}}{{$country}}: {{$model[country]}}<br />{{/if}}
+					{{if $model[numpicsets] >= 1}}{{$pictureupdates}}: {{$model[numpicsets]}}<br />{{/if}}
+					{{if $model[numvideos] >= 1}}{{$videos}}: {{$model[numvideos]}}<br />{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{$rating}}
+					</div>
+					<div class="subbox">
+					{{if $model[rating]}}{{$modelrating}}: {{$model[rating]}}<br />{{/if}}
+					{{if $model[avgscenerating]}}{{$averagescenerating}}: {{$model[avgscenerating]}}{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{$recentcomments}}
+					</div>
+					<div class="subbox">
+
+						<div id="comments">
+
+						{{if $comments}}
+							{{foreach $comments as $comment}}
+							<div class="comment">
+								<span class="cdate">{{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> said: {{@comment.content}}<br />
+								<hr />
+								<a href="./report.php?id={{@comment.id}}" class="report">{{$reportcomment}}</a>
+								<div class="c">&nbsp;</div>
+							</div>
+							{{/foreach}}
+						{{/if}}
+
+						<hr />
+						Post a new comment!
+
+					</div><!-- /subbox-->
+				</div>
+			</div><!-- /gallery-left-->
+
+			<div class="c"></div>
+			</div> <!-- empty div before #gallery -->
+			<div class="c"></div>
+
+			<div id="bottom">
+				<div class="bottom-a">
+					<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

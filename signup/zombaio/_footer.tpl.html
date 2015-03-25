@@ -1,0 +1,34 @@
+	<div width="100%" class="footerbar"></div>
+
+	<div id="footer"><!-- footer-->
+		<div class="left">
+			&copy; 2010-{{#date('Y')}} {{$__sitename}} - {{$_allrightsreserved}}.
+		</div>
+
+		{{if $_page[templatename] != 'join'}} {{* don't show login on join page*}}
+		<div class="right">
+			<a href="./?page=terms">{{$_terms}}</a>
+			|
+			<a href="./?page=privacypolicy">{{$_privacypolicy}}</a>
+			|
+			<a href="./?page=contact#contact">{{$_contact}}</a>
+			|
+			<a href="http://support.zombaio.com/">{{$_billingsupport}}</a>
+			|
+			<a href="./?page=2257">{{$_short2257}}</a>
+			|
+			<a href="#top">{{$_top}}</a>
+		</div>
+		{{/if}}
+
+		<div class="c"></div>
+	</div><!-- /footer-->
+
+	<p>&nbsp;</p>
+
+</div><!-- /content -->
+
+
+</div><!-- /center-->
+</body>
+</html>

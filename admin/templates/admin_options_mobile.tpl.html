@@ -1,0 +1,85 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_mobile" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>{{@_t.mobiledeviceredirections}}</h3>
+
+			<fieldset>
+				<h4>{{@_t.globalredirection}}</h4>
+
+				<div class="oitem_input">
+					{{if ($__showadmintooltips)}}
+						<div class="gray">
+						Globally turn off all mobile redirects by setting this to false.
+						</div>
+					{{/if}}
+					<div class="mtop5">
+						<input id="mdr_1" type="radio" value="1" name="options[mobile_device_redirect]"{{if $options['mobile_device_redirect']}} checked="checked"{{/if}}>
+						<label for="mdr_1">true</label>
+						<input id="mdr_0" type="radio" value="0" name="options[mobile_device_redirect]"{{if !$options['mobile_device_redirect']}} checked="checked"{{/if}}>
+						<label for="mdr_0">false</label>
+					</div>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.redirects}}</h3>
+
+			<fieldset>
+					{{if ($__showadmintooltips)}}
+					You can define different redirects depending on the matching devices. Set the following variables to the redirect url or leave them blank to not redirect for the mobile device. Urls can be relative or even point to another website.
+					{{/if}}
+
+					<div class="oitem_input">
+						<label class="title" for="ipo">IPhone and IPod Touch:</label>
+						<input id="ipo" type="text" name="options[mobile_device_redirect_urls][iphoneurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.iphoneurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="aph">Android Phones:</label>
+						<input id="aph" type="text" name="options[mobile_device_redirect_urls][androidurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.androidurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="opm">Opera Mini:</label>
+						<input id="opm" type="text" name="options[mobile_device_redirect_urls][operaurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.operaurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="bb">Blackberry:</label>
+						<input id="bb" type="text" name="options[mobile_device_redirect_urls][blackberryurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.blackberryurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="palm">Palm:</label>
+						<input id="palm" type="text" name="options[mobile_device_redirect_urls][palmurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.palmurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="wmob">Windows Mobile:</label>
+						<input id="wmob" type="text" name="options[mobile_device_redirect_urls][windowsurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.windowsurl}}">
+					</div>
+					<div class="oitem_input">
+						<label class="title" for="omd">{{@_t.othermobiledevices}}:</label>
+						<input id="omd" type="text" name="options[mobile_device_redirect_urls][mobileurl]" class="forminput" size="50" value="{{@options.mobile_device_redirect_urls.mobileurl}}">
+					</div>
+			</fieldset>
+
+		</div>
+
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

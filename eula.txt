@@ -1,0 +1,252 @@
+			   COMPANY, Inc.
+
+		TERMS AND CONDITIONS OF USE AGREEMENT                     
+
+IMPORTANT: READ THE FOLLOWING TERMS CAREFULLY BEFORE DOWNLOADING,
+INSTALLING AND USING THIS PRODUCT! BY DOWNLOADING, INSTALLING, OR
+USING THE SOFTWARE PRODUCT, YOU AGREE TO BE BOUND BY THESE TERMS
+AND CONDITIONS. IF YOU DO NOT AGREE TO THE TERMS OF THIS EULA,
+DO NOT INSTALL, DOWNLOAD OR USE THE SOFTWARE PRODUCT.
+
+This End-User License Agreement (EULA) is a legal agreement between
+COMPANY, Inc. ("Licensor" or "us" or "we") and you, the purchaser of the license rights granted
+by this Agreement ("Licensee" or "You").
+
+
+1. LICENSE.
+
+The accompanying software ("Software") and tutorial videos ("Documentation")
+is protected by copyright laws and international copyright treaties,
+as well as other intellectual property laws and treaties. In this License Agreement,
+the Software and Documentation and any copies or modifications are referred to
+as the "Licensed Product".
+
+The Software Product is licensed, not sold.
+EULA inures after purchase by the user of the Software Product License.
+Without having the license you can not use the Software Product.
+
+Licensor grants Licensee the non-exclusive license to use the accompanying software 
+Software and Documentation.
+
+All rights to and in the Licensed Product, all copies and derivative works,
+including, but not limited to, copyrights and
+trade secret rights, belong to Licensor and Licensor holds title to each copy
+of the Software.
+
+The Software shall only be used in conjunction with one website.
+Licensee is required to purchase additional licenses of the Licensed
+Product for each additional web site.
+Use of the Software on more than one website without proper licensing will
+result in termination of all of Licensee's rights to use the Licensed Product.
+
+Licensee's login information for the Owners Lounge is for use of Licensee only.
+Licensee shall not provide Owners Lounge login information to any third party
+under any circumstance, and this Agreement shall automatically terminate in
+the event of such action. Licensee shall not transfer or distribute the
+Licensed Product to others, and this Agreement shall automatically terminate
+in the event of such a transfer or distribution.
+
+Licensee shall not copy, modify or create derivative works of the
+Licensed Product, except as provided for herein and to make one copy of the
+Software for the sole purpose of backup as long as all copyright and other
+notices are reproduced and included on the backup copy.
+
+
+2. TERM AND TERMINATION.
+
+This License Agreement is effective until
+terminated.  Licensor may terminate this License Agreement if Licensee
+breaches any of the terms and conditions contained herein.
+Upon termination of this License Agreement for any reason, Licensee shall
+permanently destroy all copies of the Licensed Product.
+
+All provisions of this Agreement relating to disclaimers of warranties,
+limitation of liability, remedies, or damages, and Licensor's proprietary
+rights shall survive termination.
+
+
+3. RESTRICTIONS ON TRANSFER AND USE.
+
+Licensee may not transfer, in whole or in part, the Licensed Product
+to any third party, including a transfer contemporaneously with the sale
+of the web site, assets or stock of Licensee.
+Any attempt to sublicense, assign, or transfer any of the rights, duties, or
+obligations hereunder is void.  Use of the Software for remote hosting of 
+software for third parties is forbidden and may result in termination of your
+License Agreement.
+
+
+4. LIMITED WARRANTY. Licensor does not warrant that the functions
+contained in the Licensed Product will meet Licensee's requirements or that the
+operation of the Software will be uninterrupted or error-free.
+
+THE LICENSED PRODUCT IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. LICENSOR
+DOES NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THE SOFTWARE WILL MEET YOUR
+REQUIREMENTS OR THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR
+ERROR FREE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE LICENSED
+PRODUCT IS WITH LICENSEE.
+
+Some states do not allow the exclusion of implied warranties, so the above
+exclusion may not apply to you.  This warranty gives you specific legal rights,
+and you may also have other rights that vary from state to state.
+
+
+5. LIMITATION OF LIABILITY.  LICENSOR'S SOLE OBLIGATION OR LIABILITY
+UNDER THIS AGREEMENT IS THE REPLACEMENT OF DEFECTIVE MEDIA. IN NO EVENT WILL
+LICENSOR BE LIABLE FOR ANY CONSEQUENTIAL, INCIDENTAL, PUNITIVE, DIRECT OR
+INDIRECT DAMAGES, INCLUDING, WITHOUT LIMITATION, ANY LOSS OF DATA, OR LOSS OF
+PROFITS OR LOST SAVINGS OR LOSS OF USE, ARISING OUT OF USE OF OR INABILITY TO
+USE THE SOFTWARE OR DOCUMENTATION OR FOR ANY INSTALLATION SERVICES, EVEN IF
+LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM
+BY ANY THIRD PARTY. IF LICENSOR IS FOUND LIABLE FOR DAMAGES BY A COURT OF LAW,
+THEN THE MAXIMUM, IN THE AGGREGATE, OF DAMAGES SHALL BE THE AMOUNT THE PAID BY
+THE LICENSEE TO LICENSOR HEREUNDER.
+
+
+6. GENERAL.  Any attempt to sublicense, assign or transfer any of the
+rights, duties or obligations hereunder is void.  This Agreement shall be
+governed by and interpreted under the substantive and procedural laws of the
+State of Iowa, without regard to conflicts of provisions. All disputes shall be
+resolved in the courts located in Linn County, Iowa.  Licensee's obligations
+hereunder shall at all times be subject to the export control laws and
+regulations mandated by the Federal Government.  You agree that you will comply
+with all export control laws and regulations.
+
+
+7. TECHNICAL SUPPORT. Once you have licensed the Software, priority 
+technical support is available via a support ticket system for three (3) months
+from the date of purchase.  Additional priority technical support can be
+purchased in one (1) month intervals at the then current rates.  Purchase of
+additional domain licenses does not include additional priority technical
+support.  Technical Support can be accessed through our Owners Lounge.
+
+Standard support is available free of charge for the lifetime of your license
+through our owners lounge help forums.  Our standard support service has a 
+minimum 48 hour response time.  If you have an urgent issue that you need a
+response to, we recommend using our priority support service which can be
+purchased for a small fee if your three (3) months of included priority
+support have expired.
+
+Technical support may be discontinued for older versions of our products at
+any time.  If you are using a version for which support has been discontinued,
+you will need to upgrade to a newer version in order to receive further
+support.
+
+In order to receive technical support, you must have an unedited copy of the
+Software running on your server.  The only sections of code that you may edit
+are those that are mentioned in the documentation for the Software.  Any other
+editing of the Software will result in the loss of technical support.  We do
+not provide technical support for modified Software.
+
+For priority technical support requests, please allow 24 hours for a response.
+We do not have a 24-hour staff to handle the requests we get, so please be
+patient when requesting assistance.  For standard support requests, please
+allow a minimum of 48 hours for a response.  We do not provide telephone
+correspondence for sales or tech support at this time.  We are a small company
+with limited resources, and are not able to offer that service.  To date, we 
+have been able to successfully resolve ALL tech support issues through e-mail
+and the help boards, so just because we don't offer phone support doesn't mean
+we can't help.  Some issues may require that we login to your server through a
+shell or FTP.  If you are unable or unwilling to provide us with login
+information, we may be unable to assist in troubleshooting the problem.  In
+these cases you will need to handle your own troubleshooting.
+
+The tech support staff will be able to assist you with problems you encounter
+with the Software itself (software generated error messages).  It is assumed
+that your server meets the requirements of the software.  The tech support
+staff can not offer server administration services to get your server properly
+configured to run the software.  Configuring the software templates to match
+your site, setting up banners for your members to use, etc. is solely your
+responsibility.  If you are having problems getting your site to look how you
+want it, we can offer limited template support by identifying which files need
+to be edited and what the available template options do.   It is assumed that
+you have a solid understanding of HTML on the source level.  The tech support
+staff members are not HTML developers, and cannot provide you with any template
+customization services.  If you do need to have a template created, we may be
+able to offer that service for an additional charge.
+
+If you alter or modify the Software which results in the Software ceasing to
+function or not to function properly, there will be an additional fee if you
+require us to correct the error.
+
+
+8. REFUND POLICY.  We do not refund any monies for return of the 
+Licensed Product.  ALL SALES ARE FINAL.  The operating system and other
+requirements are clearly stated, so make sure that your system meets those
+requirements before you purchase the Licensed Product.  Prior to your purchase
+you have the opportunity to view the demo and ask us questions to make sure
+that the Software suits your needs - no refunds will be given on the basis that
+the Licensed Product does not meet your requirements. Any refunds or charge-
+backs processed without the consent of JMB Software, Inc. will result in legal
+action against you for breach of the software license.
+
+
+9. INSTALLATION POLICY.  If you require that we install the Software
+for you, there is an additional fee for that service.  The fee varies based
+on the product.  Current pricing can be found on our website or by contacting
+the sales staff.
+
+Installation consists of us asking you a series of questions, getting your
+server login information, uploading all required files, setting all the 
+variables according to your answers, and making sure the script is operating
+properly within your server capabilities.  Once that is completed, we will
+contact you with the information you need to begin working with the Software.
+
+We do not setup any HTML for you, and we also do not setup cron scripts or
+crontab entries if that is an option for the script you are purchasing.  A 
+standard installation is done based on the installation instructions provided
+with the software.  Utilities, add ons, and both optional and required modules
+for the software to function are not included in the installation unless
+specifically noted at the time of purchase.  The Software comes with default
+HTML, and that is what will be used during the installation.  All modifications
+to the software templates must be created and entered into the script by 
+yourself or your site's webmaster.  This is done through a web based interface
+wich allows you to modify the HTML code and template values.
+
+During the installation we will attempt to setup the script so that it can send
+e-mails.  Unfortunately, some servers have restrictions on web software sending
+e-mails, so this is something we cannot guarantee.  All other functions of the
+Software are covered in the basic installation.
+
+By providing your login information to us for installation services you are
+authorizing us to access your web site, make changes, create directories,
+upload files and all other necessary actions to get the software installed and
+operating pursuant to our standard specifications.  Additionally, you are
+permitting us to retain the login information for future technical support,
+should it be needed and for removal of the Software in the event your license
+is terminated pursuant to the terms hereof.  You will indemnify and hold us
+harmless for all damages that arise from our access to your site and hold us
+harmless for, and hereby expressly assume all risk for, any violation of your
+agreement with your web site host or provider.
+
+Installation services are only available for servers that meet the software
+requirements.  We do not offer installation services for servers that do not
+meet the software requirements.
+
+The installation fee covers the initial installation of a single instance of
+the software you have purchased the service for.  Any upgrades or additional
+installations will require an additional fee.  Unless specifically requested,
+all installations are done with the latest stable release of the product you
+purchase.  Installation of beta versions will only be done if specifically
+requested at the time of purchase
+
+
+10. CONFIDENTIALITY AND LINKING. Your personal information will be kept
+confidential and will not be disclosed to a third party unless we are presented
+with a court order ordering us to do so.  The Software may enable collection of
+personally identifiable information and you as the owner are solely responsible
+for compliance with the Children's Online Privacy Protection Act.
+
+We reserve the right to use your web site URL as an example for other potential
+customers to view.  We reserve the right to link to your site whenever you are
+using the Software.  The Software contains links to our web site at the bottom
+of some of the pages. This is done to provide us with an inexpensive way of
+advertising, and in turn allows us to offer you the most affordable prices 
+possible.  Removal or alteration any of these links is strictly forbidden.  If
+your web site is found to have removed or altered the link, your Owner's Lounge
+access will be permanently disabled and this License Agreement terminated.  We
+offer a special version of the Software for an additional fee that does not
+contain links to our site.  Beta or other types of test releases may not have a
+link removed version available.

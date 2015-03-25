@@ -1,0 +1,62 @@
+{{include _header}}
+
+{{translations _rememberme="Remember Me"}}
+
+<script type="text/javascript"><!--
+function ClearInput(id){
+	var input = document.getElementById(id);
+	input.value = '';
+}
+//-->
+</script>
+
+	<div class="pagecontent">
+
+				<div class="c">&nbsp;</div>
+
+				<div class="mbot10" align="center">
+					Log In @ <a href="{{$__siteurl}}">{{$__sitename}}</a>
+				</div>
+
+				{{if $_error}}
+				<div class="error">
+					{{$_error}}
+				</div>
+				{{/if}}
+
+				<div id="form">
+					<form name="loginform" id="loginform" action="{{$__memberurl}}/" method="post">
+
+					<p>
+						<label>{{$_username}}<br />
+						<input name="{{# Authentification::USERNAME}}" id="user_login" class="input" value="" size="20" tabindex="10" type="text" /></label>
+					</p>
+					<p>
+						<label>{{$_password}}<br />
+						<input name="{{# Authentification::PASSWORD}}" id="user_pass" class="input" value="" size="20" tabindex="20" type="password" onclick="ClearInput(this.id);" /></label>
+					</p>
+					<p class="forgetmenot"><label><input name="{{# Authentification::REMEMBER}}" id="rememberme" value="1" tabindex="90" type="checkbox" /> {{$_rememberme}}</label></p>
+
+					<input name="redirect" type="hidden" value="{{$redirect}}" />
+
+					<p class="submit mtop10">
+						<input type="submit" class="login-button" tabindex="100" value="{{$_login}}" id="submit" name="submit" />
+					</p>
+					</form>
+				</div><!-- /form-->
+
+				<div id="bottom" style="width:280px;" align="center">
+					<div class="bottom-text smallfont mtop5 mbot10">
+
+					</div>
+				</div><!-- /bottom-->
+
+
+			<script type="text/javascript"><!--
+			try{document.getElementById('user_login').focus();}catch(e){}
+			//-->
+			</script>
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

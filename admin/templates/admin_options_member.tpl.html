@@ -1,0 +1,51 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_member" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>{{@_t.user_authentification}}</h3>
+			<fieldset>
+				<div class="oitem_select">
+					<label for="authselector" class="title">{{@_t.authmethod}}:</label>
+					<select name="options[auth_method]" id="authselector" class="forminput">
+						<option{{if $options['auth_method']=='htaccess'}} selected="selected"{{/if}} value="htaccess">htaccess</option>
+						<option{{if $options['auth_method']=='database'}} selected="selected"{{/if}} value="database">database</option>
+					</select>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.admin_user_account}}</h3>
+			<fieldset>
+				<div class="oitem_select">
+					<div class="title"><label for="a_acc">Admin User ID</label></div>
+					<input id="a_acc" type="text" class="forminput numeric" name="options[admin_member_account]" value="{{@options.admin_member_account}}">
+					{{if ($__showadmintooltips)}}
+						<img src="{{$__adminurl}}/img/icons/information.png" width="16" height="16" alt="?" align="bottom" border="0" class="pointer" onclick="$('.admin_user_info').toggle();">
+						<div class="admin_user_info gray hidden">
+							Numeric user id of the admin member. This is usually the first member of the site. When you add a new update, the initial rating (if any) will be added under this user's account.
+							This member will NOT receive any editor or administrator permissions!
+						</div>
+					{{/if}}
+				</div>
+			</fieldset>
+		</div>
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

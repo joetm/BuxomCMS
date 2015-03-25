@@ -1,0 +1,119 @@
+{{set $_pagetitle = $model['title']}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight = "0"}}
+{{set $barcolor = "96A5A2"}}
+{{include _header}}
+
+{{*
+	<div id="headerimg"></div><!-- /headerimg-->
+*}}
+
+	<a name="model"></a>
+
+			<div id="content-right">
+
+				<div class="headline_bar">
+					{{@model.title}}
+				</div>
+
+				<div class="thumbs">
+					<!-- model picture -->
+					<div>
+						<img src="{{@model.thumbnails.0.path}}" width="{{@model.thumbnails.0.width}}" height="{{@model.thumbnails.0.height}}" border="2" alt="{{@model.title}}">
+					</div>
+					{{if $model['description']}}{{@model.description}}{{/if}}
+				</div><!-- /thumbs-->
+
+				{{if $model['updates']}}
+				<div class="headline_bar">
+					{{@_t.updates}}
+				</div>
+				<div>
+					{{foreach $model['updates'] as $update}}
+		 			<div class="thumbnail">
+{{*!!!!!!!!!!!!!*}}
+
+
+
+
+
+
+		 				<a href="{{$__siteurl}}/{{if $update['type'] == 'videoset'}}video{{else}}set{{/if}}/{{@update.slug}}">
+		 					<img src="{{@update.path}}" width="{{@update.width}}" height="{{@update.height}}" alt="" border="1">
+		 					<div>{{@update.title}}</div>
+		 				</a>
+		 			</div>
+					{{/foreach}}
+				</div>
+				{{/if}}
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.statistics}}
+					</div>
+					<div class="subbox">
+					{{if $model['location']}}{{@_t.location}}: {{@model.location}}<br>{{/if}}
+					{{if $model['country']}}{{@_t.country}}: {{@model.country}}<br>{{/if}}
+					{{if $model['stats']['setnum'] >= 1}}{{@_t.pictureupdates}}: {{@model.stats.setnum}}<br>{{/if}}
+					{{if $model['stats']['numpics'] >= 1}}{{@_t.pictures}}: {{@model.stats.numpics}}<br>{{/if}}
+					{{if $model['stats']['numvideos'] >= 1}}{{@_t.videos}}: {{@model.stats.numvideos}}<br>{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.rating}}
+					</div>
+					<div class="subbox">
+					{{if $model['rating']}}{{@_t.modelrating}}: {{@model.rating}}<br>{{/if}}
+					{{if $model['avgscenerating']}}{{@_t.averagescenerating}}: {{@model.avgscenerating}}{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{@_t.recentcomments}}
+					</div>
+					<div class="subbox">
+
+						<div id="comments">
+
+						{{if $comments}}
+							{{foreach $comments as $comment}}
+							<div class="comment">
+								<span class="cdate">{{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> said: {{@comment.content}}<br>
+								<hr>
+								<a href="./report.php?id={{@comment.id}}" class="report">{{@_t.reportcomment}}</a>
+								<div class="c">&nbsp;</div>
+							</div>
+							{{/foreach}}
+						{{else}}
+							{{@_t.no_comments}}
+						{{/if}}
+
+						<hr>
+						Post a new comment!
+
+					</div><!-- /subbox-->
+				</div>
+			</div><!-- /gallery-left-->
+
+			<div class="c"></div>
+			</div> <!-- empty div before #gallery -->
+			<div class="c"></div>
+
+			<div id="bottom">
+				<div>
+					<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+
+{{include _footer}}

@@ -1,0 +1,42 @@
+{{*peel*}}
+<style type="text/css"><!--
+#pageflip {
+	position: relative;
+	right: 0;
+	top: 0;
+	float: right;
+	z-index:99;
+}
+#pageflip img {
+	width: 50px;
+	height: 52px;
+	z-index: 99;
+	position: absolute;
+	right: 0;
+	top: 0;
+	-ms-interpolation-mode: bicubic;
+}
+#pageflip .msg_block {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+	top: 0;
+	background: url({{$__siteurl}}/img/peel_video-formats.png) no-repeat right top;
+}
+#pageflip a img{
+	border:0px;
+}
+//-->
+</style>
+
+{{*
+<body>
+*}}
+
+	<div id="pageflip">
+		<a href="{{$__siteurl}}/join"><img src="{{$__siteurl}}/img/peel_page_flip.png" alt="" border="0"></a>
+		<div class="msg_block"></div>
+	</div>
+{{*/peel*}}

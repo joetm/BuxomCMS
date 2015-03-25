@@ -1,0 +1,12 @@
+<!-- rating-->
+<link type="text/css" href="{{$__siteurl}}/js/rating/jquery.rating.css" rel="stylesheet">
+<script src='{{$__siteurl}}/js/rating/jquery.MetaData.js' type="text/javascript"></script>
+<script src="{{$__siteurl}}/js/rating/jquery.rating.pack.js" type="text/javascript"></script>
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+	{{*comment this out to allow rating by clicking the stars on the new_update and new_model pages*}}
+	$('.star').rating('readOnly', true); //true or false
+});
+//-->
+</script>

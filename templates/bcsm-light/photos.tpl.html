@@ -1,0 +1,54 @@
+{{set $_pagetitle="BuxomCurves Pictures"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="325"}}
+{{set $barcolor="961512"}}
+{{include _header}}
+
+{{* {{photos internal_id=0 amount=4 paginate=true}} *}}
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<a name="photos"></a>
+	<div class="headline_bar" align="left">
+			<span class="right f11">{{@_t.sortby}}
+			{{if $sorting != 'rating'}}<a href="{{$__siteurl}}/photos/sort/rating">{{@_t.rating}}</a> |{{else}}{{@_t.rating}} |{{/if}}
+			{{if $sorting != 'title'}}<a href="{{$__siteurl}}/photos/sort/title">{{@_t.title}}</a> |{{else}}{{@_t.title}} |{{/if}}
+			{{if $sorting != 'date'}}<a href="{{$__siteurl}}/photos/sort/date">{{@_t.date}}</a>{{else}}{{@_t.date}}{{/if}}</span>
+			<span class="left bold">{{@_t.photogalleries}}</span>
+	</div>
+
+	<div class="pagecontent">
+
+			{{foreach $updates as $update}}
+			<div class="thumbnail">
+				<a href="{{$__siteurl}}/set/{{@update.slug}}">
+					<div class="g-title">{{@update.title}}</div>
+					<img src="{{@update.path}}" width="{{@update.width}}" height="{{@update.height}}" alt="" border="1">
+				</a>
+			</div>
+			{{else}}
+				{{@_t.noupdates}}
+			{{/foreach}}
+
+			<div class="c"></div>
+
+			{{if $pagination}}
+			<div class="pagination">
+				{{@pagination.links}}
+			</div>
+			{{/if}}
+
+			<div id="bottom">
+				<div>
+					<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

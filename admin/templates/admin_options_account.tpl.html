@@ -1,0 +1,53 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+});
+//-->
+</script>
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_account" method="post" name="options" id="options" autocomplete="off">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+			<div class="optiondiv">
+				<h3>{{@_t.change_password}}</h3>
+
+				<fieldset>
+					<div class="oitem_input">
+						<label for="c_pwd" class="title">
+							{{@_t.current_password}}
+						</label>
+						<input id="c_pwd" type="password" value="" class="forminput" name="old_password">
+					</div>
+
+					<div class="oitem_input">
+						<label for="n_pwd" class="title">{{@_t.new_password}}</label>
+						<input id="n_pwd" type="password" value="" class="forminput" name="new_password[0]">
+					</div>
+
+					<div class="oitem_input">
+						<label for="n_pwdr" class="title">{{@_t.repeat_password}}</label>
+						<input id="n_pwdr" type="password" value="" class="forminput" name="new_password[1]">
+					</div>
+				</fieldset>
+
+			</div>
+
+			<div>
+				<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+			</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

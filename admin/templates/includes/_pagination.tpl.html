@@ -1,0 +1,10 @@
+<div class="right perpage"">
+	per page: <input size="2" type="text" class="forminput" id="perpage" name="perpage" value="{{if $perpage}}{{$perpage}}{{/if}}">
+	<input type="image" src="{{$__adminurl}}/img/icons/arrow_refresh_small.png" value="Set" alt="Set" name="submit" title="Set perpage setting">
+</div>
+
+{{if $pagination}}
+		<div class="pagination" style="float:left;">
+			{{@pagination.links}}
+		</div>
+{{/if}}

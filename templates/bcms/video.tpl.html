@@ -1,0 +1,189 @@
+{{set $_pagetitle="Video"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="214"}}
+{{set $barcolor="961512"}}
+
+
+{{include _header}}
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<a name="gallery"></a>
+	<div class="pagecontent">
+
+			<div id="content-right">
+
+
+				<div class="headline_bar" align="left">
+					{{$title}}
+				</div>
+
+
+				<div id="videocontainer">
+
+					<!-- Begin VideoJS -->
+					<div class="video-js-box" style="{{*background-image:url(/img/logo_loading.gif); background-repeat:no-repeat;background-position: center center;*}}">
+						<video id="video" class="video-js" width="720" height="480" poster="http://video-js.zencoder.com/oceans-clip.png" preload>
+							<source src="http://video-js.zencoder.com/oceans-clip.mp4" type="video/mp4">
+							<source src="http://video-js.zencoder.com/oceans-clip.webm" type="video/webm">
+							<source src="http://video-js.zencoder.com/oceans-clip.ogg" type="video/ogg">
+							<object width="720" height="480" type="application/x-shockwave-flash"
+							data="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf">
+								<param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.1.swf" />
+								<param name="allowfullscreen" value="true" />
+								<param name="flashvars" value='config={"clip":"http://video-js.zencoder.com/oceans-clip.mp4"}' />
+								<img src="http://video-js.zencoder.com/oceans-clip.png" width="720" height="480" alt="Poster Image"
+									title="No video playback capabilities." />
+							</object>
+						</video>
+						<!--
+						<p class="vjs-no-video"><strong>Download Video:</strong>
+							<a href="http://video-js.zencoder.com/oceans-clip.mp4">MP4</a>,
+							<a href="http://video-js.zencoder.com/oceans-clip.webm">WebM</a>,
+							<a href="http://video-js.zencoder.com/oceans-clip.ogg">Ogg</a><br>
+							<a href="http://videojs.com">HTML5 Video Player</a> by <a href="http://videojs.com">VideoJS</a>
+						</p>
+						-->
+					</div>
+					<!-- End VideoJS -->
+
+					<div class="c">&nbsp;</div>
+
+					<div id="bottom">
+						<div class="bottom-a">
+							<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+						</div>
+						<div class="bottom-text">
+							Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+						</div>
+					</div><!-- /bottom-->
+
+				</div><!-- /videocontainer-->
+
+
+				{{if $screenpics}}
+				<div class="headline_bar" align="left">
+					Screenshots from this Video
+				</div>
+
+				<div id="screenpics">
+
+					{{foreach $screenpics as $screenpic}}
+					<div class="thumbnail">
+		 					<img src="/thumbs/videos/{{$shortmodelname}}/{{$sceneshortname}}/screens/{{@screenpic}}" width="160" height="120" alt="" border="1" />
+					</div>
+					{{/foreach}}
+
+				</div><!-- /screenpics-->
+				{{/if}}
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar" align="left">
+						Statistics
+					</div>
+					<div class="subbox">
+					{{if $date}}
+						Added on: {{$date}}<br />
+					{{/if}}
+					{{if $duration}}
+						Video Duration: {{$duration}}<br />
+					{{/if}}
+					{{if $rating}}
+						Current Rating: {{$rating}}<br />
+					{{/if}}
+						Model: <a href="./model.php?id={{$modelid}}">{{$shortmodelname|ucwords}}</a><br />
+					{{if $tags}}
+						Tags: {{foreach $tags as $tag}}{{$tag}}{{/foreach}}
+					{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						About this Scene
+					</div>
+					<div class="subbox">
+						{{$description}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						<img src="/img/icons/star.png" width="12" height="12" alt="" border="0" /> Rating
+					</div>
+					<div class="subbox">
+					Rate Now!
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						<img src="img/icons/disk.png" alt="" width="12" height="12" border="0" /> Download Options
+					</div>
+					<div class="subbox">
+
+						HiFi: <a href="./members/zips/#">Download .mp4</a><br />
+						<span class="f10">(h.264 @ 5000kbps) XXX MB)</span><br />
+						HiFi: <a href="./members/zips/#">Download .wmv</a><br />
+						<span class="f10">(@ 5000kbps) (XXX MB)</span><br />
+						LoFi: <a href="./members/zips/#">Download IPod</a><br />
+						<span class="f10">(XX MB)</span>
+
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						<img src="/img/icons/comments.png" width="16" height="16" align="absmiddle" alt="" border="0" /> Recent Comments
+					</div>
+					<div class="subbox">
+
+						<div id="comments">
+
+						{{if $comments}}
+							{{foreach $comments as $comment}}
+							<div class="comment">
+								<span class="right"><a href="./report.php?id={{@comment.id}}" class="report"><img src="img/warning.png" title="Report this comment" width="12" height="12" border="0" /></a></span>
+								<span class="cdate">On {{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> said:
+								<div class="c"></div>
+								{{@comment.content}}
+								<hr />
+								<div class="c">&nbsp;</div>
+							</div>
+							{{/foreach}}
+
+						{{else}}
+							<div class="smallfont">No comments for this video, yet.</div>
+						{{/if}}
+						<hr />
+
+						<img src="/img/comment_add.png" width="12" height="12" alt="" border="0" />
+						Post a new comment!
+						<br />Comment form here!
+
+					</div><!-- /subbox-->
+				</div>
+			</div><!-- /gallery-left-->
+
+			<div class="c"></div>
+			</div> <!-- empty div before #gallery -->
+			<div class="c"></div>
+
+			<div id="bottom">
+				<div class="bottom-a">
+					<a href="./join.php">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+	<div class="c">&nbsp;</div>
+
+{{include _footer}}
+

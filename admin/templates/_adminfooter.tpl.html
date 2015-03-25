@@ -1,0 +1,31 @@
+		<div class="bottom-decobar"></div>
+
+		<div id="disclaimer" class="left tinyfont">
+			{{if __VERSION}}v{{#__VERSION}}{{/if}}
+			- &copy;2010-{{# date('Y')}} <a href="http://www.buxomCMS.com/">BuxomCMS</a>
+			- All Rights Reserved.
+		</div>
+
+		<div class="right tinyfont">
+			{{if $_page['templatename'] != 'admin_login'}}
+					<a href="{{$__adminurl}}/editor">{{$_template_editor|strtolower}}</a>
+					|
+					<a href="{{$__adminurl}}/accounts">{{$_accounts|strtolower}}</a>
+					|
+					<a href="{{$__adminurl}}/login_history">{{$_loginhistory|strtolower}}</a>
+					|
+					<a href="{{$__adminurl}}/activitylog">{{$_activitylog|strtolower}}</a>
+					|
+					<a href="{{$__adminurl}}/structure">{{$_showstructure|strtolower}}</a>
+			{{/if}}
+		</div>
+
+		<div class="c"></div>
+
+	</div><!-- /content -->
+
+	<div class="c" style="margin-bottom:24px;"></div>
+
+</div><!-- /align center-->
+</body>
+</html>

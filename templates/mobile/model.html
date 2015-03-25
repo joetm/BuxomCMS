@@ -1,0 +1,88 @@
+<?php
+
+/***config***/
+error_reporting(E_ALL | E_STRICT);
+require_once "../_init.php";
+$templatename = "mmodel";
+$tpl = new Template($templatename,10,'../templates/mobile');
+/***config***/
+
+/***page setup***/
+$tpl->barcolor = "961512";
+$tpl->_keywords = "buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women";
+$tpl->_description = "BuxomCurves description";
+$commentlimit = 5;
+/***page setup***/
+
+/***get variables***/
+if(empty($_GET['id'])){
+	$id = 0;
+	$_GET['id'] = 0;
+}
+else{
+	$model = new Model($_GET['id']);
+}
+/***get variables***/
+
+/***database connect***/
+$db = DB::getInstance();
+
+//***model data***//
+$model->getData();
+
+//***updates data***//
+$model->getUpdates();
+//updates are now in $model->updates
+
+//***model comments***//
+$comments = array();
+$i = 0;
+$sql = "SELECT * FROM `modelcomments` WHERE `modelid` = '$model->id' AND `date` <= NOW() LIMIT ".$commentlimit;
+$comments = $db->query3d($sql);
+
+/***stats***/
+$stats = new Stats;
+/***stats***/
+
+/***database disconnect***/
+unset($sql);
+unset($db);
+
+/***modelname***/
+if (is_object($model)) $tpl->assign("model", $tpl->parseObjectToArray($model));
+
+/***comments***/
+if(isset($comments)) $tpl->assign("comments", $comments);
+
+/***modelthumbsizes***/
+$tpl->assign("modelthumbsizes", $modelthumbsizes);
+//width: $modelthumbsizes[0][0]
+//height:$modelthumbsizes[0][1]
+/***modelthumbsizes***/
+$tpl->assign("updatethumbsizes", $updatethumbsizes);
+//we use update thumb1 for the model profile page
+//width: $updatethumbsizes[1][0]
+//height:$updatethumbsizes[1][1]
+
+/***config***/
+if(isset($model->headerimgheight)){
+	$tpl->headerimgheight = $model->headerimgheight;
+}
+else{
+	$tpl->headerimgheight = 325;
+}
+
+//$tpl->assign("_page", $tpl->get() );
+
+$tpl->display();
+
+if(Config::Get('debug') === true){
+	//memory_debug();
+//	echo "<p>Loaded in: ",microtime(true) - $time, " seconds</p>\n";
+}
+
+//this will include a copyright notice comment in the output
+//you can savely remove this
+$tpl->Copyright();
+
+?>

@@ -1,0 +1,36 @@
+{{* submenu *}}
+<div id="submenu">
+				<ul class="menu">
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_general'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_general">{{$_general}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_theme'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_theme">{{$_theme}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_cache'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_cache">{{$_cache}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_member'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_member">{{$_member}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_billing'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_billing">{{$_billing}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_social'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_social">{{$_social}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_mobile'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_mobile">{{$_mobile}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_local'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_local">L10n &amp; i18n</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_types'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_types">Post Types</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_options_account'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_account">Account</a>
+					</li>
+				</ul><!-- /menu -->
+</div>
+<div class="c"></div>

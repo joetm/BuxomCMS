@@ -1,0 +1,209 @@
+{{set $_pagetitle="BuxomCurves.com"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves.com - Because chubbies are better!"}}
+{{set $headerimgheight="204"}}
+{{set $barcolor="261512"}}
+{{include _header}}
+
+	<div id="headerimg">
+		<div style="float:right;margin:0px;margin-top:32px;margin-right:45px;color:#FFFFFF;text-align:right;">
+			<div>
+				<span class="f18">bux&middot;om [b&#365;k&#769;s&#600;m]</span>
+			</div>
+			<div>
+				<span class="f14">
+					<strong>a.</strong> Healthily plump and ample of figure.<br>
+					<strong>b.</strong> Full-bosomed.<br>
+					<br>
+					<div style="width:350px;font-style:italic;">"A generation ago, fat babes were considered healthy and buxom actresses were popular, but society has since come to worship thinness." (Robert A. Hamilton)</div>
+				</span>
+			</div>
+		</div>
+	</div><!-- /headerimg-->
+
+
+			<div id="content-right">
+
+				<div class="headline_bar">
+					{{@_t.welcomemessage}}!
+				</div>
+				<div align="justify">
+					Welcome to the newly re-booted, re-launched and revamped PinupFiles/PinupGlam, the biggest and most comprehensive modern-day big bust pinup site on the web! At long last, we have merged BOTH sites PinupFiles.Com and PinupGlam.Com together into one big mega-site to feature ALL of our photos and videos that we've ever done in our entire six and a half year history! We specialize in bringing you nothing but the hottest, sexiest, the most beautiful big-bust gals on the planet, and our lineup of amazing ladies is second-to-none. We have tons of brand new features including search functions, ratings and ranking systems, a personal favorites section where you can make your very own exclusive playlists, and much more!
+
+					With over 100 gigabytes of amazing photos and videos of our incomparable models, we will be be adding new photo sets and videos every single day for the entire month of September, in addition to our regular new weekly updates. Feel free to click around and check everything out and let us know what you think, as all content now has a feedback feature where you can rank your favorite videos and photo sets so we know which gals you like best and what we should feature more often.
+
+					Want to find out more about us and our incredible lineup of amazing models? Take our tour below...
+				</div>
+
+				<div class="headline_bar">
+						<span class="right"><a href="{{$__siteurl}}/models">{{@_t.more}}...</a></span>
+						<span class="left bold">{{@_t.ourmodels}}</span>
+				</div>
+
+				{{foreach $models as $model}}
+			 	<div class="thumbnail">
+					<div>
+			 		<a href="{{$__siteurl}}/model/{{@model.slug}}">
+			 			<img src="{{@model.path}}" width="{{@model.width}}" height="{{@model.height}}" alt="" border="1">
+			 		</a>
+			 		</div>
+			 		<div>
+				 		<div class="right smallfont" title="{{@_t.rating}}: {{@model.rating}}"></div>
+			 			<div class="left">{{@model.modelname}}</div>
+						<div class="c"></div>
+					</div>
+			 	</div>
+				{{else}}
+					{{@_t.nomodels}}
+				{{/foreach}}
+				<div class="c"></div>
+
+				{{if $myspace_user || $twitter_user || $youtube_user || $blogger_user || $flickr_user}}
+					<div class="headline_bar">
+						{{@_t.followus}}...
+					</div>
+					<div class="social_icons">
+					{{if $myspace_user}}
+						<a href="http://www.myspace.com/{{$myspace_user}}"><img src="{{$__siteurl}}/img/logos/myspace.png" class="socneticon" width="104" height="28" alt="{{$myspace_user}}" border="0"></a>
+					{{/if}}
+					{{if $twitter_user}}
+						<a href="http://twitter.com/{{$twitter_user}}"><img src="{{$__siteurl}}/img/logos/twitter.png" class="socneticon" width="116" height="24" alt="{{$twitter_user}}" border="0"></a>
+					{{/if}}
+					{{if $youtube_user}}
+						<a href="http://www.youtube.com/user/{{$youtube_user}}"><img src="{{$__siteurl}}/img/logos/youtube.png" class="socneticon" width="70" height="28" alt="{{$youtube_user}}" border="0"></a>
+					{{/if}}
+					{{if $blogger_user}}
+						<a href="http://{{$blogger_user}}.blogspot.com/" target="_blank"><img src="{{$__siteurl}}/img/logos/blogger.png" class="socneticon" width="98" height="28" alt="{{$blogger_user}}" border="0"></a>
+					{{/if}}
+					{{if $flickr_user}}
+						<a href="http://www.flickr.com/photos/{{$flickr_user}}/" target="_blank"><img src="{{$__siteurl}}/img/logos/flickr.gif" class="socneticon" width="98" height="28" alt="{{$flickr_user}}" border="0"></a>
+					{{/if}}
+					{{if $tumblr_user}}
+						<a href="http://{{$tumblr_user}}.tumblr.com/" target="_blank"><img src="{{$__siteurl}}/img/logos/tumblr.gif" class="socneticon" width="98" height="28" alt="{{$tumblr_user}}" border="0"></a>
+					{{/if}}
+					</div>
+				{{/if}}
+
+				<div class="headline_bar">
+						<span class="right"><a href="{{$__siteurl}}/photos">{{@_t.more}}...</a></span>
+						<span class="left bold">{{@_t.recentupdates}}</span>
+				</div>
+
+				<div class="thumbs">
+					{{foreach $updates as $update}}
+			 		<div class="thumbnail">
+			 			<a href="{{$__siteurl}}/{{if $update.type == 'videoset'}}video{{else}}set{{/if}}/{{@update.slug}}">
+			 				<img src="{{@update.path}}" width="{{@update.width}}" height="{{@update.height}}" alt="" border="1">
+			 				<div class="g-title">{{@update.title}}</div>
+			 			</a>
+			 			<div>
+				 			<div class="right smallfont" title="{{@_t.rating}}: {{@update.rating}}"></div>
+				 			<div class="left smallfont">{{@update.date}}</div>
+							<div class="c"></div>
+						</div>
+			 		</div>
+			 		{{else}}
+			 			{{@_t.noupdates}}
+					{{/foreach}}
+					<div class="c"></div>
+				</div><!-- /thumbs-->
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar">
+						{{@_t.lastupdate}}
+					</div>
+
+					<div class="subbox">
+
+						{{if $latestupdate}}
+							<div>
+							<a href="{{$__siteurl}}/{{$latestupdate['type']}}/{{@latestupdate.slug}}">
+								<div style="padding-bottom:7px;">{{@latestupdate.title}}</div>
+								<img src="{{@latestupdate.path}}" width="{{@latestupdate.width}}" height="{{@latestupdate.height}}" alt="" border="1">
+							</a>
+							</div>
+						{{/if}}
+
+					</div><!-- /subbox-->
+				</div>
+
+				{{if $twitts}}
+					<div class="headline_bar">
+						{{@_t.news}}
+					</div>
+					{{*<div class="right smallfont"><a href="#">{{@_t.followuson}} {{@_t.twitter}}</a></div>*}}
+					<div class="subbox">
+							<div class="comment">
+								{{*Problem: keine Unterscheidung zwischen video und pics!!!*}}
+								{{foreach $twitts as $twit}}
+									{{@twit.user}}@{{@twit.date}}: {{@twit.message}} <br>
+									<hr>
+								{{/foreach}}
+							</div>
+					</div>
+				{{/if}}
+
+					<div class="headline_bar">
+						{{@_t.newestcomments}}
+					</div>
+					<div class="subbox f11">
+							{{foreach $comments as $comment}}
+							<div class="comment">
+								{{*Problem: keine Unterscheidung zwischen video und pics!!!*}}
+								{{*
+								//comment sollte zu scene linken! {{@comment.scene}}
+								*}}
+								<div class="left">
+									<span class="cdate">On {{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> {{@_t.said}}:
+									<div class="c"></div>
+									{{@comment.content}}
+								</div>
+								<div class="right">
+									<a href="{{$__siteurl}}/report.php?id={{@comment.id}}" class="report"><img src="{{$__siteurl}}/img/icons/warning.png" title="{{@_t.reportcomment}}" width="12" height="12" border="0"></a>
+								</div>
+								<div class="c">
+									<hr>
+								</div>
+							</div>
+							{{else}}
+								<div class="smallfont">{{@_t.nocomments}}</div>
+							{{/foreach}}
+					</div><!-- /subbox-->
+
+					{{if $comingsoon}}
+						<div class="headline_bar">
+							{{@_t.coming_soon}}
+						</div>
+						<div class="subbox">
+							{{foreach $comingsoon as $cs}}
+							<div>
+								<a href='{{#Path::Get("url:site/$cs[type]")}}/{{@cs.slug}}'>
+									<div style="padding-bottom:7px;"><span class="right f10" style="padding-right:10px;">{{@cs.date}}</span><span class="left">{{@cs.title}}</span></div>
+									<img src="{{@cs.thumb3}}" width="225" height="285" alt="" border="1">
+								</a>
+							</div>
+							{{else}}
+								<div class="smallfont">{{@_t.noupdates}}</div>
+							{{/foreach}}
+						</div><!-- /subbox-->
+					{{/if}}
+
+			</div><!-- /sidebar-->
+
+			<div class="c"></div>
+
+			<div id="bottom">
+				<div>
+					<a href="/join/">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+{{include _footer}}

@@ -1,0 +1,48 @@
+{{include _mheader}}
+
+<div id="mobileheader">
+
+	<h1>{{$_sitename}}</h1>
+
+</div>
+
+<div id="mobilecontainer">
+
+	{{foreach $updates as $update}}
+	<div class="thumbnail">
+		<a href="/set.php?id={{@update.id}}">
+			<div class="g-title">{{@update.title}}</div>
+			<img src="{{@update.thumb1}}" width="225" height="285" alt="" border="1" />
+		</a>
+		{{@update.description}}
+	</div>
+	{{/foreach}}
+
+
+	<div class="c"></div>
+
+
+	{{foreach $models as $model}}
+	<div class="thumbnail">
+		<a href="model.php?id={{@model.id}}">
+			<div class="g-title"><span class="bold">{{@model.modelname}}</span></div>
+			<img src="{{@model.thumb0}}" width="{{$modelthumbsizes[0][0]}}" height="{{$modelthumbsizes[0][1]}}" alt="{{@model.modelname}}" border="1" />
+		</a>
+		<br>
+		Rating: {{@model.rating}}/5
+	</div>
+	{{/foreach}}
+
+
+	<div class="c"></div>
+
+
+	{{if $pagination}}
+	<div class="pagination">
+		{{@pagination.links}}
+	</div>
+	{{/if}}
+
+</div>
+
+{{include _mfooter}}

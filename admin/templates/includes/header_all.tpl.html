@@ -1,0 +1,28 @@
+{{* {{include includes/growl}} *}}
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+	$(".forminput").live('focus', function(){
+		$(this).css('border','1px solid yellow');
+    });
+	$(".forminput").live('blur', function(){
+		$(this).css('border','1px solid #e5e5e5');
+    });
+});
+//-->
+</script>
+
+<!--[if lt IE 7]>
+<style type="text/css">
+/*IE png fix*/
+img { behavior: url({{$__siteurl}}/js/iepngfix.htc) }
+</style>
+<![endif]-->
+
+<!--[if IE]>
+<style type="text/css">
+.inactivethumb{
+	filter:alpha(opacity=60);
+}
+</style>
+<![endif]-->

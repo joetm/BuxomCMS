@@ -1,0 +1,221 @@
+{{include _adminheader}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+			<div id="dashboard">
+
+				{{if $update_available}}
+					<!-- update notice-->
+					<div align="center">
+						The latest version is <a href='http://buxomcms.com/latest' title="Download and upgrade">{{$__newestversion}}</a>.
+					</div>
+				{{/if}}
+
+				<div class="mbot5">
+					<div class="right mtop10">{{@_t.quickstats}}: {{@num.member}} {{@_t.activemembers}}, {{@num.picture}} {{@_t.pictureupdates}}, {{@num.video}} {{@_t.videoupdates}}, {{@num.model}} {{@_t.models}}, {{@num.comment}} {{@_t.comments}}, {{@num.tag}} {{@_t.tags}}</div>
+					<div class="left"><h1>{{@_t.siteoverview}}</h1></div>
+					<div class="c"></div>
+				</div>
+
+				{{if $feed}}
+					<div id="dashboard_feed" style="width:19%">
+						<h3 class="mbot5">{{@feed.title}}</h3>
+						<hr>
+						{{foreach $feed['items'] as $item}}
+							{{$item}}
+						{{/foreach}}
+					</div>
+				{{/if}}
+
+<div style="float:left;width:79%">
+				<table border="0" class="dashboard f12" cellpadding="0" cellspacing="0">
+				<thead>
+				<tr>
+				<th width="50%" align="left">
+					<h2><a href="{{$__adminurl}}/updates" title="{{@_t.editupdates}}"><img src="{{$__adminurl}}/img/icons/image_edit.png" alt="" width="16" height="16" border="0"></a> {{@_t.updates}}</h2>
+				</th>
+				<th>&nbsp;</th>
+				<th width="50%" align="left">
+<!--
+					<span class="right mtop5" style="font-weight:normal;">
+						{{@_t.id}}
+					</span>
+-->
+					<h2><a href="{{$__adminurl}}/models" title="{{@_t.editmodels}}"><img src="{{$__adminurl}}/img/icons/user_edit.png" alt="" width="16" height="16" border="0"></a> {{@_t.models}}</h2>
+				</th>
+				</tr>
+				</thead>
+
+
+			<tr>
+			<td width="50%" valign="top">
+
+				{{if $_page['errormessage']['updates']}}
+					{{$_page['errormessage']['updates']}}
+				{{else}}
+
+				{{set $i = 0}}
+				{{foreach $updates as $u}}
+				<div width="100%" class="indexrow {{if ($i % 2 == 0)}}odd{{else}}even{{/if}}">
+					<div class="left" style="width:100%">
+						<a href='{{#Path::Get("url:site/$u[type]")}}/{{@u.slug}}' title="{{@_t.view}}" target="_blank">
+						<img src="{{$__adminurl}}/img/icons/link_go.png" border="0" width="16" height="16" alt="{{@_t.view}}"></a>
+
+						{{@u.title}}
+					<div class="right">
+
+						{{if $u['type'] == 'video'}}
+							<img src="{{$__adminurl}}/img/icons/video.png" alt="{{@u.type}}" title="({{@u.type}})" border="0" width="16" height="16">
+						{{else}}
+							<img src="{{$__adminurl}}/img/icons/images.png" alt="{{@u.type}}" title="({{@u.type}})" border="0" width="16" height="16">
+						{{/if}}
+
+						&nbsp;
+						<a href="{{$__adminurl}}/update?edit={{@u.id}}" title="{{@_t.editupdate}}"><img src="{{$__adminurl}}/img/icons/pencil.png" width="16" height="16" alt="" border="0"></a>
+					</div>
+					</div>
+				<div class="c"></div>
+				</div>
+				{{set $i++}}
+				{{/foreach}}
+
+				{{/if}}
+
+			</td>
+			<td>&nbsp;</td>
+			<td width="50%" valign="top">
+
+			{{if $_page['errormessage']['models']}}
+				{{$_page['errormessage']['models']}}
+			{{else}}
+
+				{{set $i = 0}}
+				{{foreach $models as $m}}
+				<div width="100%" class="indexrow {{if ($i % 2 == 0)}}odd{{else}}even{{/if}}">
+					<div class="left">
+						<a href="{{$__siteurl}}/{{@m.type}}/{{@m.slug}}" title="{{@_t.view}}" target="_blank">
+						<img src="{{$__adminurl}}/img/icons/link_go.png" alt="{{@_t.view}}" width="16" height="16" border="0"></a>
+
+						{{@m.modelname}}
+					</div>
+					<div class="right">
+
+						{{@m.dateline}}
+
+						&nbsp;
+						<a href="{{$__adminurl}}/model?edit={{@m.id}}" title="{{@_t.editmodel}}"><img src="{{$__adminurl}}/img/icons/pencil.png" width="16" height="16" border="0" alt=""></a>
+					</div>
+					<div class="c"></div>
+				</div>
+				{{set $i++}}
+				{{/foreach}}
+
+			{{/if}}
+
+			</td>
+			</tr>
+			</table>
+
+			<table border="0" class="dashboard f12 mtop10" cellpadding="0" cellspacing="0">
+			<thead>
+			<tr>
+			<th width="50%" align="left">
+				<h2><a href="{{$__adminurl}}/comments" title="{{@_t.editcomments}}"><img src="{{$__adminurl}}/img/icons/comment_edit.png" alt="" width="16" height="16" border="0"></a> {{@_t.comments}}</h2>
+			</th>
+			<th>&nbsp;</th>
+			<th width="50%" align="left">
+				<h2><a href="{{$__adminurl}}/members" title="{{@_t.editmembers}}"><img src="{{$__adminurl}}/img/icons/group.png" alt="" width="16" height="16" border="0"></a> {{@_t.members}}</h2>
+			</th>
+			</tr>
+			</thead>
+
+
+			<tr>
+			<td width="50%" valign="top">
+
+			{{if $_page['errormessage']['comments']}}
+				{{$_page['errormessage']['comments']}}
+			{{else}}
+
+				{{set $i = 0}}
+				{{foreach $comments as $c}}
+				<div width="100%" class="indexrow {{if ($i % 2 == 0)}}odd{{else}}even{{/if}}">
+				<form action="{{$__adminurl}}/" method="post" name="editaddform">
+				<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+					<div class="left" style="width:100%">
+						<a href='{{#Path::Get("url:site/$c[type]")}}/id/{{@c.id}}' title="{{@_t.viewupdate}}" target="_blank">
+						<img src="{{$__adminurl}}/img/icons/link_go.png" border="0" alt="{{@_t.view}}" width="16" height="16"></a>
+
+						{{@c.comment}}
+					<div class="right">
+						(by {{@c.username}})
+						<input type="hidden" name="comment" value="{{@c.id}}">
+
+						{{if $c['status'] == 'queued'}}
+							<img src="{{$__adminurl}}/img/icons/queued.png" alt="{{@_t.queued}}" title="{{@_t.queued}}" border="0" width="16" height="16">
+						{{else}}
+							<input type="image" src="{{$__adminurl}}/img/icons/queued_deactivated.png" value="queue" alt="" name="_action" title="{{@_t.queuecomment}}">
+						{{/if}}
+						{{if $c['status'] == 'approved'}}
+							<img src="{{$__adminurl}}/img/icons/accept.png" alt="{{@_t.approved}}" title="{{@_t.approved}}" border="0" width="16" height="16">
+						{{else}}
+							<input type="image" src="{{$__adminurl}}/img/icons/lock_break_deactivated.png" value="approve" alt="" name="_action" title="{{@_t.approvecomment}}">
+						{{/if}}
+						{{if $c['status'] == 'spam'}}
+							<img src="{{$__adminurl}}/img/icons/stop.png" alt="{{@_t.spam}}" title="{{@_t.spam}}" width="16" height="16" border="0">
+						{{else}}
+							<input type="image" src="{{$__adminurl}}/img/icons/stop_deactivated.png" value="spam" alt="" name="_action" title="{{@_t.markasspam}}">
+						{{/if}}
+
+						&nbsp;
+
+						<a href="{{$__adminurl}}/comments?id={{@c.id}}" title="{{@_t.editcomment}} #{{@c.id}}"><img src="{{$__adminurl}}/img/icons/pencil.png" width="16" height="16" alt='' border="0"></a>
+					</div>
+					</div>
+				</form>
+				<div class="c"></div>
+				</div>
+				{{set $i++}}
+				{{/foreach}}
+
+			{{/if}}
+
+			</td>
+			<td>&nbsp;</td>
+			<td width="50%" valign="top">
+
+			{{if $_page['errormessage']['members']}}
+				{{$_page['errormessage']['members']}}
+			{{else}}
+
+				{{set $i = 0}}
+				{{foreach $members as $m}}
+				<div width="100%" class="indexrow {{if ($i % 2 == 0)}}odd{{else}}even{{/if}}">
+					<div class="left">
+						<img src="{{$__adminurl}}/img/icons/{{@m.status}}.png" alt="{{@m.status}}" title="{{@m.status}}" width="16" height="16" border="0">
+
+						{{@m.username}}
+					</div>
+					<div class="right">
+						{{@m.padded.id}}
+					</div>
+				<div class="c"></div>
+				</div>
+				{{set $i++}}
+				{{/foreach}}
+
+			{{/if}}
+
+			</td>
+			</tr>
+			</table>
+</div>
+
+			<div class="c">&nbsp;</div>
+
+			</div><!-- /dashboard-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

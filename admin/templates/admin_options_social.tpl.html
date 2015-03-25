@@ -1,0 +1,259 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+{{include includes/growl}}
+
+{{include includes/numeric}}
+
+<script type="text/javascript"><!--
+function toggleStatus() {
+	if ($('.sdsdsdsdsd').attr('value') == 'sendmail') {
+		$('.deactivate').attr('disabled', 'disabled');
+		$(".deactivate").addClass("gray");
+	} else {
+		$('.deactivate').removeAttr('disabled');
+		$(".deactivate").removeClass("gray");
+	}
+}
+$(document).ready(function(){
+	$('#mailselector').change(function() {
+			toggleStatus();
+	});
+
+	//initial
+	toggleStatus();
+});
+//-->
+</script>
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+	$(".authbutton_ok").click(function(){
+		//remove authorization
+		var pname = $(this).attr('name');
+		$.ajax({
+			url: '{{$__adminurl}}/plugins/'+pname+'.plugin.php',
+			cache: false,
+			data: { 'plugin': pname,
+					'remove_auth': '1',
+					'securitytoken': '{{$securitytoken}}'},
+			dataType: 'text',
+			type: 'POST',
+			success: function(data) {
+				if(data == 'ok')
+				{
+					//auth was successfully removed
+					//refresh page
+					window.location = '{{$__adminurl}}/options_social';
+				}
+				else
+				{
+					alert('ERROR: '+data);
+//					alert('could not remove authorization.');
+				}
+			}
+		});
+	});
+});
+//-->
+</script>
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	$(".infoexpand").click(function(){
+		$(".infotext").toggle();
+	});
+
+});
+//-->
+</script>
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_social" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+
+		<div class="optiondiv">
+			<h3>{{@_t.nested_comments}}</h3>
+			<fieldset>
+				<div>
+					<input id="nested_comm1" type="radio" name="options[nested_comments]"{{if $options['nested_comments']}} checked="checked"{{/if}} value="1">
+					<label for="nested_comm1">on</label>
+					<input id="nested_comm2" type="radio" name="options[nested_comments]"{{if !$options['nested_comments']}} checked="checked"{{/if}} value="0">
+					<label for="nested_comm2">off</label>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.use_blacklist}}</h3>
+			<fieldset>
+				<div class="mbot5">
+					<div>Check comments against the blacklist words?</div>
+					<input id="cub_yes" type="radio" name="options[comment_use_blacklist]"{{if $options['comment_use_blacklist']}} checked="checked"{{/if}} value="1">
+					<label for="cub_yes">yes</label>
+					<input id="cub_no" type="radio" name="options[comment_use_blacklist]"{{if !$options['comment_use_blacklist']}} checked="checked"{{/if}} value="0">
+					<label for="cub_no">no</label>
+				</div>
+
+				<div class="mbot5">
+					<div>
+						Blacklisted words. Separated by comma.
+					</div>
+					{{if ($__showadmintooltips)}}
+					<div class="gray">
+						If a blacklisted word is found in the comment, the comment is discarded.
+					</div>
+					{{/if}}
+				</div>
+				<textarea name="blacklist_words" cols="70" style="width:99%;" rows="4" class="forminput">{{@options.blacklist_words}}</textarea>
+			</fieldset>
+		</div>
+
+
+		<div class="optiondiv">
+			<h3>{{@_t.socialnetworkfeatures}}</h3>
+
+			<fieldset>
+
+				{{block:optionfields plugin='' i='' _t='' tooltips=false}}
+
+					<input type="hidden" name="plugins[{{$i}}][requires_auth]" value="{{if $plugin['requires_auth'] == '1'}}1{{else}}0{{/if}}">
+					<input type="hidden" name="plugins[{{$i}}][name]" value="{{@plugin.name}}">
+					<input type="hidden" name="plugins[{{$i}}][picturepost]" value="{{@plugin.picturepost|default:0}}">
+
+					<div style="float:left;width:170px;" class="mot10">
+						<h4>{{@plugin.name|ucwords}} {{if $tooltips}}<span class="infoexpand pointer"><img src="img/icons/information.png" width="16" height="16" alt="?" align="top" border="0"></span>{{/if}}</h4>
+						<label for="un{{$i}}">{{@_t.username}}:</label>
+						<input id="un{{$i}}" type="text" name="plugins[{{$i}}][username]" value="{{@plugin.username}}" class="forminput">
+						{{if $tooltips}}
+							<div class="infotext c mbot5 mtop5 gray hidden">
+							{{@plugin.infotext}}
+							</div>
+						{{/if}}
+						<div class="c mbot5"></div>
+							{{* Social Posting *}}
+							{{if $plugin['updateposting_possible'] == true}}
+								<div style="height:36px;">
+									{{if $plugin['requires_auth'] == true}}
+										<div class="authorize_{{$i}}">
+											<div class="mbot5 mtop5">
+												{{if !empty($plugin['access_token'])}}
+													<input type="button" id="auth_button_{{$i}}" onclick="return false;" name="{{@plugin.name|strtolower}}" value="Authorized" class="authbutton_ok adm_button">
+												{{else}}
+													<div style="padding:7px 0px;">
+														<a href="./options_social?plugin={{@plugin.name|strtolower}}&amp;key={{@plugin.key}}&amp;secret={{@plugin.secret}}" id="auth_button_{{$i}}" class="adm_button">Authorize</a>
+													</div>
+												{{/if}}
+											</div>
+										</div>
+									{{else}}
+										<!-- Plugin does not require authentification -->
+									{{/if}}
+								</div>
+								<div style="height:48px;">
+									Automatically post to {{@plugin.name|strtolower}} on new update?
+									<div class="c"></div>
+									<input id="pou{{$i}}" type="radio" value="1" name="plugins[{{$i}}][postonupdate]"{{if $plugin['postonupdate']}} checked="checked"{{/if}}>
+									<label for="pou{{$i}}">Yes</label>
+									<input id="npou{{$i}}" type="radio" value="0" name="plugins[{{$i}}][postonupdate]"{{if !$plugin['postonupdate']}} checked="checked"{{/if}}>
+									<label for="npou{{$i}}">No</label>
+								</div>
+{{if array_key_exists('key', $plugin)}}
+								<div class="c mbot5"></div>
+									<label for="key_{{$i}}">Key:</label>
+									<input id="key_{{$i}}" type="text" name="plugins[{{$i}}][key]" value="{{@plugin.key}}" class="forminput">
+{{/if}}
+{{if array_key_exists('secret', $plugin)}}
+								<div class="c mbot5"></div>
+									<label for="secret_{{$i}}">Secret:</label>
+									<input id="secret_{{$i}}" type="text" name="plugins[{{$i}}][secret]" value="{{@plugin.secret}}" class="forminput">
+{{/if}}
+{{if array_key_exists('email', $plugin)}}
+								<div class="c mbot5"></div>
+									<label for="email_{{$i}}">Email:</label>
+									<input id="email_{{$i}}" type="text" name="plugins[{{$i}}][email]" value="{{@plugin.email}}" class="forminput">
+{{/if}}
+{{if array_key_exists('password', $plugin)}}
+								<div class="c mbot5"></div>
+									<label for="password_{{$i}}">Password:</label>
+									<input id="password_{{$i}}" type="text" name="plugins[{{$i}}][password]" value="{{@plugin.password}}" class="forminput">
+{{/if}}
+{{*
+								<div class="c mbot5"></div>
+									<label for="application_id_{{$i}}">Application ID:</label>
+									<input id="application_id_{{$i}}" type="text" name="plugins[{{$i}}][application_id]" value="{{@plugin.application_id}}" class="forminput">
+*}}
+							{{/if}}
+					</div>
+				{{/block}}
+
+
+				{{set $i=0}}
+				{{foreach $plugins as $o}}
+					{{!optionfields plugin=$o i=$i _t=$_t tooltips=$__showadmintooltips}}
+					{{set $i++}}
+				{{else}}
+					No Social Plugins found.
+				{{/foreach}}
+
+
+				<div class="c"></div>
+
+				{{if ($__showadmintooltips)}}
+				<div class="mtop10 gray">
+					Set to "No" or leave empty to deactivate.
+					{{*<br>
+					Username is used for "follow us" links on the homepage.
+					*}}
+				</div>
+				{{/if}}
+
+			</fieldset>
+
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.ping_search_engines}}</h3>
+			<fieldset>
+				<div class="mbot5">
+					<div>{{@_t.ping_search_engines}}?</div>
+					<input id="p_yes" type="radio" name="ping_options[ping_engines]"{{if $ping_options['ping_engines']}} checked="checked"{{/if}} value="1">
+					<label for="p_yes">yes</label>
+					<input id="p_no" type="radio" name="ping_options[ping_engines]"{{if !$ping_options['ping_engines']}} checked="checked"{{/if}} value="0">
+					<label for="p_no">no</label>
+				</div>
+
+				<div class="mbot5">
+					<div>
+					URLs to ping when a new update is successfully added. One per line.
+					{{if ($__showadmintooltips)}}
+						<span class="pointer" onclick="$('.ping_info').toggle();"><img src="img/icons/information.png" width="16" height="16" alt="?" align="top" border="0"></span>
+						</div>
+						<div class="ping_info gray hidden">
+						The default method used in the XML-RPC call is "weblogUpdates.ping".<br>
+						You can specify a different method for each service using this syntax:<br>
+						methodname|http://url/to/service
+					{{/if}}
+					</div>
+				</div>
+				<textarea name="ping_options[ping_urls]" cols="70" style="width:99%;" rows="4" class="forminput">{{@ping_options.ping_urls}}</textarea>
+			</fieldset>
+		</div>
+
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

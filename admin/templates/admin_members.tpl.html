@@ -1,0 +1,389 @@
+{{include _adminheader}}
+
+<script type="text/javascript"><!--
+function ClearInput(value, id){
+	var input = document.getElementById(id);
+	if(value == input.value){
+		input.value = '';
+	}else{
+		input.value = input.value;
+	}
+}
+
+function isEmpty(inputStr) { if ( null == inputStr || "" == inputStr || 0 == inputStr.length ) { return true; } return false; }
+
+var defaults = new Object();
+defaults.username	= "{{$_defaults['username']}}";
+defaults.password	= "{{$_defaults['password']}}";
+defaults.email		= "{{$_defaults['email']}}";
+defaults.IP			= "{{$_defaults['IP']}}";
+defaults.join_date	= "{{# date(Config::Get('date_string'))}}";
+
+function EmailMember()
+{
+	var a = new Array();
+	$('input:checkbox:checked').each(function(i) {
+		if($(this).attr("id") != 'checkboxall')
+		{
+			a[i] = $(this).closest('tr').children('.emailaddress').html();
+		}
+		else a[i] = null;
+	});
+
+	if(!isEmpty(a))
+	{
+		var loc = 'mailto:';
+		for(i=0; i<a.length; i++)
+		{
+			if(a[i]!=null)
+			{
+				loc += a[i];
+				if (i == 0 && a.length > 1) loc += '?bcc=';
+				if (i >= 1 && !(i==a.length - 1)) loc += '&amp;bcc=';
+			}
+		}
+
+	/*
+	loc = "mailto:test@web.de&bcc=sfsdg@rdh.de&bcc=john@doe.com&bcc=john@doe.com&bcc=john@doe.com&bcc=john@doe.com";
+	*/
+
+	if(confirm('Send email? '+loc))
+		location.href = loc;
+
+	//alert(loc);
+
+	}
+
+}
+
+function set_default_values()
+{
+	//set the default fields
+	$('#username').val(defaults.username);
+	$('#email').val(defaults.email);
+	$('#IP').val(defaults.IP);
+	$('#password').val(defaults.password);
+	$('#join_date').val(defaults.join_date);
+
+	//important for editing: remove the member id
+	$('#member_id').val('');
+}
+
+function api_call()
+{
+	if(confirm('Also send a cancellation request to your processing company?'))
+	{
+		//submit form and send API request to Zombaio
+		$('#api_call').val('1');
+	}
+	else
+	{
+		//only submit form
+		$('#api_call').val('0');
+	}
+	return true;
+}
+//-->
+</script>
+
+<script src="{{$__adminurl}}/js/jquery.jeditable.min.js" type="text/javascript"></script>
+<script src="{{$__adminurl}}/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript"><!--
+var oTable;
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1000);
+
+
+	$(".edit_icon").live('click',function(){
+			//get values
+			var id = $(this).val();
+
+			var row = $(this).parents('tr');
+
+			var username = $(row).children('td').eq(2).html();
+			var email = $(row).children('td').eq(3).html();
+			var join_date = $(row).children('td').eq(4).html();
+			var IP = $(row).children('td').eq(7).html();
+			var password = '';
+
+			$('#username').val(username);
+			$('#email').val(email);
+			$('#join_date').val(join_date);
+			$('#IP').val(IP);
+			$('#password').val(password);
+
+			//important for editing: fill the member id
+			$('#member_id').val(id);
+
+			//button text
+			$('#addnewmember').val('{{@_t.edit_member}}');
+
+			//prefill
+			$('#newmember').show('fast');
+	});
+
+	$("#checkboxall").click(function(){
+		var checked_status = this.checked;
+			$("input[name=checkbox\\[\\]]").each(function()
+			{
+				this.checked = checked_status;
+			});
+	});
+
+	$('#addnew').toggle(
+		function(){
+			$('#newmember').show('fast');
+			$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+			//button text
+			$('#addnewmember').val('{{@_t.addnewmember}}');
+
+			set_default_values();
+		},
+		function() {
+           	$('#newmember').hide('fast');
+           	$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_open.png');
+		}
+	);
+	{{if $_page['errorcss']}}
+		$("#newmember").show('fast');
+		$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+	{{/if}}
+
+	/* Init DataTables */
+	oTable = $('#table').dataTable( {
+					{{include includes/datatable_setup}}
+					"aaSorting": [[0,'desc']],
+					"bStateSave": true,
+					{{include includes/datatable_language}}
+					"sDom": '<"top"<"right"f>><"bottom"rt<"actions">lpi><"clear">',
+					"aoColumnDefs": [
+						//column 0: icon
+						{
+							"aTargets": [0],
+							"fnRender": function ( oObj ) {
+								if(oObj.aData[0] == 'active')
+									return '<img src="{{$__adminurl}}/img/icons/active.png" alt="" width="16" height="16" border="0" title="active">';
+								else
+									return '<img src="{{$__adminurl}}/img/icons/expired.png" alt="" width="16" height="16" border="0" title="inactive">';
+							},
+							"bSearchable": false,
+							"bSortable": false,
+							"sClass": "center"
+						},
+						//column 1: id
+						{
+							"aTargets": [1],
+							"sClass": "center"
+						},
+						//2: username
+						//column 3: email
+						{
+							"aTargets": [3],
+							"sClass": "emailaddress"
+						},
+						//column 4: join date
+						{
+							"aTargets": [4],
+							"sClass": "tabledate"
+						},
+						//column 5: last_login
+						{
+							"aTargets": [5],
+							"sClass": "tabledate"
+						},
+						//column 6: expire
+						{
+							"aTargets": [6],
+							"sClass": "tabledate"
+						},
+						//7: IP
+						//column 8: edit
+						{
+							"aTargets": [8],
+							"fnRender": function ( oObj ) {
+								return '<input type="image" src="{{$__adminurl}}/img/icons/pencil.png" alt="'+oObj.aData[1]+'" width="16" height="16" class="edit_icon" border="0" value="'+oObj.aData[1]+'" title="{{@_t.edit}}" onclick="return false;">';
+							},
+							"bSearchable": false,
+							"bSortable": false,
+							"sClass": "center"
+						},
+						//column 9: checkbox
+						{
+							"aTargets": [9],
+							"fnRender": function ( oObj ) {
+								return '<input type="checkbox" name="checkbox[]" id="checkbox'+oObj.aData[1]+'" value="'+oObj.aData[1]+'">';
+							},
+							"bSearchable": false,
+							"bSortable": false,
+							"sClass": "center"
+						}
+					],
+
+					{{include includes/datatable_request}}
+					{{!fnServerData table='members' securitytoken=$securitytoken}}
+
+					"fnDrawCallback": function () {
+						//edit in place
+						$('#table tbody td:nth-child(2),#table tbody td:nth-child(3),#table tbody td:nth-child(4)').editable('{{$__adminurl}}/lib/editable_ajax.php', {
+							"callback": function( sValue, y ) {
+								var aPos = oTable.fnGetPosition( this );
+								oTable.fnUpdate( sValue, aPos[0], aPos[1], false );
+							},
+							"submitdata": function ( value, settings ) {
+								var aPos = oTable.fnGetPosition( this );
+								var aData = oTable.fnGetData( aPos[0] );
+								return	{
+											"column": aPos[1], //translate to columname with fnColumnToField function!
+											"id": aData[1],    //id
+											"type": "members",
+											"securitytoken": "{{$securitytoken}}"
+										};
+							},
+							"height": "14px",
+							indicator: '<img src="{{$__adminurl}}/img/loader.gif">'
+						});
+
+//						$(".tabledate").mask("9999-99-99 99:99:99",{placeholder:"_"});
+					}
+/*
+					,
+					"fnDrawCallback":function(){
+						if ( $('#table_paginate span span.paginate_button').size()) {
+							$('#table_paginate')[0].style.display = "block";
+						} else {
+							$('#table_paginate')[0].style.display = "none";
+						}
+					}
+*/
+	});
+
+	$("div.actions").html('<div class="dt_buttons"><div class="right dt_butt"><input type="submit" id="activate" name="activate" value="{{@_t.activate}}" class="adm_button"></div><div class="right dt_butt"><input type="submit" id="deactivate" name="deactivate" value="{{@_t.deactivate}}" class="adm_button" onclick="api_call();"></div><div class="right dt_butt"><input type="submit" name="delete" value="{{@_t.delete}}" class="adm_button" onclick="api_call();"></div><div class="right dt_butt"><input type="button" class="adm_button" onclick="javascript:EmailMember()" name="emailmember" value="{{@_t.email}}"></div></div>');
+
+});
+//-->
+</script>
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+				<div class="dt_buttons right" style="margin-bottom:5px;">
+					<form action="{{$__adminurl}}/export" method="post">
+					<div class="dt_butt right">
+						<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+						<input type="submit" name="export" value="{{@_t.export}}" class="adm_button">
+					</div>
+					</form>
+
+					<form action="{{$__adminurl}}/email" method="post">
+					<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+						<div class="dt_butt right"><input type="submit" name="emailmembers" value="Batch Email" class="adm_button"></div>
+						{{*
+					 	<div class="right mright10 mtop5">
+					    	<input type="radio" name="members" value="all"{{if $email['type'] != 'all'}} checked="checked"{{/if}}> All
+					    	<input type="radio" name="members" value="active"{{if $email['type'] == 'active'}} checked="checked"{{/if}}> Active
+					    	<input type="radio" name="members" value="inactive"{{if $email['type'] == 'inactive'}} checked="checked"{{/if}}> Inactive
+					    </div>
+						*}}
+					</form>
+				</div>
+
+				<div class="left mright5">
+					<a href="#" class="mtop5" id="addnew"><img id="addicon" src="{{$__adminurl}}/img/icons/details_open.png" style="position:relative;top:3px;" width="20" height="20" hspace="5" alt="" title="{{@_t.addnewmember}}" border="0"></a>
+
+					{{include includes/error_success_msg}}
+				</div>
+
+				<div class="c"></div>
+
+				<div id="newmember" class="hidden">
+
+					<form action="{{$__adminurl}}/members" method="post" name="addnew">
+					<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+						<div class="left">
+							<div>
+								<label for="username" class="{{$_page['errorcss']['username']}}">{{@_t.membername}}:</label><br>
+								<input type="text" class="forminput" id="username" size="26" name="new_username" value="{{@var.username|default:"John Doe"}}" onclick="ClearInput('John Doe', this.id);">
+							</div>
+							<div class="mtop5">
+								<label for="password" class="{{$_page['errorcss']['password']}}">{{@_t.password}}:</label><br>
+								<input type="text" class="forminput" id="password" size="26" name="new_password" value="{{@var.password|default:"password"}}" onclick="ClearInput('password', this.id);">
+							</div>
+						</div>
+						<div class="left">
+							<div>
+								<label for="email" class="{{$_page['errorcss']['email']}}">{{@_t.email}}:</label><br>
+								<input type="text" class="forminput" id="email" size="26" name="new_email" value="{{@var.email|default:'john@doe.com'}}" onclick="ClearInput('john@doe.com', this.id);">
+							</div>
+							<div class="mtop5">
+								<label for="IP" class="{{$_page['errorcss']['IP']}}">{{@_t.IP}}:</label><br>
+								<input type="text" class="forminput" id="IP" size="12" name="IP" value="{{@var.IP|default:'000.000.000.000'}}" onclick="ClearInput('000.000.000.000', this.id);">
+							</div>
+						</div>
+						<div class="left">
+							<div class="left">
+								<label for="join_date" class="{{$_page['errorcss']['join_date']}}">{{@_t.join_date}}:</label><br>
+								<input type="text" class="forminput date" id="join_date" size="8" name="join_date" value="{{if $var['join_date']}}{{@var.join_date}}{{else}}{{# date(Config::Get('date_string'))}}{{/if}}">
+							</div>
+							<div class="left">
+									<label for="expire_time" class="{{$_page['errorcss']['expire_time']}}">{{@_t.expiry}}:</label><br>
+									<input type="text" class="forminput" id="expire_time" size="3" name="expire_time" value="{{if $var['expire_time']}}{{@var.expire_date}}{{else}}30{{/if}}"> {{@_t.days|strtolower}}
+							</div>
+
+							<div class="c"></div>
+							<div class="mtop5">
+								<div class="{{$_page['errorcss']['no_emails']}}">{{@_t.receive_emails}}:</div>
+									<input type="radio" value="0" name="no_emails"{{if $var['no_emails'] == 0}} checked="checked"{{/if}} id="no_em_y">
+									<label for="no_em_y">Yes</label>
+									<input type="radio" value="1" name="no_emails"{{if $var['no_emails'] == 1}} checked="checked"{{/if}} id="no_em_n">
+									<label for="no_em_n">No</label>
+							</div>
+						</div>
+
+						<div class="c"></div>
+						<div class="mtop5">
+							<input type="submit" id="addnewmember" name="addnewmember" value="{{@_t.addnewmember}}">
+
+							<input type="hidden" id="member_id" name="member_id" value="{{@var.id}}">
+						</div>
+					</form>
+				</div>
+
+
+			<div id="memberlist">
+
+				<form action="{{$__adminurl}}/members" method="post" name="memberform">
+				<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+					<input type="hidden" name="api_call" id="api_call" value="0">
+
+					<table border="0" cellpadding="0" cellspacing="0" width="100%" id="table">
+					<thead>
+					<tr>
+						<th class="col_icon">&nbsp;</th>
+						<th class="col_id">{{@_t.ID}}</th>
+						<th>{{@_t.membername}}</th>
+						<th class="col_email">{{@_t.email}}</th>
+						<th class="col_date_short">{{@_t.join_date}}</th>
+						<th class="col_date_short">{{@_t.last_login}}</th>
+						<th class="col_date_short">{{@_t.expire}}</th>
+						<th class="col_ip">{{@_t.IP}}</th>
+						<th class="col_edit">{{@_t.edit}}</th>
+						<th class="col_checkbox"><input type="checkbox" name="checkboxall" id="checkboxall"></th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr><td colspan="9">Querying data...</td></tr>
+					</tbody>
+					</table>
+
+				</form>
+
+				<div class="c"></div>
+
+			</div><!-- /memberlist-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

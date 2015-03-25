@@ -1,0 +1,67 @@
+{{include _adminheader}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+			{{include includes/error_success_msg}}
+
+			<div id="errormessage" class="hidden error left" align="center"></div>
+			<div class="c"></div>
+
+			<div id="socialwrap" align="center">
+
+				<div id="zend-progressbar-container">
+					<div id="zend-progressbar-done"></div>
+				</div>
+
+				<iframe src="{{$__adminurl}}/lib/socialposting.php?id={{$update_id}}&maxprogress={{$maxprogress}}" width="100%" height="300"></iframe>
+
+				<div id="social_output"></div>
+
+				<div id="ping_output"></div>
+
+				<div id="final_output"></div>
+
+			</div>
+
+	</div><!-- admincontent-->
+
+<script type="text/javascript"><!--
+function ProgressBar_Update(data)
+{
+	if (data.text != null)
+	{
+		document.getElementById('zend-progressbar-done').style.width = data.percent + '%';
+
+		if(data.text.msg)
+		{
+			if(data.text.type == 'ping')
+				$('#ping_output').append('ping.');
+			else
+				$('#ping_output').append('post.');
+		}
+	}
+}
+function ProgressBar_Finished(data)
+{
+	document.getElementById('zend-progressbar-done').style.width = '100%';
+
+	$('#final_output').html('FINAL');
+//or redirect
+
+
+
+
+
+
+}
+
+function ErrorMsg(error)
+{
+	$('#errormessage').html(error);
+	$('#errormessage').show();
+}
+//-->
+</script>
+
+{{include _adminfooter}}

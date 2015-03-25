@@ -1,0 +1,255 @@
+{{include _adminheader}}
+
+{{include includes/numeric}}
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	/*-----------------------*/
+	/* REMOVE THUMBNAIL SIZE */
+	/*-----------------------*/
+	$(".btn").live('click',function(){
+
+		var that = this;
+		var internal_id = $(this).parents("tr").find("td:first").html();
+
+		//decrease id on add button
+		$(that).parents("table").find(".add").attr("id", internal_id);
+
+		//show the previous delete button
+		$(that).parents("table").find(".btn"+(internal_id-1)).show();
+
+		//remove the row on success
+		$(that).parent().parent().remove();
+
+/*
+				else
+				{
+					//we had an error removing the thumbnail row
+					$(that).parent().parent().next().find("td:first").html('error');;
+				}
+*/
+	});
+
+	/*--------------------*/
+	/* ADD THUMBNAIL SIZE */
+	/*--------------------*/
+	$(".add").live('click',function(){
+
+		var type = $(this).parents("table").attr("id");
+
+		var width = parseInt($(this).parents("table").find(".width").val());
+		var height = parseInt($(this).parents("table").find(".height").val());
+
+		var newid = parseInt($(this).attr('id'));
+
+		//add the row
+		$(this).parents("tr").before("<tr><td>"+newid+"</td><td align='center'><input type='hidden' name='options["+type+"_thumbnailsize]["+newid+"][width]' value='"+width+"'>"+width+"</td><td align='center'><input type='hidden' name='options["+type+"_thumbnailsize]["+newid+"][height]' value='"+height+"'>"+height+"</td><td><a href='#thumbnails' class='btn"+newid+" btn' id='"+newid+"'><img src='{{#Path::Get('rel:admin')}}/img/icons/cancel.png' width='16' height='16' alt='' border='0'></a></td></tr>");
+
+		//increase id on add button
+		$(this).attr("id", newid+1);
+
+		//remove the previous delete button
+		$(this).parents("table").find(".btn"+(newid-1)).hide();
+	});
+
+});
+//-->
+</script>
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_theme" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>{{@_t.theme}}</h3>
+
+			<fieldset>
+				<div class="oitem_input">
+					<label for="frontend_theme" class="title">{{@_t.frontend_theme}}:</label>
+					<select id="frontend_theme" name="options[frontend_theme]" class="forminput">
+						{{foreach $themes as $theme}}
+							<option{{if $theme==$options['frontend_theme']}} selected="selected"{{/if}}>{{$theme}}</option>
+						{{/foreach}}
+					</select>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<div class="optiondiv">
+			<h3>HTML 5 Support</h3>
+			<fieldset>
+				<div class="oitem_radio">
+					<div class="title">Use HTML 5 videos?:</div>
+					<input id="html5_yes" type="radio" value="1" name="options[html5]"{{if $options['html5']}} checked="checked"{{/if}}>
+					<label for="html5_yes">Yes</label>
+					<input id="html5_no" type="radio" value="0" name="options[html5]"{{if !$options['html5']}} checked="checked"{{/if}}>
+					<label for="html5_no">No</label>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="optiondiv">
+			<h3>Default Base Path</h3>
+			<fieldset>
+				<div class="oitem_select">
+					<label for="def_base" class="title">Default Base Path:</label>
+					<select id="def_base" name="options[default_base]">
+						<option value="member"{{if $options['default_base']=='member'}} selected="selected"{{/if}}>member</option>
+						<option value="free"{{if $options['default_base']=='free'}} selected="selected"{{/if}}>free</option>
+						<option value="webroot"{{if $options['default_base']=='webroot'}} selected="selected"{{/if}}>webroot</option>
+					</select>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.thumbnailprocessing}}</h3>
+
+			<fieldset>
+				<div class="oitem_input">
+					<label for="sharpeningamount" class="title">{{@_t.thumbnail_sharpening}}:</label>
+					<input id="sharpeningamount" type="text" name="options[thumbnailsharpen]" class="forminput numeric" size="2" value="{{@options.thumbnailsharpen}}">
+					<span class="gray">(0...1)</span>
+				</div>
+
+				<div class="oitem_input">
+					<label for="thumbnailquality"  class="title">{{@_t.thumbnailquality}}:</label>
+					<input id="thumbnailquality" type="text" name="options[thumbnailquality]" class="forminput numeric" size="2" value="{{@options.thumbnailquality}}">
+					<span class="gray">(0...100)</span>
+				</div>
+
+				<div class="oitem_input">
+					<label for="num_video_framegrabs" class="title">{{@_t.num_video_framegrabs}}:</label>
+					<input id="num_video_framegrabs" type="text" name="options[num_video_screencaps]" class="forminput numeric" size="2" value="{{@options.num_video_screencaps}}">
+					<span class="gray">(default: 20)</span>
+				</div>
+
+				<div class="oitem_radio">
+					<div class="title">{{@_t.make_anim}}:</div>
+					<input id="ma_yes" type="radio" value="1" name="options[make_anim]"{{if $options['make_anim']}} checked="checked"{{/if}}>
+					<label for="ma_yes">Yes</label>
+					<input id="ma_no" type="radio" value="0" name="options[make_anim]"{{if !$options['make_anim']}} checked="checked"{{/if}}>
+					<label for="ma_no">No</label>
+				</div>
+			</fieldset>
+
+		</div>
+
+		<div class="optiondiv">
+			<h3>Thumbnailing &amp; Framegrabbing</h3>
+			{{if ($__showadmintooltips)}}
+			<div class="optiondescription">
+				Sizes of the automatically created thumbnails.
+			</div>
+			{{/if}}
+
+			<fieldset>
+				<div class="oitem_input">
+					<div class="title">Picture Thumbnails:</div>
+					<label for="ptwidth">Width:</label>
+					<input id="ptwidth" type="text" name="options[picturegrab_thumbnailsize][width]" class="forminput numeric" size="2" value="{{@options.picturegrab_thumbnailsize.width}}">
+					<label for="ptheight">Height:</label>
+					<input id="ptheight" type="text" name="options[picturegrab_thumbnailsize][height]" class="forminput numeric" size="2" value="{{@options.picturegrab_thumbnailsize.height}}">
+				</div>
+
+				<div class="oitem_input">
+					<div class="title">Video Framegrabs:</div>
+					<label for="vtwidth">Width:</label>
+					<input id="vtwidth" type="text" name="options[videograb_thumbnailsize][width]" class="forminput numeric" size="2" value="{{@options.videograb_thumbnailsize.width}}">
+					<label for="vtheight">Height:</label>
+					<input id="vtheight" type="text" name="options[videograb_thumbnailsize][height]" class="forminput numeric" size="2" value="{{@options.videograb_thumbnailsize.height}}">
+				</div>
+
+			</fieldset>
+
+		</div>
+
+		<div class="optiondiv">
+			<a name="thumbnails"></a>
+
+			<h3>{{@_t.thumbnailsizes}}</h3>
+			{{if ($__showadmintooltips)}}
+			<div class="optiondescription">
+				Define the sizes of the manually uploaded update thumbnails.
+			</div>
+			{{/if}}
+
+			<fieldset>
+				{{block:thumboption title='' arr='' _t=''}}
+				<div class="left mbot5 mtop5" style="margin-right:20px;">
+					<h4 class="center">{{$title|ucwords}} {{@_t.update}}</h4>
+
+					<table border="0" cellpadding="0" cellspacing="0" id="{{$title}}" class="thumbtable">
+					<thead>
+						<th class="normalfont">{{@_t.internal_id}}</th>
+						<th class="normalfont" align="center">{{@_t.width}}</th>
+						<th class="normalfont" align="center">{{@_t.height}}</th>
+						<th></th>
+					</thead>
+					<tbody>
+					{{set $num = count($arr) - 1}}
+					{{set $i = 0}}
+					{{foreach $arr as $key => $ths}}
+						<tr id="thumbtr{{$key}}">
+							<td>{{$key}}</td>
+							<td align="center">
+								<input type="hidden" name="options[{{$title|strtolower}}_thumbnailsize][{{$i}}][width]" value="{{$ths['width']}}">
+								{{$ths['width']}}
+							</td>
+							<td align="center">
+								<input type="hidden" name="options[{{$title|strtolower}}_thumbnailsize][{{$i}}][height]" value="{{$ths['height']}}">
+								{{$ths['height']}}
+							</td>
+							<td>
+								<a href="javascript:void(0);" class="btn{{$key}} btn{{if $num != $i}} hidden{{/if}}" id="{{$key}}"><img src="{{#Path::Get('rel:admin')}}/img/icons/cancel.png" width="16" height="16" alt="" border="0"></a>
+							</td>
+						</tr>
+						{{set $i++}}
+					{{/foreach}}
+					<tr>
+						<td class="noborder" class="ajaxerror"></td>
+						<td class="noborder" align="center">
+							<input class="numeric forminput width center" type="text" size="3" value="">
+						</td>
+						<td class="noborder" align="center">
+							<input class="numeric forminput height center" type="text" size="3" value="">
+						</td>
+						<td class="noborder">
+							<a href="javascript:void(0);" class="add" id="{{$i}}">
+								<img src="{{#Path::Get('rel:admin')}}/img/icons/add.png" alt="" border="0" width="16" height="16">
+							</a>
+						</td>
+					</tr>
+					</tbody>
+					</table>
+				</div>
+				{{/block}}
+
+				{{!thumboption title="model"   arr=$options['model_thumbnailsize']   _t=$_t}}
+
+				{{!thumboption title="picture" arr=$options['picture_thumbnailsize'] _t=$_t}}
+
+				{{!thumboption title="video"   arr=$options['video_thumbnailsize']   _t=$_t}}
+
+			</fieldset>
+		</div>
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

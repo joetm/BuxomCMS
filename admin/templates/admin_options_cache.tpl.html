@@ -1,0 +1,47 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_cache" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>{{@_t.caching_options}}</h3>
+
+			<fieldset>
+				<div class="oitem_radio">
+					<div class="title">{{@_t.caching}}?</div>
+					<div>
+						<input id="caching_1" type="radio" name="options[caching]"{{if $options['caching']}} checked="checked"{{/if}} value="1">
+						<label for="caching_1">on</label>
+						<input id="caching_2" type="radio" name="options[caching]"{{if !$options['caching']}} checked="checked"{{/if}} value="0">
+						<label for="caching_2">off</label>
+					</div>
+				</div>
+
+				<div class="oitem_select">
+					<label for="cache_system" class="title">{{@_t.cache_system}}</label>
+					<select name="options[cache_engine]" class="forminput" id="cache_system">
+						<option{{if $options['cache_engine'] == 'filecache'}} selected="selected"{{/if}}>filecache</option>
+						<option{{if $options['cache_engine'] == 'memcached'}} selected="selected"{{/if}}>memcached</option>
+					</select>
+				</div>
+			</fieldset>
+
+		</div>
+
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

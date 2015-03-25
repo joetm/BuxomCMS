@@ -1,0 +1,52 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_billing" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>Billing Information</h3>
+
+			<fieldset>
+				<div class="oitem_select">
+					<label for="proc" class="title">Processor:</label>
+					<select id="proc" name="options[processor]" class="forminput">
+						{{foreach $processors as $p}}
+							<option{{if $p == $options['processor']}} selected="selected"{{/if}}>{{$p}}</option>
+						{{/foreach}}
+					</select>
+				</div>
+
+				<div class="oitem_select">
+					<label for="a_url" class="title">{{@_t.approval_url}}:</label>
+					<input id="a_url" type="text" name="options[approval_url]" class="forminput" size="50" value="{{@options.approval_url}}">
+				</div>
+
+				<div class="oitem_select">
+					<label for="d_url" class="title">{{@_t.denial_url}}:</label>
+					<input id="d_url" type="text" name="options[denial_url]" class="forminput" size="50" value="{{@options.denial_url}}">
+				</div>
+
+				<div class="oitem_select">
+					<label for="e_url" class="title">{{@_t.error_url}}:</label>
+					<input id="e_url" type="text" name="options[error_url]" class="forminput" size="50" value="{{@options.error_url}}">
+				</div>
+
+			</fieldset>
+		</div>
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

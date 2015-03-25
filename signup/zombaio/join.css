@@ -1,0 +1,87 @@
+/*join page*/
+#joinoptions{margin:0px;padding:0px;}
+.bad{color:#F00000;}
+
+/*overwrite*/
+body
+{
+	/*faux background overwrite*/
+	background-image: url();
+}
+#content{
+	width:850px;
+}
+
+.pagecontent{
+	background-image: url(/signup/zombaio/img/join_bg.jpg);
+	background-position: top left;
+	background-repeat:no-repeat;
+}
+
+#join_page_right{
+	float:right;
+	width:310px;
+}
+#join_page_container{
+	width:100%;
+}
+
+.join_membership{
+	padding:5px 0px 5px 0px;
+	font-weight:bold;
+}
+#joinoptions ul{
+	padding:0px;
+	margin:0px 0px 0px 25px;
+}
+.join_button{
+	padding:8px;
+	margin-bottom:5px;
+	width:200px;
+}
+.faqinput{
+	width:120px;
+	border-color:#666666;
+}
+
+#loginpage #groupbox {
+	margin-left: 8px;
+	padding: 16px 16px 40px 16px;
+	font-weight: normal;
+	-moz-border-radius: 11px;
+	-khtml-border-radius: 11px;
+	-webkit-border-radius: 11px;
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	-moz-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	-webkit-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	-khtml-box-shadow: rgba(200,200,200,1) 0 4px 18px;
+	box-shadow: rgba(200,200,200,1) 0 4px 18px;
+}
+
+#slider { margin: 10px 0px 10px 0px; width:200px; }
+
+.jocontainer { display:none; }
+
+#joinoptions ul li {
+	list-style: none;
+}
+
+#newindow { display:none; }
+
+.asterisk{display:none}
+
+.dynpricefield{
+	border:0;
+	color:#f6431f;
+	font-weight:bold;
+	width:40px;
+	padding:5px;
+	padding-left:0px;
+	background-color: #EAEAEA;
+}
+
+.black{
+	color:#000000;
+}

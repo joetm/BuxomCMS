@@ -1,0 +1,358 @@
+{{include _adminheader}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+			{{include includes/error_success_msg}}
+
+			{{if $cropping_time}}
+				<div class="right gray">Cropping time: {{$cropping_time}} sec</div>
+			{{/if}}
+
+			<div id="errormessage" class="hidden error left" align="center"></div>
+			<div class="c"></div>
+
+			<div id="thumbwrap" align="center">
+
+				<div id="zend-progressbar-container">
+					<div id="zend-progressbar-done"></div>
+				</div>
+
+				<form action="{{$__adminurl}}/finishupdate" method="post" name="newupdate" id="finishupdate">
+					<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+					<input type="hidden" name="type" value="video">
+
+					<div class="itembox c mtop10">
+
+						<iframe src="{{$__adminurl}}/lib/step2video.php" {{*id="long-running-process"*}} width="100%" height="100"></iframe>
+
+						<div id="thumbnails"></div>
+
+						<div class="c"><br></div>
+
+					</div>
+
+
+
+
+					<div id="video_items">DETAILS!</div>
+
+
+
+
+					<div class="c"><br></div>
+
+					<div class="finish-button">
+						{{* recropping? *}}
+						{{if !isset($_GET['step2'])}}
+							<input type="submit" id="abortbutton" class="submitbutton" name="abort" value="{{@_t.abort}}">
+						{{/if}}
+
+						<input type="submit" id="submitbutton" class="submitbutton" name="submit" value="{{@_t.finalizeupdate}}">
+					</div>
+				</form>
+			</div>
+
+	</div><!-- admincontent-->
+
+
+
+
+
+<script type='text/javascript' src='/js/micro-templating/template-engine.js'></script>
+
+<script type="text/html" id="video_templ">
+					<div class="itembox c" id="item<%=id%>">
+						<input type="hidden" name="video[<%=id%>]" value="<%=id%>">
+						<input type="hidden" name="video[<%=id%>][filename]" value="<%=filename%>">
+						<div class="right mright10 mtop10">
+							<div>
+								<a href="javascript:void(0);" id="x[<%=id%>]" class="deletefromupdate">Remove from Update</a>
+							</div>
+{{*
+							<div class="mtop5">
+								{{@_t.alsodeletefile}} <input type="checkbox" name="x<%=id%>">
+							</div>
+*}}
+						</div>
+
+						<div class="left mright10">
+							<img src="<%=preview%>" border="2" alt="preview">
+						</div>
+
+						<div class="left" style="width:320px">
+							<div class="mbot5">Filename: <%=filename%></div>
+
+							<div class="ititle" style="width:100px;">
+								<label for="format_<%=id%>">Format:</label>
+							</div>
+							<div class="left">
+								<input name="video[<%=id%>][format]" type="text" tabindex="4" class="forminput" id="format_<%=id%>" value="<%=video_format%>" size="12" maxlength="50">
+							</div>
+							<div class="c"></div>
+
+{{*
+							<div class="ititle">
+								<label for="width_<%=id%>">Width:</label>
+							</div>
+							<div class="right">
+								<input name="video[<%=id%>][width]" type="text" tabindex="4" class="forminput" id="width_<%=id%>" value="<%=width%>" size="12" maxlength="50">
+							</div>
+							<div class="c"></div>
+
+							<div class="ititle">
+								<label for="height_<%=id%>">Height:</label>
+							</div>
+							<div class="right">
+								<input name="video[<%=id%>][height]" type="text" tabindex="4" class="forminput" id="height_<%=id%>" value="<%=height%>" size="12" maxlength="50">
+							</div>
+							<div class="c"></div>
+*}}
+
+							<div class="ititle" style="width:100px;">
+								<label for="duration_<%=id%>">Duration:</label>
+							</div>
+							<div class="left">
+								<input name="video[<%=id%>][length]" type="text" tabindex="4" class="forminput dynamic" id="duration_<%=id%>" value="<%=length%>" size="12" maxlength="50">
+
+								<input name="video[<%=id%>][duration_human]" type="text" tabindex="4" class="forminput dynamic gray" id="durationhuman_<%=id%>" value="<%=duration%>" size="11" maxlength="50" style="background-color:#FFFFFF;border:0px;" disabled="disabled">
+							</div>
+							<div class="c"></div>
+
+							<div class="ititle" style="width:100px;">
+								<label for="bitrate_<%=id%>">Bitrate:</label>
+							</div>
+							<div class="left">
+								<input name="video[<%=id%>][bitrate]" type="text" tabindex="4" class="forminput dynamic" id="bitrate_<%=id%>" value="<%=bitrate%>" size="12" maxlength="50">
+
+								<input name="video[<%=id%>][bitrate_human]" type="text" tabindex="4" class="forminput dynamic gray" id="bitratehuman_<%=id%>" value="<%=human_bitrate%>" size="11" maxlength="50" style="background-color:#FFFFFF;border:0px;" disabled="disabled">
+							</div>
+							<div class="c"></div>
+
+{{*
+							<div class="ititle">
+								<label for="fps_<%=id%>">Fps:</label>
+							</div>
+							<div class="right">
+								<input name="video[<%=id%>][fps]" type="text" tabindex="4" class="forminput" id="fps_<%=id%>" value="<%=fps%>" size="30" maxlength="50">
+							</div>
+							<div class="c"></div>
+*}}
+						</div>
+						<div class="c"></div>
+					</div>
+</script>
+
+<script type="text/javascript"><!--
+	//precache template
+	var video_detail_box = tmpl("video_templ");
+//-->
+</script>
+
+<script type="text/javascript"><!--
+
+
+	function ProgressBar_Update(data)
+	{
+		if (data.text != null)
+		{
+			document.getElementById('zend-progressbar-done').style.width = data.percent + '%';
+
+			if(data.text.url)
+			{
+				container = "<div class='container'><img src='"+data.text.url+"' border='0' class='imageclick' id='video"+data.text.id+"'><input type='hidden' name='video["+data.text.id+"][mark]' value='1'><input type='hidden' name='video["+data.text.id+"][filename]' value='"+data.text.filename+"'><input type='hidden' name='video["+data.text.id+"][width]' value='"+data.text.width+"'><input type='hidden' name='video["+data.text.id+"][height]' value='"+data.text.height+"'></div>";
+
+				$('#thumbnails').append(container);
+			}
+
+			if(data.text.details)
+			{
+
+//				alert( data.text.details.preview );
+
+
+
+
+
+
+
+				//add new video details box
+				$('#video_items').append( video_detail_box( data.text.details ) ); //!!!
+
+			}
+		}
+	}
+	function ProgressBar_Finished(data)
+	{
+		document.getElementById('zend-progressbar-done').style.width = '100%';
+		$('#finish-button').show();
+	}
+
+function ErrorMsg(error)
+{
+	$('#errormessage').html(error);
+	$('#errormessage').show();
+}
+
+function chgimgopacity(id, value)
+{
+	$("#"+id).fadeTo(200, value);
+}
+
+function unmark(id) {
+	var numeric_id = id.replace("video","");
+	var theimginput = '[name="video\['+numeric_id+'\]\[mark\]"]';
+	var current = $(theimginput).attr("value");
+	var opacity = $("#"+id).css('opacity');
+
+//alert(numeric_id);
+//alert(theimginput);
+//alert('current: '+current);
+//alert(opacity);
+
+	if (opacity < 1 && current == 0)
+	{
+		chgimgopacity(id, 1.0);
+		$(theimginput).attr("value", 1);
+	}
+	else
+	{
+		chgimgopacity(id, 0.3);
+		$(theimginput).attr("value", 0);
+	}
+} //unmark
+
+function removeitem(item)
+{
+	//remove div container
+	$(item).slideUp('fast', function() {
+		// Animation complete.
+		$(item).remove();
+	});
+}
+
+
+
+
+
+
+
+$('.deletefromupdate').live('click',function() {
+
+	var numeric_id = $(this).attr('id').replace("x[", "").replace("]", "");
+
+	var check = $("[name=x"+numeric_id+"]").attr("checked");
+
+	if (!check)
+	{
+		//just remove the item, but do not delete video file
+		removeitem('#item'+numeric_id);
+	}
+	else
+	{
+		//remove item and delete video
+
+		var filename = $("[name=video\\["+numeric_id+"\\]\\[filename\\]]").attr("value");
+
+		$.ajax({
+			type: 'POST',
+			async: false,
+			url: "{{$__adminurl}}/lib/step2video.php",
+			data: ({"filename": filename,
+					"securitytoken": '{{$securitytoken}}' }),
+			dataType: "text",
+			global: false,
+			error: function(XMLHttpRequest, text, errorThrown){
+				$('#errormessage').html("Error: "+text);
+				$('#errormessage').show('fast');
+			},
+			success: function(ret, text, XMLHttpRequest){
+				//alert(ret);
+				if(ret != "success")
+				{
+					$('#errormessage').html("Error: "+ret);
+					$('#errormessage').show('fast');
+				}
+				removeitem('#item'+numeric_id);
+			} //success function
+		}); //ajax
+
+	} //else
+
+});
+
+
+
+
+
+
+
+$('.imageclick').live('click',function() {
+	unmark($(this).attr("id"));
+});
+
+$('.imageclick').live('mouseover',function() {
+		$(".imageclick").css("cursor","pointer");
+});
+
+function sec2hms(sec)
+{
+	var hms = "";
+	var hours = Math.floor(sec / 3600);
+	hms = hours + ":";
+	minutes = Math.floor(Math.floor(sec / 60) % 60);
+	//pad minutes
+	if(minutes<9)
+		minutes = '0'+minutes;
+	hms = hms + minutes + ":";
+	seconds = Math.floor(sec % 60);
+	hms = hms + seconds;
+	return hms;
+}
+
+function humannumber(num) {
+	var precision = 3;
+
+	if(num>1000000)
+	{
+		newnum = Math.floor(num/1000000);
+		residue = '';//num.slice(1);
+		newnum = newnum+residue+'m';
+	}
+	else if(num>1000)
+	{
+		newnum = Math.floor(num/1000);
+		residue = '';//num.slice(1);
+		newnum = newnum+residue+'k';
+	}
+	else
+		newnum = num;
+
+	return newnum;
+}
+
+$(document).ready(function(){
+
+	$(".dynamic").change(function () {
+
+		var arr = $(this).attr("id").split("_");
+		var data = $(this).val();
+
+		//fork type
+		if(arr[0]=='duration')
+		{
+			var newval = sec2hms(data);
+		}
+		else if(arr[0]=='bitrate')
+		{
+			var newval = humannumber(data);
+		}
+
+		$('input[name=video\\['+arr[1]+'\\]\\['+arr[0]+'_human\\]]').val(newval);
+	});
+
+});
+//-->
+</script>
+
+{{include _adminfooter}}

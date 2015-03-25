@@ -1,0 +1,267 @@
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+		function changeVals() {
+			var values = $("#modelselector").val() || [];
+
+			$.each(values, function(key, value) {
+
+				{{if !$form_modelreleaseurl}}
+					if(!$("#modelreleaseurl_"+value).length){
+						//add release field
+						$("#fieldcontainer").append("<div id='modelreleaseurl_"+value+"' class='formitem dynamic__formfield{{@errorcss.modelreleaseurl}}'><label for='modelreleaseurl_input_"+value+"'>{{@_t.modelreleaseurl}} <span class='f10'>for "+$('#modelselector option[value='+value+']').text()+"</span> {{!optional id='modelreleaseurl'}}</label><br><input id='modelreleaseurl_input_"+value+"' name='modelreleaseurl["+value+"]' tabindex='50' type='text' class='forminput' value='' size='74'></div>");
+					}
+				{{/if}}
+				{{if !$form_miscurl}}
+					if(!$("#miscurl_"+value).length)
+					{
+						//add misc field
+						$("#fieldcontainer").append("<div id='miscurl_"+value+"' class='formitem dynamic__formfield{{@errorcss.miscurl}}'><label for='miscurl_input_"+value+"'>{{@_t.miscurl}} <span class='f10'>for "+$('#modelselector option[value='+value+']').text()+"</span> {{!optional id='miscurl'}}</label><br><input name='miscurl["+value+"]' id='miscurl_input_"+value+"' type='text' tabindex='51' class='forminput' value='' size='74'></div>");
+					}
+				{{/if}}
+			});
+
+			//remove all not selected fields
+			var preg = '';
+			$.each(values, function(k, v) {
+				preg = preg + " #modelreleaseurl_"+v+","+" #miscurl_"+v+",";
+			});
+			//remove trailing comma
+			preg = preg.slice(0,preg.length-1);
+			$("#fieldcontainer > :not("+preg+")").remove();
+
+		} //changeVals
+
+		$("#modelselector").change(changeVals);
+		changeVals();
+
+		//prefill
+		{{foreach $output[modelreleaseurl] as $key => $val}}
+			$("#modelreleaseurl_input_{{$key}}").val("{{#addslashes($val)}}");
+		{{/foreach}}
+		{{foreach $output[miscurl] as $key => $val}}
+			$("#miscurl_input_{{$key}}").val("{{#addslashes($val)}}");
+		{{/foreach}}
+});
+//-->
+</script>
+
+
+				<div class="itembox">
+{{if !$form_location}}
+					<!-- location -->
+					<div class="formitem{{@errorcss.location}}">
+						<div class="ititle">
+							<label for="location">{{@_t.location}} {{!optional id='location'}}</label>
+						</div>
+						<div class="right">
+							<input name="location" tabindex="50" type="text" class="forminput" id="location" value="{{@location.location}}" size="50">
+						</div>
+						<div class="c"></div>
+					</div>
+{{/if}}
+
+					<div class="formitem">
+						<div class="sep"></div>
+					</div>
+
+					<div class="formitem">
+{{if !$form_country}}
+					<!-- country -->
+						<div class="left{{@errorcss.country}}">
+							<div class="ititle left">
+								<label for="country">{{@_t.country}} {{!optional_short id='country'}}
+								</label> &nbsp;
+							</div>
+							<div class="right">
+								<select name="country" tabindex="51" style="width:220px;" id="country" class="forminput f12">
+								{{foreach $countries as $c}}<option{{if $c['country'] == $location['country']}} selected="selected"{{/if}}>{{@c.country}}</option>{{/foreach}}
+								</select>
+							</div>
+						</div>
+{{/if}}
+{{if !$form_LatLng}}
+					<!-- LatLng -->
+						<div class="right{{@errorcss.LatLng}}">
+							<div class="formitem right">
+								<input type="text"  tabindex="52" name="LatLng" class="forminput right" id="LatLng" value="{{@location.LatLng}}" size="10">
+							</div>
+							<div class="ititle right{{@errorcss.LatLng}}">
+								<label for="LatLng">{{@_t.lat}},{{@_t.lng}}
+								{{!optional_short id='LatLng'}}
+								</label> &nbsp;
+							</div>
+						</div>
+{{/if}}
+						<div class="c"></div>
+					</div>
+
+					<div class="formitem">
+						<div class="sep"></div>
+					</div>
+
+					<!-- zipcode, state -->
+					<div class="formitem">
+						{{if !$form_state}}
+							<div class="left{{@errorcss.state}}">
+								<div class="formitem right">
+									<input type="text" tabindex="53" name="state" class="forminput right" id="state" value="{{@location.state}}" size="30">
+								</div>
+								<div class="ititle right{{@errorcss.state}}">
+									<label for="state">{{@_t.state}}
+									{{!optional_short id='state'}}
+									</label> &nbsp;
+								</div>
+							</div>
+						{{/if}}
+						{{if !$form_zipcode}}
+							<!--zipcode-->
+							<div class="right{{@errorcss.zipcode}}">
+								<div class="ititle left">
+									<label for="zipcode">{{@_t.zipcode}} {{!optional_short id='zipcode'}}
+									</label> &nbsp;
+								</div>
+								<div class="right">
+									<input type="text" tabindex="53" name="zipcode" class="numeric forminput right" id="zipcode" value="{{@location.zipcode}}" size="10">
+								</div>
+							</div>
+						{{/if}}
+					</div>
+					<div class="c"></div>
+
+				</div>
+
+
+{{if !$form_2257}}
+<!-- 2257 record -->
+<div class="itembox">
+
+	<h4>2257 Record</h4>
+	{{if $_page['templatename'] == 'admin_update'}}
+		<div class="left formitem{{@errorcss.models}}">
+			<!-- model name -->
+			<div>
+				<label>{{@_t.models}} {{!optional id='models'}}</label>
+			</div>
+		    <select name="models[]" size="5" style="width:190px;" multiple="multiple" class="{{@errorcss.models}}" tabindex="54" id="modelselector">
+				{{foreach $models as $m}}
+					<option id="model_{{@m.id}}" value="{{$m[id]}}"{{if in_array($m[id], $output[models])}} selected="selected"{{/if}}>{{@m.modelname}} {{if $m[slug]}}({{@m.slug}}){{/if}}</option>
+				{{/foreach}}
+			</select>
+		</div>
+
+		{{if !$form_notes}}
+			<div class="right formitem{{@errorcss.notes}}">
+				<div>
+					<label for="notes">{{@_t.update}} {{@_t.notes}} {{!optional id='notes'}}</label>
+				</div>
+				<textarea name="notes" tabindex="55" class="forminput" id="notes" cols="29" style="height:75px;width:265px;" rows="3">{{@_2257.notes}}</textarea>
+			</div>
+		{{/if}}
+		<div class="c"></div>
+	{{/if}}
+	{{if $_page['templatename'] != 'admin_update'}}
+		{{if !$form_birthdate}}
+						<!-- birthdate -->
+						<div class="formitem{{@errorcss.birthdate}}">
+							<div class="ititle">
+								<label for="birthdate">{{@_t.birthdate}} {{!optional id='birthdate'}}</label>
+							</div>
+							<div class="right">
+								<input name="birthdate" type="text" class="forminput" id="birthdate" value="{{@_2257.birthdate}}" size="8">
+							</div>
+							<div class="c"></div>
+						</div>
+		{{/if}}
+		{{if !$form_gender}}
+						<!-- gender -->
+						<div class="formitem{{@errorcss.gender}}">
+							<div class="ititle">
+								<label for="gender">{{@_t.gender}} {{!optional id='gender'}}</label>
+							</div>
+							<div class="right">
+								<select name="gender" id="gender" class="forminput" style="width:80px">
+									<option{{if $_2257['gender'] == 'female'}} selected="selected"{{/if}}>female</option>
+									<option{{if $_2257['gender'] == 'male'}} selected="selected"{{/if}}>male</option>
+									<option{{if $_2257['gender'] == 'trans'}} selected="selected"{{/if}}>trans</option>
+								</select>
+							</div>
+							<div class="c"></div>
+						</div>
+		{{/if}}
+		{{if !$form_realname}}
+			<div class="formitem{{@errorcss.realname}} left">
+				<div>
+					<label for="realname">{{@_t.realname}} {{!optional id='realname'}}</label>
+				</div>
+				<input name="realname" type="text" tabindex="56" class="forminput" id="realname" value="{{@_2257.realname}}" size="44">
+			</div>
+		{{/if}}
+		{{if !$form_passport_id}}
+			<div class="formitem{{@errorcss.passport_id}} right">
+				<div>
+					<label for="passport_id">{{@_t.passport_id}} {{!optional id='passport_id'}}</label>
+				</div>
+				<input name="passport_id" type="text" tabindex="57" class="forminput" id="passport_id" value="{{@_2257.passport_id}}" size="20">
+			</div>
+		{{/if}}
+		<div class="c"></div>
+		{{if !$form_aliases}}
+			<div class="formitem{{@errorcss.aliases}}">
+				<div>
+					<label for="aliases">{{@_t.aliases}} {{!optional id='aliases'}}</label>
+				</div>
+				<input name="aliases" type="text" tabindex="58" class="forminput w100" id="aliases" value="{{@_2257.aliases}}" size="72">
+			</div>
+		{{/if}}
+
+		{{if !$form_idurl}}
+			<div class="formitem{{@errorcss.idurl}}">
+				<div>
+					<label for="idu">{{@_t.idurl}} {{!optional id='idurl'}}</label>
+				</div>
+				<input name="idurl" type="text" tabindex="59" class="forminput w100" id="idu" value="{{@_2257.idurl}}" size="72">
+			{{*
+				<img src="{{$__adminurl}}/img/icons/server_delete.png" class="mousehover" id="idurldelete" width="16" height="16" border="0">
+				<img src="{{$__adminurl}}/img/icons/server_add.png" class="mousehover" id="idurladd" width="16" height="16" border="0">
+				<a href="#"><img src="{{$__adminurl}}/img/icons/link_go.png" width="16" height="16" border="0"></a>
+			*}}
+			</div>
+		{{/if}}
+		{{if !$form_miscurl}}
+			<div class="formitem{{@errorcss.miscurl}}">
+				<div>
+					<label for="murl">{{@_t.miscurl}} {{!optional id='miscurl'}}</label>
+				</div>
+				<input name="miscurl" type="text" tabindex="59" class="forminput w100" id="murl" value="{{@_2257.miscurl}}" size="72">
+			</div>
+		{{/if}}
+	{{/if}}
+	{{if $_page['templatename'] != 'admin_model'}}
+
+		{{*miscurl and release*}}
+		<div id="fieldcontainer"></div>
+
+		{{if !$form_productiondate}}
+			<div class="formitem{{@errorcss.productiondate}}">
+				<div>
+					<label for="pdate">{{@_t.productiondate}} {{!optional id='productiondate'}}</label>
+				</div>
+				<input name="productiondate" tabindex="59" type="text" class="forminput date" id="pdate" value="{{@_2257.productiondate}}" size="8">
+			</div>
+		{{/if}}
+
+	{{/if}}
+	{{if $_page['templatename'] != 'admin_update'}}
+		{{if !$form_notes}}
+			<div class="formitem{{@errorcss.notes}}">
+				<div>
+					<label for="notes">{{@_t.notes}} {{!optional id='notes'}}</label>
+				</div>
+				<textarea name="notes" class="forminput w100" id="notes" cols="59" rows="3">{{@_2257.notes}}</textarea>
+			</div>
+		{{/if}}
+	{{/if}}
+
+</div> <!-- 2257 record -->
+{{/if}}

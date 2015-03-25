@@ -1,0 +1,119 @@
+{{include _adminheader}}
+
+<style type="text/css">
+.export_option{
+	float:left;
+	width:180px;
+	margin-right:10px;
+}
+.h4heading{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+</style>
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	//expansion animation
+	$("#exportbody").toggle('slow');
+
+
+	$("#checkboxall").click(function(){
+		var checked_status = this.checked;
+			$("input[name^='data']").each(function()
+			{
+				this.checked = checked_status;
+			});
+	});
+
+	$("#exportbutton").click(function(){
+		$("#exportbody").hide('fast');
+	});
+
+});
+//-->
+</script>
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+			{{include includes/error_success_msg}}
+
+			{{if !empty($export)}}
+			<div class="hidden" id="exportbody">
+				<textarea name="exportbody" style="width: 99%; border: 1px solid rgb(229, 229, 229);" class="forminput" cols="90" rows="13">{{$export}}</textarea>
+			</div>
+			{{/if}}
+
+			<form action="{{$__adminurl}}/export" method="post" name="exportmembers">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+				<div class="optiondiv">
+
+					<h3>{{@_t.export_member_data}}</h3>
+
+					<fieldset>
+
+						<div class="right mtop5">{{@_t.select_all}} <input type="checkbox"{{if $checkboxall=='on'}} checked='checked'{{/if}} id="checkboxall" name="checkboxall"></div>
+
+						<div class="mtop5">
+							<div>
+								<label for="members_selector">{{@_t.members}}:</label>
+								<select name="members" id="members_selector" class="forminput">
+									<option{{if $members=='all'}} selected="selected"{{/if}} value="all">All</option>
+									<option{{if $members=='active'}} selected="selected"{{/if}} value="active">Active</option>
+									<option{{if $members=='inactive'}} selected="selected"{{/if}} value="inactive">Inactive</option>
+									<option{{if $members=='chargeback'}} selected="selected"{{/if}} value="chargeback">Chargeback</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="c mbot10"></div>
+
+
+						{{foreach $tables as $table_key => $values}}
+							<div>
+								<h4 class="h4heading">{{$table_key}}</h4>
+								{{foreach $values as $key => $val}}
+									<div class="export_option"><input type="checkbox"{{if $data[$table_key][$key] == 1}} checked="checked"{{/if}} name="data[{{$table_key}}][{{$key}}]" value="1"> {{$key}}</div>
+								{{/foreach}}
+								<div class="c"></div>
+								<hr>
+							</div>
+						{{/foreach}}
+
+
+							<div class="c mbot5"></div>
+
+						</div>
+
+					</fieldset>
+				</div>
+
+				<div class="optiondiv">
+
+					<h3>{{@_t.output_format}}</h3>
+
+					<fieldset>
+						<div>
+							<input type="radio" name="outputformat"{{if $outputformat == 'CSV'}} checked="checked"{{/if}} value="CSV"> CSV
+							<input type="radio" name="outputformat"{{if $outputformat == 'XML'}} checked="checked"{{/if}} value="XML"> XML
+							<input type="radio" name="outputformat"{{if $outputformat == 'JSON'}} checked="checked"{{/if}} value="JSON"> JSON
+						</div>
+						<div class="c mtop5">
+							<input type="checkbox" name="onscreen" value="1"{{if $onscreen == 'yes'}} checked="checked"{{/if}}> output to screen
+							<input type="text" name="separator" size="1" style="padding-left:5px;width:15px;" value="|"> text separator
+						</div>
+					</fieldset>
+				</div>
+
+				<div>
+					<input type="submit" id="exportbutton" class="submitbutton" name="submit" value="{{@_t.export}}">
+				</div>
+
+			</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

@@ -1,0 +1,167 @@
+{{include _adminheader}}
+
+{{include includes/options_submenu}}
+
+{{include includes/numeric}}
+
+<script type="text/javascript"><!--
+function toggleStatus() {
+	if ($('#mailselector').attr('value') == 'sendmail') {
+		$('#emailblock :input').attr('disabled', 'disabled');
+		$("#emailblock :input").addClass("gray");
+		$("#emailblock .lbl").addClass("gray");
+	} else {
+		$('#emailblock :input').removeAttr('disabled');
+		$("#emailblock :input").removeClass("gray");
+		$("#emailblock .lbl").removeClass("gray");
+	}
+}
+$(document).ready(function(){
+	$('#mailselector').change(function() {
+			toggleStatus();
+	});
+
+	//initial
+	toggleStatus();
+});
+//-->
+</script>
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<form action="{{$__adminurl}}/options_general" method="post" name="options" id="options">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="optiondiv">
+			<h3>{{@_t.sitedetails}}</h3>
+			<fieldset>
+				<div class="oitem_input">
+					<label for="sitename" class="title">{{@_t.sitename}}:</label>
+					<input id="sitename" type="text" size="30" name="options[sitename]" value="{{@options.sitename}}" class="forminput">
+					{{if ($__showadmintooltips)}}
+						<span class="tinyfont gray">(ex.: Buxom Curves)</span>
+					{{/if}}
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.new_update}}</h3>
+			<fieldset>
+				<div class="oitem_radio">
+					<div class="title">{{@_t.floating_thumbnails}}:</div>
+					<input id="ftyes" type="radio" value="1" name="options[floating_thumbs]"{{if $options['floating_thumbs']}} checked="checked"{{/if}}>
+						<label for="ftyes">Yes</label>
+					<input id="ftno" type="radio" value="0" name="options[floating_thumbs]"{{if !$options['floating_thumbs']}} checked="checked"{{/if}}>
+						<label for="ftno">No</label>
+				</div>
+			</fieldset>
+		</div>
+
+
+		<div class="optiondiv">
+			<h3>{{@_t.email}}</h3>
+
+			<fieldset>
+				<div class="oitem_input">
+					<label for="email" class="title">{{@_t.email}}:</label>
+					<input id="email" type="text" size="30" name="options[email]" value="{{@options.email}}" class="forminput">
+					{{if ($__showadmintooltips)}}
+					<span class="tinyfont gray">(Main email, used for internal and external communication.)</span>
+					{{/if}}
+				</div>
+
+				<div class="oitem_input">
+					<label for="emailname" class="title">Email Name:</label>
+					<input id="emailname" type="text" size="30" name="options[emailname]" value="{{@options.emailname}}" class="forminput">
+					{{if ($__showadmintooltips)}}
+					<span class="tinyfont gray">(Your name or your website.)</span>
+					{{/if}}
+				</div>
+
+				<div class="oitem_select">
+					<label for="mailselector" class="title">Mail method:</label>
+					<select name="options[mailmethod]" id="mailselector" class="forminput">
+						<option{{if $options['mailmethod']=='sendmail'}} selected="selected"{{/if}}>sendmail</option>
+						<option{{if $options['mailmethod']=='smtp'}} selected="selected"{{/if}}>smtp</option>
+					</select>
+					{{if ($__showadmintooltips)}}
+					<span class="tinyfont gray">(Sendmail uses php's built in mail() function. For smtp, you need to specify your email account's details.)</span>
+					{{/if}}
+				</div>
+
+				<div id="emailblock">
+					<div class="oitem_input">
+						<label for="smtphost" class="lbl title">SMTP host:</label>
+						<input id="smtphost" type="text" size="30" name="options[smtphost]" value="{{@options.smtphost}}" class="forminput">
+					</div>
+
+					<div class="oitem_input">
+						<label for="smtpuser" class="lbl title">SMTP user:</label>
+						<input id="smtpuser" type="text" size="30" name="options[smtpuser]" value="{{@options.smtpuser}}" class="forminput">
+					</div>
+
+					<div class="oitem_input">
+						<label for="smtppass" class="lbl title">SMTP pass:</label>
+						<input id="smtppass" type="password" size="30" name="options[smtppass]" value="{{@options.smtppass}}" class="forminput">
+					</div>
+
+					<div class="oitem_input">
+						<label for="smtpport" class="lbl title">SMTP port:</label>
+						<input id="smtpport" type="text" size="30" name="options[smtpport]" value="{{@options.smtpport}}" class="forminput numeric">
+					</div>
+				</div>
+
+{{*
+				<label for="sendemailonnewfaqitem" class="title">Send email on new FAQ item submission?</label>
+				<input id="sendemailonnewfaqitem" type="text" size="30" name="options[sendemailonnewfaqitem]" value="{{@options.sendemailonnewfaqitem}}" class="forminput">
+				<div class="c mbot5"></div>
+*}}
+
+				<div class="oitem_input">
+					<label for="email_pp" class="title">Batch Email Size:</label>
+					<input id="email_pp" type="text" size="30" name="options[email_pp]" value="{{@options.email_pp}}" class="forminput numeric">
+					{{if ($__showadmintooltips)}}
+						<span class="tinyfont gray">(Number of emails to send in batch when sending emails to members.)</span>
+					{{/if}}
+				</div>
+
+			</fieldset>
+
+		</div>
+
+
+		<div class="optiondiv">
+			<h3>{{@_t.companyinformation}}</h3>
+
+			<fieldset>
+				{{if ($__showadmintooltips)}}
+				<div class="c">
+					Enter your company info for the 2257 page.
+					<span class="pointer" onclick="$('#company_info_text').toggle();"><img src="img/icons/information.png" width="16" height="16" alt="?" align="top" border="0"></span>
+					<div id="company_info_text" class="hidden gray">
+						An image will be created from this info which makes it a bit harder for spammers to get your email.
+						If you change your company info here, delete {{$__siteurl}}/img/2257.jpg.
+						Take a look at the <a href="{{$__siteurl}}/2257">2257 page</a> to check the result.
+					</div>
+				{{/if}}
+				</div>
+				<textarea name="options[2257info]" cols="50" rows="4" class="forminput">{{@options.2257info}}</textarea>
+			</fieldset>
+
+		</div>
+
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

@@ -1,0 +1,147 @@
+{{include _adminheader}}
+
+<script type="text/javascript"><!--
+function ClearInput(value, id){
+	var input = document.getElementById(id);
+	if(value == input.value){
+		input.value = '';
+	}else{
+		input.value = input.value;
+	}
+}
+
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 2000);
+
+	$("#checkboxall").click(function(){
+		var checked_status = this.checked;
+			$("input[@name=checkbox\\[\\]]").each(function()
+			{
+				this.checked = checked_status;
+			});
+	});
+
+	$('#addnew').toggle(
+		function(){
+			$('#newaccount').show('fast');
+			$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+		},
+		function() {
+           	$('#newaccount').hide('fast');
+           	$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_open.png');
+		}
+	);
+
+	{{if $errorcss}}
+			$('#newaccount').show('fast');
+			$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+	{{/if}}
+});
+//-->
+</script>
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		<!-- addnew button -->
+		<div class="left mright5 mbot10" style="height:18px">
+			<a href="#" id="addnew"><img id="addicon" src="{{$__adminurl}}/img/icons/details_open.png" width="20" height="20" hspace="5" alt="" title="{{@_t.addnewaccount}}" border="0"></a>
+		</div>
+
+		{{include includes/error_success_msg}}
+
+		<div id="newaccount" class="hidden">
+
+					<form action="{{$__adminurl}}/accounts" method="post" name="addnewaccount">
+					<input type="hidden" name="_action" value="addnew">
+					<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+						<div class="left">
+							<div>
+								<label for="username" class="{{@errorcss.accountname}}">{{@_t.username}}</label>
+							</div>
+							<input type="text" class="forminput" id="username" size="26" name="accountusername" value="{{@account.accountusername}}">
+						</div>
+						<div class="left mleft5">
+							<div>
+								<label for="accountpassword" class="{{@errorcss.accountpassword}}">{{@_t.password}}</label>
+							</div>
+							<input type="text" class="forminput" id="accountpassword" size="26" name="accountpassword" value="{{@account.accountpassword}}">
+						</div>
+						<div class="left mleft5">
+							<div>
+								<label for="email" class="{{@errorcss.email}}">{{@_t.email}}</label>
+							</div>
+							<input type="text" class="forminput" id="email" size="26" name="email" value="{{@account.email|default:'john@doe.com'}}" onclick="ClearInput('john@doe.com', this.id);">
+						</div>
+						<div class="left mleft5">
+							<div>
+								<label for="role" class="{{@errorcss.role}}">{{@_t.role}}</label>
+							</div>
+							<select class="forminput" name="role" id="role">
+								<option>editor</option>
+								<option>administrator</option>
+							</select>
+						</div>
+						<div class="left mleft5">
+							<div>
+								<label for="name" class="{{@errorcss.name}}">{{@_t.name}}</label>
+								<span class="f11">({{@_t.optional|strtolower}})</span>
+							</div>
+							<input type="text" class="forminput" id="name" size="26" name="name" value="{{@account.name}}">
+						</div>
+						<div class="c"></div>
+						<div class="mtop5">
+							<input type="submit" id="addnewmember" class="adm_button" name="addnewmember" value="{{@_t.addnewaccount}}">
+						</div>
+					</form>
+			<div class="c mbot10"></div>
+		</div>
+
+
+		<div id="accounts">
+
+			<form action="{{$__adminurl}}/accounts" method="post" name="login_history">
+				<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+				<input type="hidden" name="_action" value="delete">
+
+				<table cellspacing="0" cellpadding="0" border="0" width="100%" id="table">
+					<thead>
+					<tr>
+						<th class="col_icon">&nbsp;</th>
+						<th width="18%" class="sorting_disabled">{{@_t.username}}</th>
+						<th width="18%" class="sorting_disabled">{{@_t.role}}</th>
+						<th class="col_email sorting_disabled">{{@_t.email}}</th>
+						<th class="sorting_disabled">{{@_t.name}} ({{@_t.optional}})</th>
+						<th class="col_checkbox sorting_disabled"><input type="checkbox" id="checkboxall" name="checkboxall"></th>
+					</tr>
+					</thead>
+					<tbody>
+					{{foreach $users as $key => $user}}
+						<tr class="{{if ($key % 2) == 0}}odd{{else}}even{{/if}}">
+							<td><img src="{{$__adminurl}}/img/icons/{{if $key == '0' || $user[role] == 'administrator'}}active{{else}}model{{/if}}.png" alt="" width="16" height="16" border="0"></td>
+							<td>{{@user.username}}</td>
+							<td>{{@user.role}}</td>
+							<td>{{@user.email}}</td>
+							<td>{{@user.name|default:' '}}</td>
+							<td>
+								{{if $key != '0' || $user[role] != 'administrator'}}
+									<input type="checkbox" value="{{@user.username}}" id="checkbox_{{$key}}" name="checkbox[]">
+								{{/if}}
+							</td>
+						</tr>
+					{{/foreach}}
+					</tbody>
+				</table>
+				<div class="dt_buttons"><div class="right dt_butt"><input type="submit" value="{{@_t.delete}}" name="delete" class="adm_button"></div></div>
+			</form>
+
+			<div class="c" style="margin-bottom:10px;"></div>
+
+		</div><!-- adminaccounts-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

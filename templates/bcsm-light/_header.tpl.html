@@ -1,0 +1,227 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{*locale*}}EN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={{# __CHARSET|strtoupper}}">
+
+<title>{{$_pagetitle}} {{$modelname}}</title>
+
+<meta name="title" content="{{$_pagetitle}}">
+<meta name="keywords" content="{{$_keywords}}">
+<meta name="description" content="{{$_description}}">
+
+<meta name="robots" content="INDEX,FOLLOW">
+<meta name="gg.show-translate" content="no">
+<meta name="gg.show-archive" content="no">
+<meta name="gg.show-similar" content="no">
+<meta name="gg.show-url" content="yes">
+
+<meta name="date" content="{{#date('m-d-Y')}}">
+
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+
+<meta http-equiv="imagetoolbar" content="false">
+<meta name="MSSmartTagsPreventParsing" content="true">
+
+<meta http-equiv="content-language" content="{{*locale*}}EN">
+
+<meta name="publisher" content="{{$__sitename}}">
+<meta name="DC.Publisher" content="{{$__sitename}}">
+
+<meta name="revisit-after" content="7 days">
+<meta name="author" content="{{$__sitename}} - {{$__siteurl}}">
+<meta name="copyright" content="{{$__sitename}}">
+<meta name="distribution" content="global">
+<meta name="resource-type" content="document">
+
+{{*
+<link rel="alternate" type="application/rss+xml" title="RSS Feed"
+        href="http://feeds.feedburner.com/xxx"/>
+*}}
+
+<!--[if lt IE 9]>
+  <script src="{{$__siteurl}}/js/modernizr-1.7.min.js"></script>
+<![endif]-->
+
+{{if $_page['templatename'] == 'login'}}
+	<link rel="stylesheet" id="login-css" href="{{$__templateurl}}/login.css" type="text/css" media="all">
+{{else}}
+	<link rel="stylesheet" id="site-css" href="{{$__templateurl}}/style.css" type="text/css" media="all">
+{{/if}}
+
+<link rel="shortcut icon" href="{{$__siteurl}}/favicon.ico" type="image/x-icon">
+
+<script type="text/javascript"><!-- {{*break out of frames*}}
+	if (window.top!=window.self){window.top.location=window.self.location;}
+//-->
+</script>
+
+{{*
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
+*}}
+<script type='text/javascript' src='{{$__siteurl}}/js/jquery.min.js'></script>
+<script type="text/javascript" src="{{$__siteurl}}/js/jquery.equalheights.js"></script>
+
+{{if $_page['templatename'] == 'video'}}
+	<!-- VideoJS Stylesheet -->
+	<link rel="stylesheet" href="{{$__siteurl}}/player/videoJS/video-js.css" type="text/css" media="screen" title="Video JS" charset="utf-8">
+	<!-- VideoJS Library -->
+	<script src="{{$__siteurl}}/player/videoJS/video.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			VideoJS.setup();
+		})
+	</script>
+{{/if}}
+
+{{*
+<!-- rating-->
+<link rel="stylesheet" type="text/css" href="{{$__siteurl}}/img/rating/rating.css">
+<script type="text/javascript" src="{{$__siteurl}}/js/jquery.rating.js"></script>
+<!-- /rating-->
+*}}
+<script type="text/javascript"><!--
+$(document).ready(function() {
+
+	{{if $_page['templatename'] == __url_set OR $_page['templatename'] == __url_video}}
+
+{{*
+	/***rating***/
+	$('#ratescene').rating('/rating.php', {maxvalue:5, increment:.5, curvalue:{{$rating}}});
+*}}
+	{{/if}}
+
+	{{if $_page['templatename'] == 'home'}}
+	/*Page Flip on hover*/
+	$("#pageflip").hover(function() {
+		$("#pageflip img , .msg_block").stop()
+			.animate({
+				width: '307px',
+				height: '319px'
+			}, 500);
+		} , function() {
+		$("#pageflip img").stop()
+			.animate({
+				width: '50px',
+				height: '52px'
+			}, 220);
+		$(".msg_block").stop()
+			.animate({
+				width: '50px',
+				height: '50px'
+			}, 200);
+	});
+	{{/if}}
+});
+//-->
+</script>
+
+{{*IE PNG Fix*}}
+<!--[if lte IE 6]>
+<style type="text/css">
+img,div,span{behavior:url({{$__siteurl}}/js/iepngfix.htc)}</style>
+<![endif]-->
+
+{{if $_page['templatename'] == 'video'}}
+    <link rel="stylesheet" type="text/css" href="{{$__siteurl}}/img/lightbox/jquery.lightbox-0.5.css" media="screen">
+    <script type="text/javascript" src="{{$__siteurl}}/js/jquery.lightbox-0.5.min.js"></script>
+    <script type="text/javascript"><!--
+    $(function() {
+        $('#videocontainer a').lightBox();
+    });
+    //-->
+    </script>
+{{/if}}
+
+<style type="text/css"><!--
+{{if $barcolor}}
+	#headerimg, .headline_bar {
+		background-color:#{{$barcolor}};
+	}
+{{/if}}
+{{if $barfontcolor}}
+	.headline_bar a{
+		color:#{{$barfontcolor}};
+	}
+{{/if}}
+
+{{if $_page['templatename']}}
+#headerimg{
+	background-image:url({{$__siteurl}}/img/header/{{if $_page['templatename'] == 'model'}}{{$slug|strtolower}}{{else}}{{@_page.templatename|strtolower}}{{/if}}.jpg);
+	height:{{$headerimgheight}}px;
+}
+{{/if}}
+//-->
+</style>
+
+<!--RTA-->
+<meta name="RATING" content="RTA-5042-1996-1400-1577-RTA">
+</head>
+<body>
+
+<a name="top"></a>
+<div align="center">
+
+
+<div id="content">
+
+	<div id="top-header">
+
+		<!-- top-right-->
+		<div id="#login">
+			<form name="loginform" id="loginform" action="/members/" method="post">
+				<label>{{$_username}}
+				<input name="username" id="user_login" class="input" value="" size="20" tabindex="101" type="text"></label>
+
+				<label>{{$_password}}
+				<input name="password" id="user_pass" class="input" value="" size="20" tabindex="102" type="password"></label>
+
+				<input name="submit" id="submit" class="login-button" value="{{$_login}}" tabindex="103" type="submit">
+			</form>
+		</div><!-- /login-->
+		<!-- statistics -->
+		<div id="headerstatistics">
+			{{* the variables that can be used here are:
+				- total_size: total size of video and picture updates
+				- num_pics: number of pictures
+				- num_videos: number of video updates
+				- pic_size: size of all picture updates
+				- video_size: sum of average video sizes of the updates *}}
+			{{if $total_size}}{{$total_size}}{{/if}}{{if $total_size && $total_pics}}, {{/if}}
+			{{if $total_pics}}{{$total_pics}} {{$_pictures}}{{/if}}{{if $total_pics && $total_videos}}, {{/if}}
+			{{if $total_videos}}{{$total_videos}} {{$_videos}}{{/if}}
+		</div>
+		<!-- statistics -->
+		<!-- /top-right-->
+
+	</div><!-- /top-header -->
+
+	<div id="menu-container">
+		<ul class="menu">
+			<li>
+				<a href="{{$__siteurl}}/index">{{$_home}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/photos">{{$_photos}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/videos">{{$_videos}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/models">{{$_models}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/about">{{$_about}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/goodies">{{$_goodies}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/members/">{{$_members}}</a>
+			</li>
+			<li>
+				<a href="{{$__siteurl}}/join">{{$_join}}!</a>
+			</li>
+		</ul><!-- /menu -->
+	</div><!-- /menu-container-->

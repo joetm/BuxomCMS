@@ -1,0 +1,68 @@
+{{include _adminheader}}
+
+<script type="text/javascript"><!--
+function ClearInput(id){
+	var input = document.getElementById(id);
+	input.value = '';
+}
+//-->
+</script>
+
+	<div class="pagecontent">
+
+		<a name="about"></a>
+
+		<div id="loginpage" align="center">
+
+				<div class="c">&nbsp;</div>
+
+				<div class="bottom-a mbot5" align="center">
+					<a href="{{$__siteurl}}">{{$__sitename}}</a>
+					<br>
+					[{{@_t.adminlogin}}]
+				</div>
+
+				{{if $_error}}
+				<div class="error">
+					{{$_error}}
+				</div>
+				{{/if}}
+
+				<div id="form">
+					<form name="loginform" id="loginform" action="{{$__adminurl}}/" method="post">
+
+					<p>
+						<label for="user_login">{{@_t.username}}<br>
+						<input name="{{# Authentification::USERNAME}}" id="user_login" class="input" value="" size="20" tabindex="10" type="text"></label>
+					</p>
+					<p>
+						<label for="user_pass">{{@_t.password}}<br>
+						<input name="{{# Authentification::PASSWORD}}" id="user_pass" class="input" value="" size="20" tabindex="20" type="password" onclick="ClearInput(this.id);"></label>
+					</p>
+					<p class="forgetmenot"><label for="rememberme"><input name="{{# Authentification::REMEMBER}}" id="rememberme" value="1" tabindex="90" type="checkbox"> {{@_t.rememberme}}</label></p>
+
+					<input name="redirect" type="hidden" value="{{$redirect}}">
+
+					<p class="submit">
+						<input type="submit" class="adm_button" tabindex="100" value="{{@_t.login}}" id="submit" name="submit">
+					</p>
+					</form>
+				</div><!-- /form-->
+
+				<div id="bottom" style="width:280px;" align="center">
+					<div class="bottom-text smallfont mtop5 mbot10">
+
+					</div>
+				</div><!-- /bottom-->
+
+
+			<script type="text/javascript"><!--
+			try{document.getElementById('user_login').focus();}catch(e){}
+			//-->
+			</script>
+
+		</div><!-- /loginpage-->
+
+	</div><!-- /pagecontent-->
+
+{{include _adminfooter}}

@@ -1,0 +1,54 @@
+{{set $_pagetitle="BuxomCurves Videos"}}
+{{set $_keywords = ""}}
+{{set $_description = "BuxomCurves description"}}
+{{set $headerimgheight = "200"}}
+{{set $barcolor = "261512"}}
+{{set $barfontcolor = "FFFFFF"}}
+{{include _header}}
+
+	<div id="headerimg"></div>
+
+	<a name="videos"></a>
+	<div class="headline_bar" align="left">
+			<span class="right f11">{{@_t.sortby}}
+			{{if $sorting != 'rating'}}<a href="{{$__siteurl}}/videos/sort/rating">{{@_t.rating}}</a> |{{else}}{{$rating}} |{{/if}}
+			{{if $sorting != 'title'}}<a href="{{$__siteurl}}/videos/sort/title">{{@_t.title}}</a> |{{else}}{{$title}} |{{/if}}
+			{{if $sorting != 'date'}}<a href="{{$__siteurl}}/videos/sort/date">{{@_t.date}}</a>{{else}}{{$date}}{{/if}}</span>
+			<span class="left bold">{{@_t.videos}}</span>
+	</div>
+
+	<div class="pagecontent">
+
+			{{foreach $videos as $video}}
+			<div class="thumbnail">
+				<a href="{{$__siteurl}}/video/{{@video.slug}}">
+					<div class="g-title">{{@video.title}}</div>
+					{{if $video['path']}}
+					<img src="{{@video.path}}" width="305" height="203" alt="" border="1">
+					{{/if}}
+				</a>
+			</div>
+			{{else}}
+				{{@_t.noupdates}}
+			{{/foreach}}
+
+			<div class="c"></div>
+
+			{{if $pagination}}
+			<div class="pagination">
+				{{@pagination.links}}
+			</div>
+			{{/if}}
+
+			<div id="bottom">
+				<div>
+					<a href="{{$__siteurl}}/join">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

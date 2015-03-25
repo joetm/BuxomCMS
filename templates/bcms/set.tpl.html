@@ -1,0 +1,152 @@
+{{set $_pagetitle="Set"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="214"}}
+{{set $barcolor="961512"}}
+
+{{translations aboutthisscene="About this Scene" addedon="Added on" currentrating="Current Rating" downloadoptions="Download Options" model="Model" photocount="Photo Count" photos="Photos" rating="Rating" recentcomments="Recent Comments" said="said" statistics="Statistics" tags="Tags"}}
+
+{{include _header}}
+
+{{*
+    <script type="text/javascript">
+    $(function() {
+        $('#t a').lightBox();
+    });
+    </script>
+*}}
+
+	<div id="headerimg">
+	</div><!-- /headerimg-->
+
+	<a name="gallery"></a>
+	<div class="pagecontent">
+
+			<div id="content-right">
+
+				<div class="headline_bar" align="left">
+					{{$title}}
+				</div>
+
+				<div class="thumbs">
+
+					<div id="t">
+					{{foreach $picPages as $file}}
+						<div class="thumbnail">
+							<a href="{{@file.link}}">
+							<img src="{{@file.img}}"{{@file.class}} alt="" width="120" height="180" />
+							</a>
+						</div>
+					{{/foreach}}
+					</div>
+
+					<div class="c"></div>
+
+					{{if $pageNumbers}}
+					<div class="pagination">
+						{{$pageNumbers}}
+					</div>
+					{{/if}}
+
+				</div><!-- /thumbs-->
+
+			</div><!-- /content-right-->
+
+
+			<div id="sidebar">
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{$statistics}}
+					</div>
+					<div class="subbox">
+					{{$addedon}}: {{$date}}<br />
+					{{$photocount}}: {{$piccount}} <!--full-sized--> {{$photos|strtolower}}<br />
+					{{if $picsize}}Size: {{$picsize}}<br />{{/if}}
+					{{$currentrating}}: {{$rating}}<br />
+					{{$model}}: <a href="./profile.php?id=####">{{$modelname}}</a><br />
+					{{if $tags}}{{$tags}}: {{foreach $tags as $tag}}{{$tag}}{{/foreach}}
+					{{/if}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{$aboutthisscene}}
+					</div>
+					<div class="subbox">
+						{{$description}}
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{$rating}}
+					</div>
+					<div class="subbox">
+
+						<div id="ratescene" class="rating">&nbsp;</div>
+
+					</div><!-- /subbox-->
+				</div>
+
+				<div>
+					<div class="headline_bar" align="left">
+						{{$downloadoptions}}
+					</div>
+					<div class="subbox">
+						<img src="img/icons/compress.png" width="16" height="16" alt="" border="0" align="absmiddle" />
+						<a href="./members/zips/{{$shortmodelname|strtolower}}/{{$sceneshortname|strtolower}}.zip">Download Zip File</a> ({{$zipsize}})
+					</div><!-- /subbox-->
+				</div>
+				<div>
+					<div class="headline_bar" align="left">
+						{{$recentcomments}}
+					</div>
+					<div class="subbox">
+
+						<div id="comments">
+
+						{{if $comments}}
+							{{foreach $comments as $comment}}
+							<div class="comment">
+								<span class="right"><a href="./report.php?id={{@comment.id}}" class="report"><img src="img/warning.png" title="Report this comment" width="12" height="12" border="0" /></a></span>
+								<span class="cdate">On {{@comment.date}}</span> <span class="cname">{{@comment.name}}</span> {{$said}}:
+								<div class="c"></div>
+								{{@comment.content}}
+								<hr />
+								<div class="c">&nbsp;</div>
+							</div>
+							{{/foreach}}
+
+						{{else}}
+							<div class="smallfont">No comments for this video, yet.</div>
+						{{/if}}
+						<hr />
+
+						<img src="/img/icons/comment_add.png" width="12" height="12" alt="" border="0" />
+						Post a new comment!
+						<br />Comment form here!
+
+					</div><!-- /subbox-->
+				</div>
+			</div><!-- /gallery-left-->
+
+			<div class="c"></div>
+			</div> <!-- empty div before #gallery -->
+			<div class="c"></div>
+
+			<div id="bottom">
+				<div class="bottom-a">
+					<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+				<div class="c"></div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+	<div class="c">&nbsp;</div>
+
+{{include _footer}}
+

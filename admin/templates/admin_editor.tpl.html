@@ -1,0 +1,73 @@
+{{include _adminheader}}
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	$('#tsel').change(function(){
+			alert('Editing '+$(this).val());
+			$("#editor_form").submit();
+	});
+{{*
+	//pre-select
+	$("#tsel option[value='{{$template}}']").attr('selected', 'selected');
+*}}
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+});
+//-->
+</script>
+
+<script type="text/javascript" src="/js/jquery.textarearesizer.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".resizable:not(.processed)").TextAreaResizer();
+});
+</script>
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		<div id="templates">
+
+			<form action="{{$__adminurl}}/editor" id="editor_form" method="POST">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+				<div id="templateselector">
+					<label for="tsel">{{@_t.select_template}}:</label>
+					<select name="template" id="tsel">
+						{{foreach $templates as $t}}
+							<option value="{{$t}}"{{if $t==$template}} selected="selected"{{/if}}>{{$t}}</option>
+						{{/foreach}}
+					</select>
+					<noscript>
+						<input type="submit" value="{{@_t.select}}">
+					</noscript>
+				</div>
+
+				<div id="_editing">editing: {{$template}}</div>
+
+				<div class="c"></div>
+
+				{{if $templatecontent}}
+				<div>
+					<textarea rows="28" class="resizable" cols="108" style="background-color:#F0F0F0;width:100%" id="editor" name="templatecontent">{{$templatecontent}}</textarea>
+				</div>
+				{{/if}}
+
+				{{if $templatecontent}}
+				<div align="center" class="mtop10">
+					<input type="submit" value="{{@_t.save}}" class="submitbutton">
+				</div>
+				{{/if}}
+
+			</form>
+
+			<div class="c"></div>
+
+		</div><!-- templates-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

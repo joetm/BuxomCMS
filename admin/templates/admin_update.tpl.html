@@ -1,0 +1,756 @@
+{{include _adminheader}}
+
+{{*optional field msg*}}
+{{block:optional id=''}}{{if !isset(update::$mandatory[$id])}}<span class='f10 optional'>* (optional)</span>{{/if}}{{/block}}
+{{block:optional_short id=''}}{{if !isset(update::$mandatory[$id])}}<span class='f10 optional'>*</span>{{/if}}{{/block}}
+
+{{* autocomplete *}}
+<script type='text/javascript' src='{{$__adminurl}}/js/jquery.autocomplete.min.js'></script>
+
+{{include includes/slug_check}}
+
+{{include includes/slug_suggest}}
+
+{{include includes/numeric}}
+
+<script type="text/javascript"><!--
+	var Paths = new Object;
+	Paths.memberpics = '{{# addslashes(Path::Get('path:member/pics').DIR_SEP)}}';
+	Paths.freepics = '{{# addslashes(Path::Get('path:free/pics').DIR_SEP)}}';
+	Paths.membervideos = '{{# addslashes(Path::Get('path:member/videos').DIR_SEP)}}';
+	Paths.freevideos = '{{# addslashes(Path::Get('path:free/video').DIR_SEP)}}';
+	Paths.webroot = '{{# addslashes(Path::Get('path:site').DIR_SEP)}}';
+//--></script>
+
+<script type="text/javascript"><!--
+function ClearInput(value, id){
+	var input = document.getElementById(id);
+	if(value == input.value){
+		input.value = '';
+	}else{
+		input.value = input.value;
+	}
+}
+
+function hideallvideo()
+{
+		$(".videoonly").hide();
+		$(".setonly").show();
+
+		//change type for base path switch buttons
+		$('.base_buttons span.type').html('pics');
+
+		{{if !update::$id}}
+			$("#submitall").attr("value","{{@_t.gotostep2}}");
+		{{else}}
+			$("#submitall").attr("value","{{@_t.save}}");
+		{{/if}}
+		$("#slugurl").html("set");
+
+		//change base path
+		$("#basepath").val( get_base_path( $('.adm_button_selected').text() ) );
+}
+function hideallpics()
+{
+		$(".setonly").hide();
+		$(".videoonly").show();
+
+		//change type for base path switch buttons
+		$('.base_buttons span.type').html('videos');
+
+//		$("#submitall").attr("value","{{@_t.submitupdate}}");
+		$("#slugurl").html("video");
+
+		//change base path
+		$("#basepath").val( get_base_path( $('.adm_button_selected').text() ) );
+
+}
+
+function get_base_path(the_base)
+{
+		switch(the_base)
+		{
+			case 'member/pics':
+				set_base = Paths.memberpics;
+				break;
+			case 'free/pics':
+				set_base = Paths.freepics;
+				break;
+			case 'member/videos':
+				set_base = Paths.membervideos;
+				break;
+			case 'free/videos':
+				set_base = Paths.freevideos;
+				break;
+			case 'webroot':
+				set_base = Paths.webroot;
+				break;
+			default:
+				set_base = '';
+				break;
+		}
+
+		return set_base;
+}
+
+$(document).ready(function(){
+
+	//switch base
+	$('.base_buttons .adm_button').click(function(e){
+		//prevent default
+		e.preventDefault();
+		e.stopPropagation();
+
+		var set_base = false;
+
+		var the_base = $(this).text();
+
+		set_base = get_base_path(the_base);
+
+		$('#basepath').val( set_base );
+
+		//remove all classes from buttons
+		$('.base_buttons .adm_button').removeClass('adm_button_selected');
+
+		//mark selected
+		$(this).addClass('adm_button_selected');
+
+		//prevent default
+		return false;
+	});
+
+	// Select thumbnail input field contents
+	$(".thinput").click(function(){
+		this.focus();
+		this.select();
+	});
+
+	{{if Update::_PREFILL}}
+	/*prefill all video fields if default values are set*/
+	$('#v_reldir').bind('change', function(){
+		$('.ht5input_m, .ht5input_f').each(function(index){
+			//has default value?
+			if($('#v_reldir').val() && ($(this).val() == '{{$_videourl}}' || $(this).val() == '{{$_freevideourl}}'))
+			{
+				//get file extension
+				var extension = '.' + $(this).next('.ext').text();
+				//fill field
+				$(this).val( $(this).val() + $('#v_reldir').val() + '/' + extension );
+			}
+		});
+	});
+	{{/if}}
+
+	{{* autocomplete *}}
+	{{block:autocomplete id='' type='' securitytoken=$securitytoken}}
+		$("#{{$id}}").autocomplete("lib/autocomplete.php", {
+			max: 15,
+			highlight: false,
+			scroll: true,
+			cacheLength: 0,
+			scrollHeight: 200,
+			extraParams: {
+							securitytoken: '{{$securitytoken}}',
+{{*							type: '{{if $id == 'p_reldir'}}set{{else}}video{{/if}}',*}}
+							base: function() {
+
+//								alert( $('#basepath').val() + $('#{{$id}}').val() );
+
+								//dynamic base {{*has added slashes*}}
+								return $('#basepath').val() + $('#{{$id}}').val();
+							}
+						},
+			formatItem: function(data, i, n, value) {
+				return value;
+			}
+		});
+	{{/block}}
+	{{!autocomplete id='p_reldir' securitytoken=$securitytoken}}
+	{{!autocomplete id='v_reldir' securitytoken=$securitytoken}}
+	{{* /autocomplete *}}
+
+	{{if $_page['errormessage']}}
+		$('#submitall').removeAttr("disabled");
+		//hide loading img
+		$('#loading_anim').hide();
+	{{/if}}
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	{{*calculate a dynamic width for the thumbnail boxes*}}
+	//event handler
+	$(window).resize(function(){
+		var newrightcol_width = $('#admincontent').width() - $('.left_col').width() - 20; //padding of 20
+		$('#box').css('width', newrightcol_width);
+	});
+	//initial setup
+	$(window).resize();
+
+	$("#typesel").change(function(){
+		if($("#typesel").val() == 'set')
+			hideallvideo();
+		else
+			hideallpics();
+	});
+	//initial (when editing)
+	if($("#typesel").val() == 'video')
+		hideallpics();
+	else
+		hideallvideo();
+
+	{{*change rating selector on star click*}}
+	$(".star").click(function () {
+		var v = $('input[name=rating2]:checked').val();
+//		if (v == ''){
+//			$("#ratingselector").val('0');
+//		}
+//		else{
+			$("#ratingselector").val(v);
+//		}
+	});
+	//change stars on rating selector click
+	$("#ratingselector").change(function () {
+		var id = $('#ratingselector').val();
+		$('.star').rating('select',id)
+	});
+
+	{{*form submit*}}
+	$("#newupdateform").submit(function(){
+		$('#submitall').attr("disabled", "disabled");
+
+		//show loading img
+		if($("#typevideo").is(":checked"))	$('#loading_anim').show();
+
+		//animated dots
+		var dots = '';
+		window.setInterval(function(){
+			if($('#dots').html() == '.....'){
+				dots = '.';
+			}
+			else{
+				dots += '.';
+			}
+			$('#dots').html(dots);
+		}, 1000);
+
+		return true;
+	});
+
+});
+//-->
+</script>
+
+<script type="text/javascript" src="{{$__adminurl}}/js/nicEdit/nicEdit-latest.js"></script>
+<script type="text/javascript"><!--
+//<![CDATA[
+bkLib.onDomLoaded(function() {
+		var nicEditr = new nicEditor({iconsPath:'{{$__adminurl}}/js/nicEdit/nicEditIcons.gif', buttonList : ['bold','italic','underline','left','center','right','ol','ul','link','unlink','xhtml']});
+		nicEditr.setPanel('NicPanel');
+		nicEditr.addInstance('description');
+});
+//]]>
+//-->
+</script>
+
+{{if $options['floating_thumbs']}}
+<script src="{{$__siteurl}}/js/jquery.floatobject-1.0.js" type="text/javascript" ></script>
+<script type="text/javascript"><!--
+$(document).ready(main);
+	function main()
+	{
+		$("#box").makeFloat({x:"current",y:"current",alwaysVisible:true});
+	}
+//-->
+</script>
+{{/if}}
+
+		<a name="top"></a>
+		<div id="admincontent">
+
+			{{include includes/error_success_msg}}
+
+			{{if $errors}}
+				<div id="errors">
+					<div>
+						<img src="{{$__adminurl}}/img/icons/warning.png" width="16" height="16" hspace="5" alt="" border="0">
+						Missing variables:
+					</div>
+					{{foreach $errors as $err}}
+						<div>{{$err}}</div>
+					{{/foreach}}
+				</div>
+			{{/if}}
+
+			<form action="{{$__adminurl}}/update{{if update::$id}}?edit={{# update::$id}}{{/if}}" method="post" name="newupdate" id="newupdateform">
+				<input type="hidden" name="_action" value="addnew">
+				<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+				<div id="box" class="right_col">
+					<!-- thumbnail -->
+					<div class="setonly">
+						<!-- picture -->
+						{{if $output['action']=='edit'}}
+							{{for $k from 0 to count($picturethumbsizes)-1}}
+								<div id="picupload_area{{$k}}" class="upload_area{{$errorcss['set_thumbs'][$k]}}">
+									{{if $output['set_thumbs'][$k]}} {{*prefill if submitted*}}
+										<img src="{{$output['set_thumbs'][$k]['path']}}?{{#time()}}" border="0" class="uploadarea_thumbnail"><br>
+										{{* {{@_t.success}}! *}}
+										<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;">
+										<input type="text" name="set_thumbs[]" value="{{$output['set_thumbs'][$k]['path']}}">
+									{{else}}
+										{{@_t.thumbnail}} {{$picturethumbsizes[$k]['width']}}x{{$picturethumbsizes[$k]['height']}} (WxH)
+									{{/if}}
+								</div>
+							{{/for}}
+						{{else}}
+							{{for $k from 0 to count($picturethumbsizes)-1}}
+								<div id="picupload_area{{$k}}" class="upload_area{{$errorcss['set_thumbs'][$k]}}">
+									{{if $output['set_thumbs'][$k]}} {{*prefill if submitted*}}
+										<img src="{{#Path::Get('rel:admin/temp')}}/{{$output['set_thumbs'][$k]}}?{{#time()}}" border="0" class="uploadarea_thumbnail"><br>
+										{{* {{@_t.success}}! *}}
+										<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;">
+										<input type="text" name="set_thumbs[]" value="{{$output['set_thumbs'][$k]}}">
+									{{else}}
+										{{@_t.thumbnail}} {{$picturethumbsizes[$k]['width']}}x{{$picturethumbsizes[$k]['height']}} (WxH)
+									{{/if}}
+								</div>
+							{{/for}}
+						{{/if}}
+					</div>
+					<!-- thumbnail -->
+					<div class="videoonly">
+						<!-- video -->
+						{{if $output['action']=='edit'}}
+							{{for $k from 0 to count($videothumbsizes)-1}}
+								<div id="videoupload_area{{$k}}" class="upload_area{{$errorcss['video_thumbs'][$k]}}">
+									{{if $output['video_thumbs'][$k]}} {{*prefill if submitted*}}
+										<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;"> {{@_t.success}}!<br>
+										<img src="{{$output['video_thumbs'][$k]['path']}}?{{#time()}}" border="0"><br>
+										<input type="hidden" name="video_thumbs[]" value="{{$output['video_thumbs'][$k]['path']}}">
+									{{else}}
+										{{@_t.thumbnail}} {{$videothumbsizes[$k]['width']}}x{{$videothumbsizes[$k]['height']}} (WxH)
+									{{/if}}
+								</div>
+							{{/for}}
+						{{else}}
+							{{for $k from 0 to count($videothumbsizes)-1}}
+								<div id="videoupload_area{{$k}}" class="upload_area{{$errorcss['video_thumbs'][$k]}}">
+									{{if $output['video_thumbs'][$k]}} {{*prefill if submitted*}}
+										<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;"> {{@_t.success}}!<br>
+										<img src="{{#Path::Get('rel:admin/temp')}}/{{$output['video_thumbs'][$k]}}?{{#time()}}" border="0"><br>
+										<input type="hidden" name="video_thumbs[]" value="{{$output['video_thumbs'][$k]}}">
+									{{else}}
+										{{@_t.thumbnail}} {{$videothumbsizes[$k]['width']}}x{{$videothumbsizes[$k]['height']}} (WxH)
+									{{/if}}
+								</div>
+							{{/for}}
+						{{/if}}
+					</div>
+					<!-- thumbnail -->
+				</div> <!-- /box-->
+
+				{{if $_page['successmessage']}}
+					<div id="success">
+						<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" hspace="5" alt="" border="0">
+						{{$_page['successmessage']}}
+						{{$modellink}}
+					</div>
+				{{/if}}
+
+				<div class="left_col">
+
+					<div class="itembox">
+
+						<div class="right gray">{{@_t.updateid}}: {{$updateid}}
+							{{if $options['html5']}}
+							<img src="{{$__adminurl}}/img/html5-icon-32.png" align="top" width="25" height="25" alt="html5">
+							{{/if}}
+						</div>
+
+						<!-- type -->
+						<div class="formitem formgroup{{@errorcss.type}}">
+							<div style="width:69px;" class="ititle left"><label for="typesel">Type</label></div>
+							<select name="type" tabindex="1" id="typesel">
+								<option value="set"{{if $output['type'] != 'video'}} checked="checked"{{/if}}>
+									{{@_t.pictures}}</option>
+								<option value="video"{{if $output['type']=='video'}} checked="checked"{{/if}}>
+									{{@_t.video}}</option>
+							</select>
+							<div class="c"></div>
+						</div>
+
+						<!-- datepicker -->
+						<div id="datepickerwrap">
+							<div id="datepicker"></div>
+							<div class="formitem{{@errorcss.date}}">
+								{{*
+								<label class="f10">{{@_t.scheduleddate}}</label>
+								*}}
+								<input name="date" class="right" value="{{@output.date}}" tabindex="29" type="hidden" id="date" size="8">
+							</div>
+						</div>
+
+						<div class="formgroup">
+
+							<div>
+								<!-- update title -->
+								<div class="formitem{{@errorcss.title}}">
+									<div class="ititle">
+										<label for="title">{{@_t.title}} {{!optional_short id='title'}}</label>
+									</div>
+									<div class="right">
+										<input name="title" style="width:230px" tabindex="20" type="text" class="forminput" id="title" value="{{@output.title}}">
+									</div>
+									<div class="cl"></div>
+								</div>
+
+								<!-- slug -->
+								<div class="formitem{{@errorcss.slug}}">
+									<div class="ititle">
+										<label for="slug">{{@_t.slug}} {{!optional id='slug'}}</label>
+									</div>
+									<div class="right">
+										<span style="color:#8f8f8f">/<span id="slugurl">set</span>/</span>
+										<input name="slug" style="width:150px" tabindex="21" type="text" class="forminput" id="slug" value="{{@output.slug}}">
+
+										<input type="button" id="check_slug" class="adm_button" name="check_slug" value="Check" onclick="return false;" size="4" style="height:20px;padding:0px;">
+									</div>
+									<div class="cl"></div>
+								</div>
+
+{{*
+{{if !$form_duration}}
+								<!-- duration -->
+								<div id="dduration" class="hidden videoonly formitem{{@errorcss.duration}}">
+									<div class="ititle">
+										<label for="duration">{{@_t.duration}} {{!optional_short id='duration'}}
+										<span class="f10">(hh:mm:ss)</span>
+										</label>
+									</div>
+									<div class="right">
+										<input name="duration" style="width:140px" type="text" class="forminput" id="duration" tabindex="22" value="{{@output.duration|default:99:99:99}}" onclick="ClearInput('duration', this.id);">
+									</div>
+									<div class="cl"></div>
+								</div>
+{{/if}}
+
+{{if !$form_width}}
+								<!-- width -->
+								<div class="videoonly formitem{{@errorcss.width}}">
+									<div class="ititle">
+										<label for="width">{{@_t.width}} {{!optional id='width'}}
+										</label>
+									</div>
+									<div class="right">
+										<input name="width" tabindex="23" style="width:100px" type="text" class="forminput numeric" id="width" value="{{@output.width}}">
+									</div>
+									<div class="cl"></div>
+								</div>
+{{/if}}
+{{if !$form_height}}
+								<!-- height -->
+								<div class="videoonly formitem{{@errorcss.height}}">
+									<div class="ititle">
+										<label for="height">{{@_t.height}} {{!optional id='height'}}
+										</label>
+									</div>
+									<div class="right">
+										<input name="height" tabindex="24" style="width:100px" type="text" class="forminput numeric" id="height" value="{{@output.height}}">
+									</div>
+									<div class="cl"></div>
+								</div>
+{{/if}}
+*}}
+
+<!--
+								<div class="formitem">
+									<div class="sep"></div>
+								</div>
+-->
+
+<!--rating-->
+{{if !$form_rating && $rating['type']=='stars'}}
+								<!-- rating -->
+								<div class="formitem">
+									<div class="left">
+										<label for="ratingselector" class="{{@errorcss.rating}}">{{@_t.initialrating}} </label>
+										<select name="rating" tabindex="25" id="ratingselector" class="selector">
+											<option{{if $output['rating'] == null}} selected="selected"{{/if}}>-</option>
+											{{for $var from $rating['min'] to $rating['max'] by $rating['step']}}
+												<option{{if $output['rating'] == $var}} selected="selected"{{/if}}>{{$var}}</option>
+											{{/for}}
+										</select>
+										{{!optional id='rating'}}
+									</div>
+
+									<div class="mtop5 right mright5">
+										{{for $var from $rating['min']+0.5 to $rating['max'] by $rating['step']}}
+											<input type="radio" class="star {split:2}" name="rating2"{{if $output['rating'] == $var}} checked='checked'{{/if}} value="{{$var}}">
+										{{/for}}
+									</div>
+
+									<div class="cl"></div>
+
+										{{*Reset the rating when editing?*}}
+										{{if isset($_GET['edit'])}}
+											<input type="checkbox" class="forminput" style="margin-right:0px;" value="1" name="resetrating"> {{@_t.reset}} {{@_t.rating}}?
+										{{/if}}
+
+									<div class="cl"></div>
+								</div>
+{{/if}}
+
+							</div>
+						</div> <!-- /formgroup -->
+
+						<div class="c formitem" style="margin-bottom:15px;">
+							<div class="sep"></div>
+						</div>
+
+
+						<!-- video url or picture folder -->
+						{{set $init_base = addslashes(Path::Get('path:'.$options['default_base']).DIR_SEP)}}
+						<input type="text" class="w100" id="basepath" name="basepath" value="{{$basepath|default:$init_base}}">
+
+{{*
+							<div class="right mtop5 base_buttons">
+								<div class="right">
+									<div class="adm_button right{{if $options['default_base']=='member/pics'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:member/pics').DIR_SEP}}">member/pics</div>
+								</div>
+								<div class="right">
+									<div class="adm_button right{{if $options['default_base']=='free/pics'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:free/pics').DIR_SEP}}">free/pics</div>
+								</div>
+								<div class="right">
+									<div class="adm_button right{{if $options['default_base']=='webroot'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:site').DIR_SEP}}">webroot</div>
+								</div>
+							</div>
+*}}
+						<div class="right mtop5 base_buttons">
+							<div class="right">
+								<div class="adm_button right{{if $options['default_base']=='member'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:member/videos').DIR_SEP}}">member/<span class="type">videos</span></div>
+							</div>
+							<div class="right">
+								<div class="adm_button right{{if $options['default_base']=='free'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:free/videos').DIR_SEP}}">free/<span class="type">videos</span></div>
+							</div>
+							<div class="right">
+								<div class="adm_button right{{if $options['default_base']=='webroot'}} adm_button_selected{{/if}}" title="Select base: {{# Path::Get('path:site').DIR_SEP}}">webroot</div>
+							</div>
+						</div>
+
+
+						<div class="hidden videoonly formitem">
+							<div class="{{@errorcss.videodirectory}}">
+								<div class="ititle">
+									<label for="v_reldir">Relative video directory</label>
+								</div>
+								<div class="c">
+									<input id="v_reldir" name="videodirectory" type="text" tabindex="3" class="forminput w100 autocomplete" value="{{@output.videodirectory}}" size="72">
+								</div>
+							</div>
+							<div class="{{@errorcss.videourl}}">
+								<div class="ititle">
+									<label for="vurl">Member Video
+									<span class="f10">(url to streaming video in member area)</span></label>
+								</div>
+								{{if !$options['html5']}}
+									<div class="left">
+										<input name="videourl" type="text" tabindex="3" class="forminput w100" id="vurl" value="{{@output.videourl|default:$_videourl}}" size="72">
+									</div>
+								{{else}}
+									<div class="c">
+										<label class="ititle">h.264:</label>
+										<div class="right">
+											<input name="videourl[h264]" type="text" tabindex="3" class="ht5input_m forminput" value="{{@output.videourl.h264|default:$_videourl}}" size="62">
+											<span class="ext hidden">mp4</span>
+										</div>
+									</div>
+									<div class="c">
+										<label class="ititle">ogg:</label>
+										<div class="right">
+											<input name="videourl[ogg]" type="text" tabindex="3" class="ht5input_m forminput" value="{{@output.videourl.ogg|default:$_videourl}}" size="62">
+											<span class="ext hidden">ogg</span>
+										</div>
+									</div>
+									<div class="c">
+										<label class="ititle">webm:</label>
+										<div class="right">
+											<input name="videourl[webm]" type="text" tabindex="3" class="ht5input_m forminput" value="{{@output.videourl.webm|default:$_videourl}}" size="62">
+											<span class="ext hidden">webm</span>
+										</div>
+									</div>
+									<div class="c">
+										<label class="ititle">flash:</label>
+										<div class="right">
+											<input name="videourl[flash]" type="text" tabindex="3" class="ht5input_m forminput" value="{{@output.videourl.flash|default:$_videourl}}" size="62">
+											<span class="ext hidden">flv</span>
+										</div>
+									</div>
+								{{/if}}
+							</div>
+							<div class="c"></div>
+							{{if !$form_freevideourl}}
+								<div class="{{@errorcss.freevideourl}}">
+									<div class="ititle">
+										<label{{if !$options['html5']}} for="fvurl"{{/if}}>Trailer video
+										<span class="f10">(url to streaming video outside of member area)</span></label>
+									</div>
+									{{if !$options['html5']}}
+										<div class="c">
+											<input name="freevideourl" type="text" tabindex="4" class="forminput w100" id="fvurl" value="{{@output.freevideourl|default:$_freevideourl}}" size="72">
+										</div>
+									{{else}}
+										<div class="c">
+											<div class="left ititle">h.264:</div>
+											<div class="right">
+												<input name="freevideourl[h264]" type="text" tabindex="4" class="ht5input_f forminput" value="{{@output.freevideourl.h264|default:$_freevideourl}}" size="62">
+												<span class="ext hidden">mp4</span>
+											</div>
+										</div>
+										<div class="c">
+											<div class="left ititle">ogg:</div>
+											<div class="right">
+												<input name="freevideourl[ogg]" type="text" tabindex="4" class="ht5input_f forminput" value="{{@output.freevideourl.ogg|default:$_freevideourl}}" size="62">
+												<span class="ext hidden">ogg</span>
+											</div>
+										</div>
+										<div class="c">
+											<div class="left ititle">webm:</div>
+											<div class="right">
+												<input name="videourl[webm]" type="text" tabindex="4" class="ht5input_f forminput" value="{{@output.freevideourl.webm|default:$_freevideourl}}" size="62">
+												<span class="ext hidden">webm</span>
+											</div>
+										</div>
+										<div class="c">
+											<div class="left ititle">flash:</div>
+											<div class="right">
+												<input name="freevideourl[flash]" type="text" tabindex="4" class="ht5input_f forminput" value="{{@output.freevideourl.flash|default:$_freevideourl}}" size="62">
+												<span class="ext hidden">flv</span>
+											</div>
+										</div>
+									{{/if}}
+								</div>
+								<div class="c"></div>
+							{{/if}}
+						</div>
+
+						<div id="dpf" class="setonly formitem{{@errorcss.picturefolder}}">
+							<div class="ititle">
+								<label for="p_reldir">Relative url to picture folder
+							</div>
+							<div class="left">
+								<input name="picturefolder" type="text" tabindex="5" class="forminput w100 autocomplete" id="p_reldir" value="{{@output.picturefolder}}" size="72" maxlength="1000">
+							</div>
+							<div class="c"></div>
+						</div>
+
+						<div class="c"></div>
+
+					</div>
+
+{{if !$form_description || !$form_tags}}
+					<div class="itembox">
+	{{if !$form_description}}
+						<!-- description -->
+						<div class="formitem{{@errorcss.description}}">
+							<div><label for="description">{{@_t.description}} {{!optional id='description'}}</label></div>
+							<div id="NicPanel" style="width: 100%"></div>
+							<div class="w100">
+								<textarea name="description" tabindex="30" style="width:477px" id="description" class="forminput w100" cols="57" rows="6">{{@output.description}}</textarea>
+							</div>
+						</div>
+	{{/if}}
+	{{if !$form_tags}}
+						<!-- tags -->
+						<div class="formitem{{@errorcss.tags}}">
+							<div>
+							<label for="tags">{{@_t.tags}} {{!optional id='tags'}}</label>
+							<span class="f10">(comma separated)</span>
+							</div>
+							<input name="tags" tabindex="31" type="text" class="forminput w100" id="tags" value="{{@output.tags}}" size="72">
+						</div>
+	{{/if}}
+					</div>
+{{/if}}
+
+					<!-- 2257record -->
+					{{include includes/2257record}}
+
+					<div class="c"><br></div>
+					<div class="left">
+						<input type="submit" id="submitall" tabindex="99" class="submitbutton" name="submit" value="{{@_t.gotostep2}}">
+					</div>
+					<div class="left hidden gray mtop10 mleft10" id="loading_anim"><img src="{{$__adminurl}}/js/indicator.gif" style="position:relative;top:3px;" width="16" height="16" alt="loading"> {{@_t.preparing_framegrab}}. {{@_t.this_can_take_minutes}}<span id="dots">...</span></div>
+
+				</div>
+			</form>
+			<div class="c"></div>
+			<div class="left_col">
+
+
+				<div class="itembox">
+					<div class="right italic smallfont">
+						{{@_t.supportedfiletypes}}: {{$allowed_mime_types}}
+					</div>
+					<div class="left"><h4>{{@_t.thumbnails}}</h4></div>
+					<div class="c"></div>
+
+					<div class="setonly mtop10">
+						{{for $i from 0 to count($picturethumbsizes)-1}}
+							<fieldset style="padding:7px;" class="{{$errorcss['set_thumbs'][$k]}}">
+								<legend>{{@_t.upload}} {{$picturethumbsizes[$i]['width']}}x{{$picturethumbsizes[$i]['height']}} (W x H) {{@_t.image|strtolower}}</legend>
+								<form action="{{$__adminurl}}/lib/ajaxupload.php" method="post" name="w{{$picturethumbsizes[$i]['width']}}h{{$picturethumbsizes[$i]['height']}}" id="w{{$picturethumbsizes[$i]['width']}}h{{$picturethumbsizes[$i]['height']}}" enctype="multipart/form-data" class="fuploadform">
+									<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+									<input type="hidden" name="maxSize" value="9999999999">
+									<input type="hidden" name="maxW" value="{{$picturethumbsizes[$i]['width']}}">
+									<input type="hidden" name="maxH" value="{{$picturethumbsizes[$i]['height']}}">
+									<input type="hidden" name="type" value="update">
+									<input type="hidden" name="colorR" value="255">
+									<input type="hidden" name="colorG" value="255">
+									<input type="hidden" name="colorB" value="255">
+									<input type="hidden" name="thnumber" value="{{$i}}">
+									<input type="hidden" name="filename" value="{{$output['set_thumbs'][$i]|default:'filename'}}">
+									<p><input type="file" class="forminput{{$errorcss[$i]}}" tabindex="80" name="filename" size="50" value="" onchange="ajaxUpload(this.form,'{{$__adminurl}}/lib/ajaxupload.php?filename=filename&amp;type=set','picupload_area{{$i}}','File Uploading Please Wait...&lt;br /&gt;&lt;img src=\'{{$__adminurl}}/img/loader_light_blue.gif\' width=\'128\' height=\'15\' border=\'0\' /&gt;','&lt;img src=\'{{$__adminurl}}/img/icons/error.gif\' width=\'16\' height=\'16\' border=\'0\' /&gt; Error in Upload, check settings and path info in source code.'); return false;">
+									{{if $output['set_thumbs'][$i]}}<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -3px;"> {{*Success!*}}{{/if}}
+									</p>
+									<noscript>
+										<p><input type="submit" name="submit" value="{{@_t.uploadimage}}"></p>
+									</noscript>
+								</form>
+							</fieldset>
+						{{/for}}
+					</div>
+
+					<div class="videoonly">
+						{{for $i from 0 to count($videothumbsizes)-1}}
+							<fieldset style="padding:7px;" class="{{$errorcss['video_thumbs'][$k]}}">
+								<legend>{{@_t.upload}} {{$videothumbsizes[$i]['width']}}x{{$videothumbsizes[$i]['height']}} (W x H) {{@_t.image|strtolower}}</legend>
+								<form action="{{$__adminurl}}/lib/ajaxupload.php" method="post" name="w{{$videothumbsizes[$i]['width']}}h{{$videothumbsizes[$i]['height']}}" id="w{{$videothumbsizes[$i]['width']}}h{{$videothumbsizes[$i]['height']}}" enctype="multipart/form-data" class="fuploadform">
+								<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+									<input type="hidden" name="maxSize" value="9999999999">
+									<input type="hidden" name="maxW" value="{{$videothumbsizes[$i]['width']}}">
+									<input type="hidden" name="maxH" value="{{$videothumbsizes[$i]['height']}}">
+									<input type="hidden" name="type" value="update">
+									<input type="hidden" name="colorR" value="255">
+									<input type="hidden" name="colorG" value="255">
+									<input type="hidden" name="colorB" value="255">
+									<input type="hidden" name="thnumber" value="{{$i}}">
+									<input type="hidden" name="filename" value="{{$output['video_thumbs'][$i]|default:'filename'}}">
+									<p><input type="file" class="forminput{{$errorcss[$i]}}" name="filename" tabindex="81" size="50" value="" onchange="ajaxUpload(this.form,'{{$__adminurl}}/lib/ajaxupload.php?filename=filename&amp;type=video','videoupload_area{{$i}}','File Uploading Please Wait...&lt;br /&gt;&lt;img src=\'{{$__adminurl}}/img/loader_light_blue.gif\' width=\'128\' height=\'15\' border=\'0\' /&gt;','&lt;img src=\'{{$__adminurl}}/img/icons/error.gif\' width=\'16\' height=\'16\' border=\'0\' /&gt; Error in Upload, check settings and path info in source code.'); return false;">
+									{{if $output['video_thumbs'][$i]}}<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -3px;"> {{*Success!*}}{{/if}}
+									</p>
+									<noscript>
+										<div><input type="submit" name="submit" value="{{@_t.uploadimage}}"></div>
+									</noscript>
+								</form>
+							</fieldset>
+						{{/for}}
+					</div>
+				</div><!-- /itembox -->
+
+			</div><!-- /left_col -->
+
+			<div class="c"><br></div>
+
+		</div><!-- admincontent-->
+
+{{include _adminfooter}}

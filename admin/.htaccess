@@ -1,0 +1,14 @@
+ErrorDocument 404 /admin/error404
+
+AddType application/x-httpd-php .html
+
+<IfModule mod_rewrite.c>
+ RewriteEngine on
+ RewriteCond %{REQUEST_FILENAME} !-f
+ RewriteCond %{REQUEST_FILENAME} !-d
+ RewriteRule ^(\w+)(/)?$ index.php?controller=$1 [L,QSA]
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)/(.*)$ index.php?controller=$1&action=$2 [L,QSA] 
+</IfModule>

@@ -1,0 +1,243 @@
+{{include _adminheader}}
+
+<script src="{{$__adminurl}}/js/jquery.jeditable.min.js" type="text/javascript"></script>
+<script src="{{$__adminurl}}/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript"><!--
+var oTable;
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	$("#checkboxall").click(function(){
+		var checked_status = this.checked;
+			$("input[@name=checkbox\\[\\]]").each(function()
+			{
+				this.checked = checked_status;
+			});
+	});
+
+	$('#addnew').toggle(
+		function(){
+			$('#newfag').show('fast');
+			$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+		},
+		function() {
+           	$('#newfag').hide('fast');
+           	$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_open.png');
+		}
+	);
+
+	{{if $_page['errorcss']}}
+		$("#newfag").show('fast');
+		$('#addicon').attr('src','{{$__adminurl}}/img/icons/details_close.png');
+	{{/if}}
+
+	{{* Init DataTables *}}
+	oTable = $('#table').dataTable( {
+		{{include includes/datatable_setup}}
+		"aaSorting": [[0,'desc']],
+		"bStateSave": false,
+		{{include includes/datatable_language}}
+		"sDom": '<"top"<"right"f>><"bottom"rt<"dt_buttons">lpi><"clear">',
+		"aoColumnDefs": [
+				{
+					"aTargets": [0],
+					"bSearchable": false,
+					"bSortable": false
+				},
+				{
+					"aTargets": [2],
+					"bSearchable": false,
+					"bSortable": false
+				},
+				{
+					"aTargets": [8],
+					"sClass": "tabledate"
+				},
+				{
+					"aTargets": [9],
+					"bSearchable": false,
+					"bSortable": false
+				}
+		],
+
+		{{include includes/datatable_request}}
+		{{!fnServerData table='faq' securitytoken=$securitytoken}}
+
+		"fnDrawCallback": function () {
+
+			//edit in place
+			$('#table tbody td:nth-child(2),#table tbody td:nth-child(4),#table tbody td:nth-child(5),#table tbody td:nth-child(6),#table tbody td:nth-child(7),#table tbody td:nth-child(8)').editable('{{$__adminurl}}/lib/editable_ajax.php', {
+				"callback": function( sValue, y ) {
+					var aPos = oTable.fnGetPosition( this );
+					oTable.fnUpdate( sValue, aPos[0], aPos[1], false );
+				},
+				"submitdata": function ( value, settings ) {
+					var aPos = oTable.fnGetPosition( this );
+					var aData = oTable.fnGetData( aPos[0] );
+					return	{
+								"column": aPos[1], //translate to columnname with fnColumnToField function!
+								"id": aData[1],    //id
+								"type": "faq",
+								"securitytoken": "{{$securitytoken}}"
+							};
+				},
+				"height": "14px",
+				indicator: '<img src="{{$__adminurl}}/img/loader.gif">'
+			});
+/*
+			$(".tabledate").mask("9999-99-99",{placeholder:"_"});
+*/
+		}
+/*
+					,
+		"fnDrawCallback":function(){
+			if ( $('#table_paginate span span.paginate_button').size()) {
+				$('#table_paginate')[0].style.display = "block";
+			} else {
+				$('#table_paginate')[0].style.display = "none";
+			}
+		}
+*/
+	});
+
+	$("div.dt_buttons").html('<div id="deletebutt" class="right dt_butt"><input type="submit" id="delete" name="delete" value="{{@_t.delete}}"></div><div id="approvebutt" class="right dt_butt"><input type="submit" id="approve" name="approve" value="{{@_t.bulkapprove}}"></div>');
+
+});
+//-->
+</script>
+
+<script type="text/javascript"><!--
+function ClearInput(value, id){
+	var input = document.getElementById(id);
+	if(value == input.value){
+		input.value = '';
+	}else{
+		input.value = input.value;
+	}
+}
+
+function send( id )
+{
+	document.forms["updform"].elements["checkbox" + id + ""].checked = true;
+	document.forms["updform"].submit();
+	return false;
+}
+
+function approveitem( id, dowhat )
+{
+	{{*
+	//dowhat : false => deactivate faq item
+	//dowhat : true  => approve faq item
+	*}}
+
+	$.ajax({
+		type: 'POST',
+		async: true,
+		url: '{{$__adminurl}}/lib/editable_ajax.php',
+		data: ({"id" : id,
+				"approve" : dowhat,
+				"securitytoken": '{{$securitytoken}}' }),
+		dataType: 'text',
+		global: false,
+		success: function(data) {
+			if(data == 'approved'){
+				//change image
+				$("#icon"+id).attr("src","{{$__adminurl}}/img/icons/lightbulb.png");
+			} else if (data == 'deactivated') {
+				//change image
+				$("#icon"+id).attr("src","{{$__adminurl}}/img/icons/lightbulb_off.png");
+			}
+		}
+	});
+}
+//-->
+</script>
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+			<!--addnew button-->
+			<div class="left mright5">
+				<a href="#" id="addnew"><img id="addicon" src="{{$__adminurl}}/img/icons/details_open.png" style="position:relative;top:3px;" width="20" height="20" hspace="5" alt="" title="{{@_t.addfaqitem}}" border="0"></a>
+			</div>
+
+			{{include includes/error_success_msg}}
+
+			<div id="newfag" class="hidden">
+
+						<form action="{{$__adminurl}}/faq" method="post" name="addnew">
+						<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+						<div class="left">
+							<label for="question" class="{{$_page['errorcss']['question']}}">{{@_t.question}}:</label><br>
+							<textarea tabindex="1" rows="5" class="forminput" id="question" cols="30" name="question">{{@var.question}}</textarea>
+							<div class="mtop5">
+							<input type="submit" id="addfaqitem" name="addfaqitem" value="{{@_t.addfaqitem}}">
+							</div>
+						</div>
+
+						<div class="left mleft5">
+							<label for="answer" class="{{$_page['errorcss']['answer']}}">{{@_t.answer}}:</label><br>
+							<textarea rows="5" tabindex="2" class="forminput" cols="30" id="answer" name="answer">{{@var.answer}}</textarea>
+						</div>
+
+						<div class="left mleft5">
+							<div style="padding-bottom:20px;">
+								<label for="name" class="{{$_page['errorcss']['name']}}">{{@_t.name}}</label><br>
+								<input type="text" tabindex="3" class="forminput" id="name" name="name" size="20" value="{{@var.name|default:"anonymous"}}" onclick="ClearInput('anonymous', this.id);">
+							</div>
+							<div>
+								<label for="email" class="{{$_page['errorcss']['email']}}">{{@_t.email}}:</label><br>
+								<input type="text" tabindex="4" class="forminput" id="email" name="email" size="20" value="{{@var.email|default:"none@invalid.inv"}}" onclick="ClearInput('none@invalid.inv', this.id);">
+							</div>
+						</div>
+
+						<!-- datepicker -->
+						<div id="datepickerwrap" class="right">
+							<label>{{@_t.scheduled_date}}:</label><br>
+							<div id="datepicker"></div>
+							<div class="formitem">
+								<input type="hidden" id="date" name="date" size="8">
+							</div>
+						</div>
+
+</form>
+					<div class="c"></div>
+			</div>
+
+			<div id="faqlist">
+
+				<form action="{{$__adminurl}}/faq" method="post" name="updform">
+				<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+					<table border="0" cellpadding="0" cellspacing="0" width="100%" id="table">
+					<thead>
+					<tr>
+						<th class="col_icon">&nbsp;</th>
+						<th class="col_id">{{@_t.id}}</th>
+						<th width="2%">{{@_t.status}}</th>
+						<th width="2%">{{@_t.category}}</th>
+						<th width="33%">{{@_t.question}}</th>
+						<th width="33%">{{@_t.answer}}</th>
+						<th>{{@_t.name}}</th>
+						<th class="col_email">{{@_t.email}}</th>
+						<th class="col_date_short">{{@_t.date}}</th>
+						<th class="col_checkbox"><input type="checkbox" name="checkboxall" id="checkboxall"></th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr><td colspan="10">Querying data...</td></tr>
+					</tbody>
+					</table>
+
+				</form>
+
+				<div class="c"></div>
+
+			</div><!-- /faqlist-->
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

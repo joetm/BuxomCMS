@@ -1,0 +1,13 @@
+{{*output error or success message*}}
+{{if $_page['errormessage']}}
+	<div id="errors" class="left">
+		<img src="{{$__adminurl}}/img/icons/warning.png" width="16" height="16" hspace="5" alt="" border="0">
+		{{$_page['errormessage']}}
+	</div>
+{{/if}}
+{{if $_page['successmessage'] || isset($_GET['success'])}}
+	<div id="success" class="left">
+	<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" hspace="5" alt="" border="0">
+		{{$_page['successmessage']|default:'Success'}}
+	</div>
+{{/if}}

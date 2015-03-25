@@ -1,0 +1,312 @@
+{{include _adminheader}}
+
+{{*optional field msg*}}
+{{block:optional id=''}}{{if !isset(model::$mandatory[$id])}}<span class='f10 optional'>* (optional)</span>{{/if}}{{/block}}
+{{block:optional_short id=''}}{{if !isset(model::$mandatory[$id])}}<span class='f10 optional'>*</span>{{/if}}{{/block}}
+
+{{include includes/slug_check}}
+
+{{include includes/slug_suggest}}
+
+{{include includes/numeric}}
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	// Select input field contents
+	$(".thinput").click(function(){
+		this.focus();
+		this.select();
+	});
+
+	//change rating selector on star click
+	$(".star").click(function () {
+		var v = $('input[name=rating2]:checked').val();
+//		if (v == ''){
+//			$("#rsel").val('0');
+//		}
+//		else{
+			$("#rsel").val(v);
+//		}
+	});
+	//change stars on rating selector click
+	$("#rsel").change(function () {
+		var id = $('#rsel').val();
+		$('.star').rating('select',id)
+	});
+
+	{{*calculate a dynamic width for the thumbnail boxes*}}
+	//event handler
+	$(window).resize(function(){
+		var newrightcol_width = $('#admincontent').width() - $('.left_col').width() - 20; //padding of 20
+		$('#box').css('width', newrightcol_width);
+	});
+	//initial setup
+	$(window).resize();
+
+});
+//-->
+</script>
+
+<script type="text/javascript" src="{{$__adminurl}}/js/nicEdit/nicEdit-latest.js"></script>
+<script type="text/javascript"><!--
+//<![CDATA[
+bkLib.onDomLoaded(function() {
+		var nicEditr = new nicEditor({iconsPath:'{{$__adminurl}}/js/nicEdit/nicEditIcons.gif', buttonList : ['bold','italic','underline','left','center','right','ol','ul','link','unlink','xhtml']});
+		nicEditr.setPanel('NicPanel');
+		nicEditr.addInstance('description');
+});
+//]]>
+//-->
+</script>
+
+{{if $options['floating_thumbs']}}
+<script src="{{$__siteurl}}/js/jquery.floatobject-1.0.js" type="text/javascript" ></script>
+<script type="text/javascript"><!--
+$(document).ready(main);
+	function main()
+	{
+		$("#box").makeFloat({x:"current",y:"current",alwaysVisible:true});
+	}
+
+{{*
+	//try to change the width of admin content if float box exceeds max height
+	$(window).scroll(function () {
+
+		var scrollboxheight = $("#box").css("height");
+		var contentheight = $("#admincontent").css("height");
+
+		var boxpos = $("#box").position();
+		var contentpos = $("#admincontent").position();
+
+		var lowerboxedge = parseInt(boxpos.top) + parseInt(scrollboxheight);
+		var lowercontentedge = parseInt(contentpos.top) + parseInt(contentheight);
+
+		if(lowerboxedge > lowercontentedge)
+		{
+			var newheight = lowerboxedge - lowercontentedge + contentheight;
+			$("#admincontent").css("height", newheight)
+//			alert( "exceeded!" );
+		}
+		else
+		{
+			var newheight = contentheight;
+			$("#admincontent").css("height", newheight)
+//			alert( "exceeded!" );
+		}
+
+	});
+*}}
+//-->
+</script>
+{{/if}}
+
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		{{if $errors}}
+			{{foreach $errors as $err}}
+				<div>{{$err}}</div>
+			{{/foreach}}
+		{{/if}}
+
+		<form action="{{$__adminurl}}/model{{if model::$c['id']}}?edit={{#model::$c['id']}}{{/if}}" method="post" name="newmodel" id="newmodelform">
+			<input type="hidden" name="_action" value="addnew">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+			<!-- thumbnails -->
+			<div id="box" class="right_col">
+				{{*edit*}}
+				{{if $misc['_action'] == 'edit'}}
+					{{for $k from 0 to count($thumbsizes)-1}}
+						<div id="upload_area{{$k}}" class="upload_area{{$errorcss['thumbs'][$k]}}">
+							{{if $misc['thumbs'][$k]}} {{*prefill*}}
+								<img src="{{$misc['thumbs'][$k]}}?{{#time()}}" class="uploadarea_thumbnail" border="0">
+								<div>
+									{{* {{@_t.success}}! *}}
+									<img src="{{#Path::Get('rel:admin')}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;">
+									<span title="internal id: {{$k}}" style="cursor:default">{{$k}}: </span>
+									<input type="text" name="_thumbs[]" class="thinput" value="{{$misc['thumbs'][$k]}}">
+								</div>
+							{{else}}
+								{{@_t.thumbnail}} {{$thumbsizes[$k]['width']}}x{{$thumbsizes[$k]['height']}} (WxH)<br>
+								<img src="{{#Path::Get('rel:admin')}}/img/icons/error.gif" width="16" height="16" border="0" style="margin-bottom: -4px;">
+								Thumbnail not found.<br>
+								{{$errorpaths[$k]}}
+							{{/if}}
+						</div>
+					{{/for}}
+				{{else}}
+				{{*new update*}}
+					{{for $k from 0 to count($thumbsizes)-1}}
+						<div id="upload_area{{$k}}" class="upload_area{{$errorcss['thumbs'][$k]}}">
+							{{if $misc['thumbs'][$k]}} {{*prefill if submitted*}}
+								<img src="{{#Path::Get('rel:admin/temp')}}/{{$misc['thumbs'][$k]}}?{{#time()}}" class="uploadarea_thumbnail" border="0">
+								<div>
+									{{* {{@_t.success}}! *}}
+									<img src="{{#Path::Get('rel:admin')}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -4px;">
+									<span title="internal id: {{$k}}" style="cursor:default">{{$k}}: </span>
+									<input type="text" name="_thumbs[]" class="thinput" value="{{$misc['thumbs'][$k]}}">
+								</div>
+							{{else}}
+								{{@_t.thumbnail}} {{$thumbsizes[$k]['width']}}x{{$thumbsizes[$k]['height']}} (WxH)
+							{{/if}}
+						</div>
+					{{/for}}
+				{{/if}}
+			</div> <!-- /box-->
+
+
+			<div class="left_col">
+
+				<div class="itembox">
+
+						<!-- model name -->
+						<div class="formitem{{@errorcss.title}}">
+							<div class="ititle">
+								<label for="mname">{{@_t.modelname}} {{!optional_short id='modelname'}}
+								</label>
+							</div>
+							<div class="right">
+								<input name="title" type="text" class="forminput" id="mname" value="{{@content.title}}" size="50">
+							</div>
+							<div class="c"></div>
+						</div>
+
+						<!-- slug -->
+						<div class="formitem{{@errorcss.slug}}">
+							<div class="ititle">
+								<label for="slug">{{@_t.slug}} {{!optional id='slug'}}</label>
+							</div>
+							<div class="right">
+
+<span id="growl" class="hidden"></span>
+
+								<span class="gray">/model/</span><input name="slug" type="text" class="forminput" id="slug" value="{{@content.slug}}" size="27">
+
+								<input type="button" id="check_slug" class="adm_button" name="check_slug" value="Check" onclick="return false;" size="4" style="height:20px;padding:0px;">
+							</div>
+							<div class="c"></div>
+						</div>
+
+{{if !$form_description}}
+					<!-- description -->
+					<div class="formitem{{@errorcss.description}}">
+						<div><label for="description">{{@_t.description}} {{!optional id='description'}}</label></div>
+						<div id="NicPanel" class="w100"></div>
+						<div class="w100">
+							<textarea name="description" id="description" style="width:477px" class="forminput w100" cols="57" rows="6">{{@content.description}}</textarea>
+						</div>
+					</div>
+{{/if}}
+
+					{{if !model::$c['id']}}
+					<div class="formitem">
+						<div class="sep"></div>
+					</div>
+{{if !$form_rating}}
+					<!-- rating -->
+					<div class="formitem">
+						<div class="left">
+							<label for="rsel" class="{{@errorcss.rating}}">{{@_t.initialrating}}</label>
+						    <select name="rating" id="rsel" class="selector">
+						    	{{for $var from $rating['min'] to $rating['max'] by $rating['step']}}
+									<option{{if $misc['rating'] == $var}} selected="selected"{{/if}}>{{$var}}</option>
+								{{/for}}
+						    </select>
+							{{!optional id='rating'}}
+						</div>
+						<div class="mtop5 right mright5">
+					    	{{for $var from $rating['min']+0.5 to $rating['max'] by $rating['step']}}
+								<input type="radio" class="star {split:2}" name="rating2"{{if $misc['rating'] == $var}} checked='checked'{{/if}} value="{{$var}}">
+							{{/for}}
+						</div>
+						<div class="c"></div>
+{{*
+						{{if model::$c['id']}}
+							<div class="f10" style="color:#A0A0A0">Resetting the rating will delete all user ratings!</div>
+						{{/if}}
+*}}
+					</div>
+{{/if}}
+					{{/if}}
+
+				</div><!-- itembox-->
+
+{{if !$form_tags}}
+				<!-- tags -->
+				<div class="itembox">
+						<div class="{{@errorcss.tags}}">
+							<label for="tags">{{@_t.tags}} {{!optional id='tags'}}</label>
+							<span class="f10">(comma separated)</span>
+						</div>
+						<input name="tags" type="text" size="72" class="forminput w100" id="tags" value="{{@misc.tags}}">
+
+				</div><!-- itembox-->
+{{/if}}
+
+
+				<!-- location + 2257record -->
+				{{include includes/2257record}}
+
+
+				<div class="c"><br></div>
+
+				{{*overall upload button*}}
+				<div>
+					<input type="submit" class="submitbutton" name="submit" value="{{@_t.submit}}">
+				</div>
+
+
+			</div><!--left_col-->
+		</form>
+		<div class="cl"></div>
+		<div class="left_col">
+
+			<div class="itembox">
+				<div class="right italic smallfont">{{@_t.supportedfiletypes}}: {{$allowed_mime_types}}</div>
+				<div class="left"><h4>{{@_t.thumbnails}}</h4></div>
+				<div class="c"></div>
+
+				<div class="mtop10">
+				{{for $k from 0 to count($thumbsizes)-1}}
+					<fieldset style="padding:7px;" class="{{$errorcss['thumbs'][$k]}}">
+						<legend>
+							{{@_t.upload}} {{$thumbsizes[$k]['width']}}x{{$thumbsizes[$k]['height']}} (W x H) {{@_t.image}}
+							{{if $misc['thumbs'][$k]}}<img src="{{$__adminurl}}/img/icons/success.gif" width="16" height="16" border="0" style="margin-bottom: -3px;"> {{*Success!*}}{{/if}}
+						</legend>
+						<form action="{{$__adminurl}}/lib/ajaxupload.php" method="post" name="w{{$thumbsizes[$k]['width']}}h{{$thumbsizes[$k]['height']}}" id="w{{$thumbsizes[$k]['width']}}h{{$thumbsizes[$k]['height']}}" enctype="multipart/form-data" class="fuploadform">
+							<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+							<input type="hidden" name="maxSize" value="9999999999">
+							<input type="hidden" name="maxW" value="{{$thumbsizes[$k]['width']}}">
+							<input type="hidden" name="maxH" value="{{$thumbsizes[$k]['height']}}">
+							<input type="hidden" name="type" value="model">
+							<input type="hidden" name="colorR" value="255">
+							<input type="hidden" name="colorG" value="255">
+							<input type="hidden" name="colorB" value="255">
+							<input type="hidden" name="thnumber" value="{{$k}}">
+							<input type="hidden" name="filename" value="{{$misc['thumbs'][$k]|default:'filename'}}">
+							<div>
+								<input type="file" class="forminput{{$errorcss['thumbs'][$k]}}" name="filename" size="53" value="" onchange="ajaxUpload(this.form,'{{$__adminurl}}/lib/ajaxupload.php', 'upload_area{{$k}}', '{{@_t.fileuploading}}. {{@_t.pleasewait}}...&lt;br /&gt;&lt;img src=\'{{$__adminurl}}/img/loader_light_blue.gif\' width=\'128\' height=\'15\' border=\'0\' /&gt;','&lt;img src=\'{{$__adminurl}}/img/icons/error.gif\' width=\'16\' height=\'16\' border=\'0\' /&gt; {{@_t.thumbnailuploaderror}}'); return false;">
+							</div>
+							<noscript>
+								<div><input type="submit" name="submit" value="{{@_t.uploadimage}}"></div>
+							</noscript>
+						</form>
+					</fieldset>
+				{{/for}}
+				</div>
+			</div> <!--itembox-->
+
+		</div><!-- left_col-->
+
+	<div class="c"><br></div>
+
+</div><!-- admincontent-->
+
+{{include _adminfooter}}

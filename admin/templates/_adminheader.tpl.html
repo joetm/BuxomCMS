@@ -1,0 +1,135 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{*locale*}}EN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={{# __CHARSET|strtoupper}}">
+
+<title>Admininstration - {{@_page.title}}</title>
+
+<meta name="title" content="{{@_page.title}}">
+<meta name="description" content="BuxomCMS Administration Panel">
+
+<meta name="robots" content="NOINDEX,NOFOLLOW">
+<meta name="author" content="{{$__sitename}} - {{$__siteurl}}">
+<meta name="copyright" content="(c){{#date('Y')}} BuxomCMS">
+<meta name="generator" content="BuxomCMS {{# __VERSION}}">
+
+<link href="{{$__siteurl}}/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+<script type="text/javascript"><!--
+	if (window.top!=window.self){window.top.location=window.self.location;}
+//-->
+</script>
+
+<link href="{{$__adminurl}}/admin.css" type="text/css" rel="stylesheet" media="all">
+{{include includes/header_login}}
+
+<script type='text/javascript' src='/js/jquery.min.js'></script>
+<!--
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
+-->
+
+	{{if $_page['templatename'] == 'admin_update' || $_page['templatename'] == 'admin_model'}}
+		{{include includes/header_new}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_newupdate_step2_pics'}}
+		{{include includes/header_step2_pics}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_newupdate_step2_video'}}
+		{{include includes/header_step2_video}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_socialposting'}}
+		{{include includes/header_step2_pics}} {{*for progressbar*}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_editpics'}}
+		{{include includes/header_editpics}}
+	{{/if}}
+	{{if $_page['templatename'] != 'admin_home' && $_page['templatename'] != 'admin_tags' && $_page['templatename'] != 'admin_newupdate_step2_pics' && $_page['templatename'] != 'admin_newupdate_step2_video'}}
+		{{include includes/header_masks}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_update' || $_page['templatename'] == 'admin_faq' || $_page['templatename'] == 'admin_comments'}}
+		{{include includes/header_datepicker}}
+	{{/if}}
+	{{if $_page['templatename'] == 'admin_update' || $_page['templatename'] == 'admin_model'}}
+		{{include includes/header_rating}}
+	{{/if}}
+	{{if $_page['templatename'] != 'admin_structure'
+		&& $_page['templatename'] != 'admin_newupdate_step2_pics'
+		&& $_page['templatename'] != 'admin_newupdate_step2_video'}}
+		{{include includes/header_all}}
+	{{/if}}
+
+</head>
+<body>
+<div align="center">
+	<a name="top"></a>
+
+	<div id="content">
+
+		<div id="top-header">
+			<div id="login">
+				<a href="{{$__siteurl}}" target="_blank">{{$_visitsite}}</a>
+			</div><!-- /login-->
+
+			<!-- top-right-->
+{{*
+			<div class="adminheaderstats">
+				{{if $_stats['total']['size']}}{{@_stats.total.size}}{{/if}}{{if $_stats['total']['size'] && $_stats['set']['num']}}, {{/if}}
+				{{if $_stats['set']['num']}}{{@_stats.set.num}} {{$_pictures}}{{/if}}{{if $_stats['set']['num'] && $_stats['video']['num']}}, {{/if}}
+				{{if $_stats['video']['num']}}{{@_stats.video.num}} {{$_videos}}{{/if}}
+				{{if $_stats['video']['size']}}{{@_statsvideo.size}}{{/if}}
+			</div>
+*}}
+			<!-- /top-right-->
+
+		</div><!-- /top-header -->
+
+		{{if $_page['templatename'] != 'admin_login'}}
+			<div id="menu-container" align="left">
+				<ul class="menu">
+					<li class="menu-item{{if $_page['templatename'] == 'admin_dashboard'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/home">{{$_home}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_members'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/members" title="{{$_editmembers}}">{{$_members}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_updates'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/updates" title="{{$_editupdates}}">{{$_updates}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_update'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/update" title="{{$_addnewupdate}}">{{$_newupdate}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_models'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/models" title="{{$_editmodels}}">{{$_models}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_model'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/model" title="{{$_addnewmodel}}">{{$_newmodel}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_comments'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/comments" title="{{$_editcomments}}">{{$_comments}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_tags'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/tags" title="{{$_edittags}}">{{$_tags}}</a>
+					</li>
+					<li class="menu-item{{if $_page['templatename'] == 'admin_ratings'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/ratings" title="{{$_ratings}}">{{$_ratings}}</a>
+					</li>
+{{*
+					<li class="menu-item{{if $_page['templatename'] == 'admin_faq'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/faq" title="{{$_editfaqitems}}">{{$_faq}}</a>
+					</li>
+*}}
+					<li class="menu-item{{if $_page['templatename'] == 'admin_docs'}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/docs" title="2257">2257</a>
+					</li>
+					<li class="menu-item{{if preg_match('~^admin_options_~', $_page['templatename'])}} menuselected{{/if}}">
+						<a href="{{$__adminurl}}/options_general" title="{{$_options}}">{{$_options}}</a>
+					</li>
+					<li class="menu-item">
+						<a href="{{$__adminurl}}/logout">{{$_logout}}</a>
+					</li>
+				</ul><!-- /menu -->
+
+			</div><!-- /menu-container-->
+		{{/if}}
+
+		<div class="c"></div>

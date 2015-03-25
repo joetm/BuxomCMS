@@ -1,0 +1,87 @@
+{{set $_pagetitle="BuxomCurves Map"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="265"}}
+{{set $barcolor="961512"}}
+
+{{include _header}}
+
+<!-- model-map -->
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAlCWNhPAz-rCpc7H1DvDNFhRZlwuLVhTIQpzmxC9pQGdaGLK2QRQgsH_t3MsWUlADNtp5uzxWZrraAA"></script>
+<script src="/js/jquery.googlemaps1.01.js"></script>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	$('#map_canvas').googleMaps({
+    	latitude: 46.313043,
+        longitude: -25.726562,
+        depth: 2,
+		controls: {
+			type: {
+				control: 'GNavLabelControl'
+			},
+			zoom: {
+				control: 'GSmallZoomControl3D'
+			}
+		},
+		markers: [
+			{{foreach $models as $m}}
+			{
+				latitude: {{@m.Lat}}, longitude: {{@m.Lng}},
+				info: {layer: '#pointer{{@m.id}}'}
+			},
+			{{/foreach}}
+		]
+    });
+});
+//-->
+</script>
+<!-- model-map -->
+
+
+	<div id="headerimg">
+		<div id="map_canvas"></div>
+	</div><!-- /headerimg-->
+
+
+	<div class="pagecontent">
+
+			<a name="models"></a>
+			<div id="modelcontent">
+
+				{{foreach $models as $model}}
+					{{*marker for map*}}
+					<div id="pointer{{@model.id}}" style="display:none">{{@model.modelname}}</div>
+
+					<div class="thumbnail" style="border:1px dotted #AAAAAA;width:{{$model[width] + 25}}px; height:{{$model[height] + 40}}px">
+						<div>
+							<a href="./model.php?slug={{@model.shortmodelname}}" title="{{@model.modelname}}">
+								<div class="g-title"><span class="bold">{{@model.modelname}}</span></div>
+								<img src="{{@model.path}}" width="{{@model.width}}" height="{{@model.height}}" alt="{{@model.modelname}}" border="1" />
+							</a>
+						</div>
+						<div class="f10">{{@model.location}}, {{@model.country}}</div>
+					</div>
+				{{/foreach}}
+
+				<div class="c"></div>
+
+				{{if $pagination}}
+				<div class="pagination">
+					{{@pagination.links}}
+				</div>
+				{{/if}}
+
+			</div> <!--modelcontent-->
+
+			<div id="bottom">
+				<div class="bottom-a" align="center">
+					<a href="{{$__siteurl}}/join.php">Join now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

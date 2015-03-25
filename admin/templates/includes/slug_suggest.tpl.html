@@ -1,0 +1,46 @@
+<script type="text/javascript"><!--
+function replaceUmlauts(string, index){
+		    var anArray = new Array(2);
+		    anArray[0] = new Array("Ö", "ö", "Ä", "ä", "Ü", "ü", "ß");
+		    anArray[1] = new Array("Oe", "oe", "Ae", "ae", "Ue", "ue", "ss");
+
+		    for (var i=0; i<anArray[index].length; i++){
+				myRegExp = new RegExp(anArray[index][i],"g");
+				string = string.replace(myRegExp, anArray[(index==0?1:0)][i]);
+			}
+		    return string;
+}
+
+$(document).ready(function(){
+	$('input[name="title"]').change(function(){
+
+		var _title = $('input[name="title"]').val();
+		var _slug = $('input[name="slug"]').val();
+
+		if(_title && !_slug)
+		{
+			//replace slashes with "-"
+			_title = _title.replace("/", "-").replace("\\", "-");
+
+			//remove leading an trailing dots
+			_title = _title.replace(/^\.*/, '').replace(/\.*$/, '');
+
+			//replace space with "-"
+			_title = _title.replace(/\s/g, "-");
+
+			//german umlauts
+			_title = _title = replaceUmlauts(_title, 0);
+
+			//remove anything that not on whitelist
+			_title = _title.replace(/[^a-zA-Z0-9\_\+\.\-]/g, "")
+
+			//remove multiple dashes
+			_title = _title.replace(/\-+/g, "-");
+
+			if(_title)
+				$('input[name="slug"]').val( _title.toLowerCase() );
+		}
+	});
+});
+//-->
+</script>

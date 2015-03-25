@@ -1,0 +1,7 @@
+AuthType Basic
+AuthUserFile ./.htpasswd
+AuthName "member area"
+
+order deny,allow
+allow from all
+require valid-user

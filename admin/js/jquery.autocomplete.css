@@ -1,0 +1,45 @@
+.ac_results {
+	padding: 0px;
+	border-left: 1px solid #888888;
+	border-top: 1px solid #888888;
+	border-right: 1px solid #888888;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	font: menu;
+	text-align:left;
+	font-size: 12px;
+	overflow: hidden;
+	border-bottom: 1px solid #888888;
+	/*
+	it is very important, if line-height is not set or set
+	in relative units then scroll will be broken in firefox
+	*/
+	line-height: 16px;
+}
+
+.ac_loading {
+	background: white url('indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+	background-color: #EEEEEE;
+}
+
+.ac_over {
+	background-color: #AAEEEE;
+	color: white;
+}

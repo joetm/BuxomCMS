@@ -1,0 +1,17 @@
+{{*send datatables request*}}
+"sAjaxSource": "{{$__adminurl}}/lib/datatables.php",
+{{block:fnServerData table='' securitytoken=$securitytoken}}
+"fnServerData": function ( sSource, aoData, fnCallback ) {
+			aoData.push(
+				{"name":"table", "value":"{{$table}}"},
+				{"name":"securitytoken", "value":"{{$securitytoken}}"}
+			);
+			$.ajax({
+				"dataType": 'json',
+				"type": 'POST',
+				"url": sSource,
+				"data": aoData,
+				"success": fnCallback
+			});
+},
+{{/block}}

@@ -1,0 +1,80 @@
+{{set $_pagetitle="BuxomCurves Models"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $headerimgheight="292"}}
+{{set $barcolor="F76474"}}
+{{include _header}}
+
+{{* {{models internal_id=0 amount=4 paginate=true description=false rating=true}} *}}
+
+{{*test*}}
+<style type="text/css">
+#headerimgtest img{
+		-moz-border-bottom-right-radius:7px;
+		-moz-border-bottom-left-radius:7px;
+		-webkit-border-bottom-right-radius:7px;
+		-webkit-border-bottom-left-radius:7px;
+		-o-border-bottom-right-radius:7px;
+		-o-border-bottom-left-radius:7px;
+		-ms-border-bottom-right-radius:7px;
+		-ms-border-bottom-left-radius:7px;
+		-khtml-border-bottom-right-radius:7px;
+		-khtml-border-bottom-left-radius:7px;
+		border-bottom-radius:7px;
+}
+</style>
+{{*test*}}
+
+	<div id="headerimgtest">
+		<img src="http://buxomcurves.com/img/header/models.jpg" alt="" width="100%" style="display:block">
+	</div>
+
+	<div class="headline_bar" align="left">
+			<span class="right f11">{{@_t.sortby}}
+			{{if $sorting != 'rating'}}<a href="{{$__siteurl}}/models/sort/rating">{{@_t.rating}}</a> |{{else}}{{@_t.rating}} |{{/if}}
+			{{if $sorting != 'modelname'}}<a href="{{$__siteurl}}/models/sort/name">{{@_t.name}}</a> |{{else}}{{@_t.name}} |{{/if}}
+			{{if $sorting != 'id'}}<a href="{{$__siteurl}}/models/sort/id">{{@_t.date}}</a>{{else}}{{@_t.date}}{{/if}}</span>
+			<span class="left bold">{{@_page.templatename|ucwords}}</span>
+	</div>
+
+	<div class="pagecontent">
+
+			{{foreach $models as $model}}
+			<div class="thumbnail">
+				<div>
+					<a href="{{$__siteurl}}/model/{{@model.slug}}">
+						<div><span class="bold">{{@model.modelname}}</span></div>
+						<img src="{{$__siteurl}}{{@model.path}}" width="{{@model.width}}" height="{{@model.height}}" alt="" border="1">
+					</a>
+					<div id="test">{{@model.description}}</div>
+				</div>
+				{{if $model['rating']}}
+					<div>
+						{{$rating}}: {{@model.rating}}
+					</div>
+				{{/if}}
+			</div>
+			{{else}}
+				No models found.
+			{{/foreach}}
+
+			<div class="c"></div>
+
+			{{if $pagination}}
+			<div class="pagination">
+				{{@pagination.links}}
+			</div>
+			{{/if}}
+
+			<div id="bottom">
+				<div>
+					<a href="#">Get instant access to all the photos sets above and more by joining now!</a>
+				</div>
+				<div class="bottom-text">
+					Your membership gives you full access to all our pinup gals, extended photo sets, exclusive behind-the-scenes shots, videos and more!
+				</div>
+			</div><!-- /bottom-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

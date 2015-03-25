@@ -1,0 +1,48 @@
+/*variables*/
+#loginpage {
+  width: 320px;
+  margin: 7px auto;
+  padding: 40px 0px 40px 0px;
+  font: 11px "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
+  /*
+  	h1 a {
+  		width: 326px;
+  		height: 67px;
+  		text-indent: -9999px;
+  		overflow: hidden;
+  		padding-bottom: 15px;
+  		display: block;
+  	}
+  */ }
+  #loginpage a {
+    color: black;
+    text-decoration: underline; }
+  #loginpage #user_pass, #loginpage #user_login {
+    font-size: 24px;
+    width: 97%;
+    padding: 3px;
+    margin: 2px 6px 16px 0px;
+    border: 1px solid #e5e5e5;
+    background: #fbfbfb; }
+  #loginpage #form {
+    margin-left: 8px;
+    padding: 16px 16px 40px 16px;
+    font-weight: normal;
+    -moz-border-radius: 11px;
+    -khtml-border-radius: 11px;
+    -webkit-border-radius: 11px;
+    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    -moz-box-shadow: #c8c8c8 0 4px 18px;
+    -webkit-box-shadow: #c8c8c8 0 4px 18px;
+    -khtml-box-shadow: #c8c8c8 0 4px 18px;
+    box-shadow: #c8c8c8 0 4px 18px; }
+    #loginpage #form label {
+      color: #777;
+      font-size: 13px; }
+    #loginpage #form .forgetmenot label {
+      font-size: 11px;
+      line-height: 19px; }
+    #loginpage #form .submit {
+      float: right; }

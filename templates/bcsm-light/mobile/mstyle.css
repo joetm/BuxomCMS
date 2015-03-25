@@ -1,0 +1,28 @@
+body {
+	color:#FFFFFF;
+	font-family:Myriad Pro,Myriad,Arial;
+	background-color:#D02466
+	padding:0px;
+	margin:0px;
+}
+a {
+	color:#FFFFFF
+}
+a:hover
+{
+	color:#FFFF66
+}
+img
+{
+	background-color:#101010
+}
+.n
+{
+	background-color:#D02466
+}
+
+#mobileheader
+{
+	width:280px;
+	height:139px;
+}

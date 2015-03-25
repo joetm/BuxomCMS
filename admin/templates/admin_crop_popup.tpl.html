@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Crop</title>
+
+<style type="text/css">
+body{
+	margin:5px;padding:0px;
+	text-align:center;
+}
+#loading_anim{
+	display:none;
+}
+</style>
+
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js'></script>
+
+<link href="{{$__adminurl}}/js/jquery.Jcrop.css" rel="stylesheet" type="text/css">
+<script src="{{$__adminurl}}/js/jquery.Jcrop.min.js" type="text/javascript"></script>
+
+<script type="text/javascript"><!--
+function submit()
+{
+	//ajax submit
+
+	//show loading img
+	$('#loading_anim').show();
+	$('#submitbutton').attr("disabled" , "disabled");
+
+	//get crop values
+	var ix = $('#x').val();
+	var iy = $('#y').val();
+	var iw = $('#w').val();
+	var ih = $('#h').val();
+
+	var filename = $('#filename').val();
+	var internal_slug = $('#internal_slug').val();
+
+	//crop file
+	$.ajax({
+		type: 'POST',
+		async: false,
+		url: "{{$__adminurl}}/lib/crop.php",
+		data: ({"x": ix,
+				"y": iy,
+				"w": iw,
+				"h": ih,
+				"internal_slug": internal_slug,
+				"filename": '{{$filename}}',
+				"securitytoken": '{{$securitytoken}}' }),
+		dataType: "text",
+		global: false,
+		error: function(req,text){
+			$('#loading_anim').hide();
+			$('#submitbutton').removeAttr("disabled");
+			$('#error').html(text);
+			$('#error').show('fast');
+		},
+		success: function(ret){
+
+			if(ret == "success")
+			{
+				$('#loading_anim').hide();
+				$('#submitbutton').removeAttr("disabled");
+
+				//switch img src in parent window
+				switch_src();
+
+				window.close(); //close crop window
+			}
+			else
+			{
+				$('#loading_anim').hide();
+				$('#submitbutton').removeAttr("disabled");
+				$('#error').html(ret);
+				$('#error').show('fast');
+			}
+
+		} //success function
+	}); //ajax
+
+}
+
+function switch_src()
+{
+	//switch src of parent window thumbnail by reloading
+	window.opener.switchSrc('{{$img_id}}')
+}
+
+function init()
+{
+
+	//close with ESC key
+	window.onkeyup = function (event) {
+		if (event.keyCode == 27) {
+			window.close (); //self
+		}
+	}
+	//submit form with ENTER key
+	window.onkeyup = function (event) {
+		if (event.keyCode == 13) {
+			submit();
+		}
+	}
+
+	var theimg = new Object;
+	var thumbimg = new Object;
+
+	var wvp = new Object;
+	wvp.height = $(window).height();
+	wvp.width  = $(window).width();
+
+	theimg.width = {{$img_width}};
+	theimg.height = {{$img_height}};
+
+	if (theimg.height > theimg.width)
+	{ //portrait
+
+		thumbimg.height = (wvp.height - 65);
+		thumbimg.width  = (thumbimg.height * {{$img_whratio}}).toFixed(0);
+	}
+	else
+	{ //landscape
+
+		thumbimg.height = (wvp.height - 100);
+		thumbimg.width  = (thumbimg.height * {{$img_whratio}}).toFixed(0);
+	}
+
+	$("#cropbox").attr("height", thumbimg.height);
+	$("#cropbox").attr("width",  thumbimg.width);
+
+
+//alert("Img.width:"+theimg.width+"\nImg.height"+theimg.height+"\nthumbimg.width"+thumbimg.width+"\nthumbimg.height"+thumbimg.height+"\naspectratio"+{{$aspectratio}}+"\nimg_whratio"+{{$img_whratio}});
+
+	//initialize the cropper
+	jQuery(function(){
+		$('#cropbox').Jcrop({
+			aspectRatio: {{$aspectratio}},
+			onSelect: updateCoords,
+		});
+	});
+
+} //init
+
+$(document).ready(function(){
+	$('#cropbox').dblclick(function(){
+		$('#cropform').submit();
+	});
+});
+//-->
+</script>
+
+<script type="text/javascript">
+<!--
+	function updateCoords(c)
+	{
+
+		w = $('#cropbox').attr("width");
+		h = $('#cropbox').attr("height");
+
+		ix = c.x * ({{$img_width}} / w);
+		ix = ix.toFixed(0);
+		iy = c.y * ({{$img_height}} / h);
+		iy = iy.toFixed(0);
+		iw = c.w * ({{$img_width}} / w);
+		iw = iw.toFixed(0);
+		ih = c.h * ({{$img_height}} / h);
+		ih = ih.toFixed(0);
+
+		$('#x').val(ix);
+		$('#y').val(iy);
+		$('#w').val(iw);
+		$('#h').val(ih);
+	};
+
+	function checkCoords()
+	{
+		if (parseInt($('#w').val())) return true;
+		alert('Please select a crop region then press submit.');
+		return false;
+	};
+//-->
+</script>
+</head>
+<body onload="init()">
+
+
+<div id="error" class="hidden"></div>
+
+<div id="cropper">
+	<div align="center">
+		<img src="{{$tempurl}}" border="0" alt="" id="cropbox">
+			<form action="javascript:submit();" onsubmit="return checkCoords();" id="cropform">
+				<input type="hidden" id="x" name="x">
+				<input type="hidden" id="y" name="y">
+				<input type="hidden" id="w" name="w">
+				<input type="hidden" id="h" name="h">
+				<input type="hidden" id="internal_slug" name="internal_slug" value="{{$internal_slug}}">
+				<input type="submit" id="submitbutton" value="Crop Image">
+				<img id="loading_anim" src="{{$__adminurl}}/js/indicator.gif" width="16" height="16" alt="cropping...">
+			</form>
+	</div>
+</div> <!-- /cropper-->
+
+</body>
+</html>

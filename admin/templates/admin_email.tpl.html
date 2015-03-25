@@ -1,0 +1,217 @@
+{{include _adminheader}}
+
+<script type="text/javascript"><!--
+function ToggleBox()
+{
+	$("#mail-process").toggle('fast');
+	$("#body").toggle('fast');
+
+	$(".submitbutton").each (function () {
+		var stat = $(this).attr("disabled");
+		if (false == stat) {
+			$(this).attr("disabled" , "disabled");
+		}
+		else {
+			$(this).removeAttr("disabled");
+		}
+	});
+}
+
+function Unwind($res)
+{
+	if ($res == 'success')
+	{
+		//successfully finished
+		ToggleBox();
+		//show success
+		$("#success").toggle("slow");
+	}
+	else
+	{
+		//error
+		ToggleBox();
+		//show error
+		$("#error").toggle("slow");
+	}
+}
+
+$(document).ready(function(){
+
+	//page refresh fix
+	$("#mail-process").attr("src", "{{$__adminurl}}/lib/mailprocess.php?do=init");
+
+	//load template via click
+	$("#template_selector ul li .tplselectorlnk").click(function(){
+		//body
+		$('#emailbody').val( $(this).next('div.tpl_content').text() );
+		//templatename
+		$('#tplname').val( $(this).text() )
+			.attr('disabled', true);
+		//action
+		alert($(this).next('div.tpl_action').text());
+
+		$('#action').val( $(this).next('div.tpl_action').text() );
+
+		$('[for="tplname"]').css( 'color', '#AAAAAA' )
+
+	});
+
+	//template saving
+	$("#save_tpl").click(function(){
+
+		var text = $('#emailbody');
+		var subject = $('#emailsubject');
+
+		if(text != '' && subject != '')
+		{
+			//send the form and save it to db + preload it
+			$("#eform").submit();
+		}
+		else
+			return false;
+	});
+
+
+	$("#submitall").click(function(){
+
+		ToggleBox();
+
+		//get the variables
+		var body = $("#emailbody").val();
+		var type = 'text';
+		var members = 'all';
+		var subject = $("#emailsubject").val();;
+
+		// write data to temp database
+		$.ajax({
+			url: '{{$__adminurl}}/lib/email.php',
+			async: false,
+			dataType: 'text',
+			type: 'POST',
+			data: ({"subject": subject,
+				"body": body,
+				"type": type,
+				"members": members,
+				"securitytoken": '{{$securitytoken}}' }),
+			success: function(data) {
+
+//				alert(data);
+
+				if(data == 'success')
+				{
+					//start mail process
+					$("#mail-process").attr("src", "{{$__adminurl}}/lib/mailprocess.php?do=create_queue&startat=0&pp={{$pp}}");
+				}
+				else
+				{
+					//could not start mailqueue
+					//show error message and reverse toggle
+
+					Unwind('error');
+
+					alert('No email addresses found using your filter criteria.');
+
+				}
+			}
+		});
+
+
+	});
+});
+//-->
+</script>
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+{{*
+			{{include includes/error_success_msg}}
+*}}
+
+			<div class="hidden" id="success">{{@_t.success}}!<br><small>{{@_t.mailprocess_finished}}.</small></div>
+
+			<div class="hidden" id="error">{{@_t.error}}.</div>
+
+			<form action="{{$__adminurl}}/email" method="post" name="emailmembers" id="eform">
+			<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+				<div class="right mleft5 mright5">
+					<div class="right mtop5">
+						{{@_t.type}}:
+					    <input id="tyhtml" type="radio" name="type" value="html"{{if $var['type'] == 'html'}} checked="checked"{{/if}}>
+							<label for="tyhtml">html</label>
+					    <input id="tytex" type="radio" name="type" value="text"{{if $var['type'] == 'text'}} checked="checked"{{/if}}>
+							<label for="tytex">text</label>
+					</div>
+					<div class="right">
+						<label for="members_selector">{{@_t.members}}:</label>
+						<select name="members" id="members_selector" class="forminput">
+							<option{{if $var['members']=='all'}} selected="selected"{{/if}} value="all">All</option>
+							<option{{if $var['members']=='active'}} selected="selected"{{/if}} value="active">Active</option>
+							<option{{if $var['members']=='inactive'}} selected="selected"{{/if}} value="inactive">Inactive</option>
+							<option{{if $var['members']=='chargeback'}} selected="selected"{{/if}} value="chargeback">Chargeback</option>
+						</select>
+					</div>
+				</div>
+
+				<!-- subject -->
+				<div id="subject"><label for="emailsubject">{{@_t.subject}}:</label>
+				    <input type="text" class="forminput" style="width:400px;margin-bottom:5px;" id="emailsubject" name="subject" value="{{@email.subject|default:$__sitename}}">
+				</div>
+
+				<!-- body -->
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr>
+				<td>
+					<textarea rows="22" cols="90" class="forminput w100" id="emailbody" name="body">{{@email.body}}</textarea>
+
+				</td>
+				<!-- template panel -->
+				{{if !empty($templates)}}
+					<td id="template_selector" width="180" valign="top">
+						<ul>
+						{{foreach $templates as $templ}}
+							<li style="margin-left:20px;">
+								<span class="tplselectorlnk">{{@templ.title}}</span>
+								<div class="tpl_content hidden">{{@templ.content}}</div>
+								<div class="tpl_action hidden">{{@templ.action}}</div>
+							</li>
+						{{/foreach}}
+						</ul>
+					</td>
+				{{/if}}
+				</tr>
+				</table>
+
+				<div class="c"></div>
+
+				<iframe src="{{$__adminurl}}/lib/mailprocess.php?do=init" id="mail-process" width="99%" height="200" class="hidden"></iframe>
+
+
+				<div class="mtop10">
+					<div class="right">
+							<label for="tplname">templatename</label>
+							<input type="text" class="forminput" name="title" id="tplname" value="{{@template.title}}">
+							<label for="newaction">Action</label>
+							<input type="text" class="forminput" name="action" id="newaction" value="">
+							<select name="actionselector" id="action">
+								<option value=""></option>
+							{{foreach $actions as $a}}
+								<option{{if $email['action'] == $a['action']}} selected="selected"{{/if}}>{{@a.action}}</option>
+							{{/foreach}}
+							</select>
+							<input type="button" id="save_tpl" class="submitbutton" value="{{@_t.save}}">
+					</div>
+					<div class="left">
+						<input type="button" id="submitall" class="submitbutton" onclick="return false;" name="send" value="{{@_t.send}}">
+
+						<input type="button" id="testemail" class="submitbutton" onclick="return false;" name="testemail" value="{{@_t.testemail}}">
+					</div>
+					<div class="c"></div>
+				</div>
+
+			</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

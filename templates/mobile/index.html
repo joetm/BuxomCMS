@@ -1,0 +1,69 @@
+<?php
+
+/***config***/
+error_reporting(E_ALL | E_STRICT);
+require_once "../_init.php";
+$templatename = "mindex";
+$tpl = new Template($templatename,10,'../templates/mobile');
+$modelsperpage = 3;
+$updatesperpage = 3;
+/***config***/
+
+/***page setup***/
+$tpl->title = "BuxomCurves Mobile";
+$tpl->headerimgheight = "238";
+$tpl->barcolor = "151296";
+$tpl->_keywords = "buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women";
+$tpl->_description = "BuxomCurves description";
+/***page setup***/
+
+/***database connect***/
+$db = DB::getInstance();
+
+/***pagination***/
+$query = "SELECT count(*) FROM models";
+$pagina = new Pagination;
+$pagination = $pagina->paginate($query,$modelsperpage,'models.php');
+/***end pagination***/
+
+$models = $db->query3d('SELECT id,modelname,slug,rating,thumb0 FROM models'.$pagination['limit']);
+
+/***pagination***/
+$query = "SELECT count(*) FROM updates";
+$pagina = new Pagination;
+$pagination = $pagina->paginate($query,$updatesperpage,'updates.php');
+/***end pagination***/
+
+$sql = "SELECT id,title,description,thumb1 FROM updates WHERE date <= NOW()".$pagination['limit'];
+
+$updates = $db->query3d($sql);
+
+/***stats***/
+//$stats = new Stats;
+/***stats***/
+
+/***database disconnect***/
+unset($sql);
+unset($db);
+
+/***models***/
+$tpl->assign("models", $models);
+
+/***updates***/
+$tpl->assign("updates", $updates);
+
+/***config***/
+$tpl->assign("_sitename", $sitename);
+
+$tpl->display();
+
+if(Config::Get('debug') === true){
+	//memory_debug();
+//	echo "<p>Loaded in: ",microtime(true) - $time, " seconds</p>\n";
+}
+
+//this will include a copyright notice comment in the output
+//you can savely remove this
+$tpl->Copyright();
+
+?>

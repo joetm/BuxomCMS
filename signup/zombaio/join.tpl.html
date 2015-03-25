@@ -1,0 +1,241 @@
+{{set $_pagetitle="Join BuxomCurves!"}}
+{{set $_keywords="buxom,buxom girls, buxom women, chubby, bbw, fat, fat girls, cute plumpers, fat belly, fat women"}}
+{{set $_description="BuxomCurves description"}}
+{{set $barcolor="961512"}}
+{{include _header}}
+
+	<div class="pagecontent">
+
+		<div id="join_page_container">
+
+			{{if $_page[errormessage]}}
+			<!-- error -->
+			<div id="errors">
+				<img src="{{$__siteurl}}/img/icons/warning.png" width="16" height="16" hspace="5" alt="" border="0">
+				<strong>{{$_page[errormessage]}}</strong><br>
+			</div>
+			{{/if}}
+
+			<div id="join_page_right">
+
+				<!-- join page content -->
+				<script type="text/javascript">
+				$(document).ready(function(){
+					var price_options = new Array();
+					{{for $i from 0 to ($options['max_value'] - $options['min_value'])/$step - $step}}
+						price_options[{{$i}}] = new Object();
+						price_options[{{$i}}]['value'] = {{$price_options[$i]['value']}}; price_options[{{$i}}]['hash'] = '{{$price_options[$i]['hash']}}';
+					{{/for}}
+
+					$("#slider").slider({
+						min: {{@options.min_value}},
+						max: {{@options.max_value}},
+						step: {{$step}},
+						value: {{$start_value}},
+						slide: function(event, ui) {
+							$("#price").val(ui.value);
+						},
+						change: function(event, ui) {
+
+							var index = Math.round((ui.value - {{@options.min_value}}) / {{$step}});
+							//set the right hash
+							$("#DynAmount_Hash").val( price_options[index]['hash'] );
+
+
+							//do stuff when slider changes
+								if (ui.value < 20){
+				//					$("#regular_price").text( ($("#amount").val() * 2) - 1 );
+				//					$(".asterisk").show();
+									$("#joinoptions1").show();
+									$("#joinoptions2").hide();
+								}
+				/*
+								else if (ui.value > 13 && ui.value < 30){
+									$("#joinoptions1").hide();
+									$("#joinoptions2").show();
+								}
+				*/
+								else if (ui.value >= 20){
+									$("#joinoptions1").hide();
+									$("#joinoptions2").show();
+				//					$(".asterisk").hide();
+								}
+								else {alert('Some error occured.');}
+						}
+					}); //animate: true,
+
+					//initial setup:
+					$("#price").val($("#slider").slider("value"));
+					$("#joinoptions2").show();
+				});
+				</script>
+				<!-- join page -->
+
+
+				<form method="POST" action="{{$formurl}}">
+
+						<div class="join_headline mbot10">
+							<h2>Become a Buxom<br>Curves Member</h2>
+						</div>
+
+						<div class="join_membership">
+						Step 1: Enter your member details
+						</div>
+
+						{{* Approval *}}
+						<input name="approve_url" type="hidden" value="{{@options.approval_url}}" />
+						<input name="return_url_approve" type="hidden" id="return_url_approve" value="{{@options.approval_url}}">
+
+						{{* Denial *}}
+						<input name="decline_url" type="hidden" id="return_url_decline" value="{{@options.denial_url}}">
+						<input name="return_url_decline" type="hidden" id="return_url_decline" value="{{@options.denial_url}}">
+
+						{{* Error *}}
+						<input name="error_url" type="hidden" id="return_url_error" value="{{@options.error_url}}">
+						<input name="return_url_error" type="hidden" id="return_url_error" value="{{@options.error_url}}">
+
+						{{* method *}}
+						<input type="hidden" name="method" value="{{$method}}" />
+
+						<input type="hidden" name="Allow_ReSync" value="1" />
+
+						{{* currency *}}
+						<input type="hidden" name="currency" value="{{$currency}}" />
+
+
+						<div class="mbot10" class="groupbox">
+
+							{{* Site *}}
+							<input name="site" type="hidden" id="site" value="{{# __sitename}}">
+
+							{{* Username *}}
+							<div class="mbot5">
+								<label for="username" class="black">Choose your Username:</label><br>
+									<input name="username" type="text" class="faqinput" id="username" value="">
+							</div>
+
+							{{* Identifier *}}
+							<input type="hidden" name="identifier" value="">
+
+							{{* Password *}}
+							<div class="mbot5">
+								<label for="password" class="black">Choose your Password:</label><br>
+									<input name="password" type="password" class="faqinput" id="password" value="">
+							</div>
+
+							{{* Email *}}
+							<div class="mbot5">
+								<label for="email" class="black">Your Email:</label><br>
+									<input name="email" type="text" class="faqinput" id="email" value="">
+							</div>
+
+							{{* hide credits on page *}}
+							<input type='hidden' name='hide_credits' value='True'>
+
+							{{* description *}}
+							<input type='hidden' name='description' value=''>
+
+						</div>
+
+						<div class="mbot10">
+
+							<div class="join_membership">
+							Step 2: Choose a membership plan
+							</div>
+
+							<div id="memberships">
+
+								<div>
+									<label for="price">1 Month Recurring ({{$currency}}):</label>
+									<input type="text" name="DynAmount_Value" id="price" class="dynpricefield" size="8">
+									<span class="asterisk">*</span>
+								</div>
+
+								<div id="slider"></div>
+
+								{{* Dunamic Hash *}}
+								<input type='hidden' name='DynAmount_Hash' id="DynAmount_Hash" value='{{$DynAmount_Hash}}'>
+
+								<div id="joinoptions">
+									<div id="joinoptions1" class="jocontainer">
+										<ul>
+											<li class="good">Streaming videos</li>
+											<li class="bad">No image zip downloads</li>
+										</ul>
+									</div>
+									<div id="joinoptions2" class="jocontainer">
+										<ul>
+											<li class="good">Streaming videos</li>
+											<li class="good">Image zip downloads</li>
+										</ul>
+									</div>
+								</div>
+
+						</div>
+
+						<div class="mtop10">
+							<div class="join_membership">Step 3: Payment Type</div>
+
+							<div class="join_header_sub" style="width:220px;">
+								<div align="left">
+									<input type="radio" id="cascade_01" name="zomPay" value="1017" checked="checked">
+									<label for="cascade_01">Join by Credit / Debit Card</label>
+								</div>
+								<div align="left">
+									<input type="radio" id="cascade_02" name="zomPay"
+									value="Join by Online Check">
+									<label for="cascade_02">Join by Online Check</label>
+								</div>
+								<div align="left">
+									<input type="radio" id="cascade_03" name="zomPay"
+									value="EU Debit / DirectPay / AsiaPay">
+									<label for="">EU Debit / DirectPay / AsiaPay</label>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div align="center">
+						<input type="submit" class="join_button" value="Submit" name="zomPay">
+					</div>
+
+					<div class="c mbot10"></div>
+
+
+					<div class="asterisk" style="display:none">* Recurring at <span id="regular_price"></span> Euros</div>
+
+
+					<div class="smallfont grey mtop10">
+						Billed descretely by {{$options[processor]}}.
+						<br>
+						<img src="{{$join_page_url}}/img/Zombaio_127x54_transp.gif" alt="" width="127" height="54" border="0">
+					</div>
+					<div>
+						<img src="{{$join_page_url}}/img/secure_payment.png" alt="" width="197" height="48" border="0">
+					</div>
+
+					<div class="mtop10">
+						<img src="{{$join_page_url}}/img/#.jpg" alt="memberarea screenshot" width="197" height="120" border="0">
+					</div>
+
+
+					<br>
+
+
+					<div class="c"></div>
+
+				</form>
+
+				<div class="c"></div>
+				<!-- join page content -->
+
+			</div>
+
+			<div class="c"></div>
+
+		</div><!-- /join_page_container-->
+
+	</div><!-- /pagecontent-->
+
+{{include _footer}}

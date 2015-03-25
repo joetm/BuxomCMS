@@ -1,0 +1,130 @@
+{{include _adminheader}}
+
+{{block:typeblock id="" arr=""}}<div class="optiondiv"><fieldset><div class="removebutton right pointer"><img src="{{#Path::Get('url:admin')}}/img/icons/cancel.png" width="16" height="16" alt="remove"></div><div class="left"><div class="oitem_input"><label for="_s_{{$id}}" class="title">Slug:</label><input type="text" id="_s_{{$id}}" class="forminput" name="options[{{$id}}][slug]" value="{{$arr[0]}}"></div><div class="oitem_input"><label for="_f_{{$id}}" class="title">Folder:</label><input type="text" id="_f_{{$id}}" class="forminput" name="options[{{$id}}][folder]" value="{{$arr[1]}}"></div></div></fieldset></div><div class="c"></div>{{/block}}
+
+
+<script type="text/javascript"><!--
+$(document).ready(function(){
+
+	 setTimeout(function(){ $('#success').fadeOut('slow'); }, 1500);
+
+	$('#deflink').click(function()
+	{
+		var defaults = '{{!typeblock id="1" arr=array('set','pics')}}
+						{{!typeblock id="2" arr=array('video','videos')}}
+						{{!typeblock id="3" arr=array('model','models')}}';
+		$(this).parents('#triforce').html(defaults);
+		$('.savemsg').show();
+	});
+
+	$('.removebutton').live('click', function(){
+		var container = $(this).parents('.optiondiv');
+		$(container).hide('fast')
+			.remove();
+	});
+	$('.removenewbutton').click(function(){
+		$('#_n_new').val('');
+		$('#_s_new').val('');
+		$('#_f_new').val('');
+		$( $(this).parents('.optiondiv') ).hide('fast');
+	});
+
+	$("#addicon").toggle(function(){
+			$("#addicon").attr('src', '{{$__adminurl}}/img/icons/details_close.png');
+			$("#addnewpanel").show('fast');
+		},function(){
+			$("#addicon").attr('src', '{{$__adminurl}}/img/icons/details_open.png');
+			$("#addnewpanel").hide('fast');
+	});
+
+});
+//-->
+</script>
+
+{{include includes/options_submenu}}
+
+	<a name="top"></a>
+	<div id="admincontent">
+
+		{{include includes/error_success_msg}}
+
+		{{block:removebutton addnew=0}}
+				<div class="{{if $addnew}}removenewbutton{{else}}removebutton{{/if}} right pointer">
+					<img src="{{#Path::Get('url:admin')}}/img/icons/cancel.png" width="16" height="16" alt="remove">
+				</div>
+		{{/block}}
+
+		<form action="{{$__adminurl}}/options_types" method="post" name="options" id="options_form">
+		<input type="hidden" name="securitytoken" value="{{$securitytoken}}">
+
+		<div class="right">
+			<img id="addicon" class="pointer" src="{{$__adminurl}}/img/icons/details_open.png" width="20" height="20" hspace="5" alt="" title="{{@_t.addnew}}" border="0">
+		</div>
+
+		<div class="optiondiv">
+			<h3>{{@_t.post_types}}</h3>
+		</div>
+
+		{{if ($__showadmintooltips)}}
+		{{/if}}
+
+		<div class="optiondiv hidden" id="addnewpanel">
+			<fieldset>
+				{{!removebutton addnew=1}}
+				<div class="left">
+					<div class="oitem_input">
+						<label for="_s_new" class="title">Slug:</label>
+						<input type="text" id="_s_new" class="forminput" name="options[new][slug]" value="">
+					</div>
+					<div class="oitem_input">
+						<label for="_f_new" class="title">Folder:</label>
+						<input type="text" id="_f_new" class="forminput" name="options[new][folder]" value="">
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+		<div class="c"></div>
+
+		<div id="triforce">
+		{{foreach $types as $key => $val}}
+		<div class="optiondiv">
+			<fieldset>
+				{{!removebutton}}
+				<div class="left">
+					{{if ($__showadmintooltips)}}
+
+					{{/if}}
+					<div class="oitem_input">
+						<label for="_s_{{$key}}" class="title">Slug:</label>
+						<input type="text" id="_s_{{$key}}" class="forminput" name="options[{{$key}}][slug]" value="{{@key}}">
+					</div>
+					<div class="oitem_input">
+						<label for="_f_{{$key}}" class="title">Folder:</label>
+						<input type="text" id="_f_{{$key}}" class="forminput" name="options[{{$key}}][folder]" value="{{@val}}">
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		{{else}}
+			<div class="optiondiv">
+				<fieldset>
+					No types found. You need to define post types.<br>
+					<div style="text-decoration:underline;" class="pointer" id="deflink">Load the defaults types</div>
+				</fieldset>
+			</div>
+		{{/foreach}}
+		</div>
+
+		<div class="c"></div>
+
+		<div>
+			<input type="submit" id="submitall" class="submitbutton" name="submit" value="{{@_t.submit}}">
+			<span class="savemsg hidden gray"> Don't forget to click save.</span>
+		</div>
+
+		</form>
+
+	</div><!-- admincontent-->
+
+{{include _adminfooter}}

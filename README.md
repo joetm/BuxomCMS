@@ -1,7 +1,7 @@
 BuxomCMS
 =============
 
-Content Management System for adult entertainment websites, designed and implemented in 2008.
+Content Management System for adult entertainment websites, designed and implemented in 2011.
 Object-oriented MVC and built in PHP with Zend-Framework best practices.
 The CMS contains sophisticated video transcoding, automatic gallery thumbnail processing with progress information, thumbnail cropping, administrator login and activity logging, and many more features.
 
